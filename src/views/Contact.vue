@@ -9,6 +9,7 @@
       style="border: 0"
       allowfullscreen=""
       loading="lazy"
+      class="mobile-map"
     ></iframe>
     </div>
     <div class="right-sqr">
@@ -18,7 +19,7 @@
         <p>Phone number: <b>+381605014493</b></p>
         <h2>SOCIAL NETWORKS</h2>
         <a href="https://www.facebook.com/ljiljanamarinkovicceramic"
-          ><i class="fab fa-facebook"></i
+          ><i class="fab fa-facebook fb"></i
         ></a>
       </div>
     </div>
@@ -108,17 +109,45 @@ h1 {
 }
 @media only screen and (max-width: 768px) {
   h1 {
-    font-size: 2rem;
+    font-size: 1.5rem;
+  }
+  h2{
+    font-size: 1rem;
+  }
+
+  .contact{
+    height: fit-content;
   }
   .content {
-    margin-left: 0.7rem;
+    margin-left: 0.5rem;
+    margin-top: 1rem;
+   
+  }
+  .fb{
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  .map{
+    width: 90vw;
+    margin-top: 8vh;
+    margin-left: 0.5rem;
+  }
+  .mobile-map{
+    width: 90vw;
+    
   }
   .right-sqr {
-    width: 100vw;
+    width: 90vw;
+    height: fit-content;
     border: none;
-    position: absolute;
-    left: 0;
+    margin-left: 0;
     animation: mobile-in 2s 1;
+    align-self: center;
+  }
+  .pg{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
   }
 }
 </style>

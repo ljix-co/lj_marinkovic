@@ -31,4 +31,10 @@ img{
   justify-content: center;
   width: 100vw;
 }
+@media only screen and (max-width: 768px) {
+  .footer-content{
+    width: 90vw;
+    margin-left: 1rem;
+  }
+}
 </style>

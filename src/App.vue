@@ -20,7 +20,7 @@
         </div>
       </div>
     </div>
-    <router-view :class="{ 'no-show': loader }" />
+    <router-view :class="{ 'no-show': loader || loaded_img === false}" />
     <Loader v-if="loader || loaded_img === false"></Loader>
     <footer>
       <Footer></Footer>
@@ -111,7 +111,8 @@ li {
   background-color: white;
 }
 .no-show {
-  visibility: hidden;
+  /* visibility: hidden; */
+  opacity: 0.3;
 }
 .menu-bar {
   visibility: hidden;

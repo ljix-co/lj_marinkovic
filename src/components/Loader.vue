@@ -12,18 +12,11 @@ export default {};
     left: 0px;
     transform: rotate(0deg);
   }
-  /* 25% {
-    left: 35vw;
-    transform: rotate(144deg);
-  } */
+
   50% {
     left: 87vw;
-    /* transform: rotate(180deg); */
   }
-  /* 75% {
-    left: 35vw;
-    transform: rotate(288deg);
-  } */
+
   100% {
     left: 0px;
     transform: rotate(359deg);
@@ -36,12 +29,12 @@ export default {};
   background-color: #c8c8ca78;
   width: 100vw;
   height: 100vh;
+
   display: flex;
   align-items: center;
   justify-content: flex-start;
 }
 .sqr {
-  /* background-color: #adadb0; */
   border: 4px solid #214478;
   width: 150px;
   height: 150px;
