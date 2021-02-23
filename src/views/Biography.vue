@@ -106,7 +106,6 @@ img {
 .author-info {
   display: flex;
   flex-direction: column;
-  /* gap: 1rem; */
 }
 .bio{
   width: 75vw;

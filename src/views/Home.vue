@@ -3,7 +3,6 @@
     <div>
       <div class="pg">
         <div class="l-sqr">
-          <!-- <img class="intro-logo" src="../../public/images/logo_slovo.png" alt="" /> -->
           <div class="web-title">
             <p class="name">LJILJANA MARINKOVIĆ</p>
             <p class="occup">Visual Artist and Web Developer</p>
@@ -52,35 +51,12 @@ export default {
     left: 0px;
   }
 }
-/* @keyframes in {
-  from {
-    top: -100px;
-  }
-  to {
-    top: 0px;
-  }
-}
-@keyframes out {
-  from {
-    top: 0px;
-  }
-  to {
-    top: -1000px;
-  }
-} */
+
 
 h3 {
   margin-top: 1vh;
 }
-/* .notShow {
-  visibility: hidden;
-}
-.show {
-  visibility: visible;
-  animation: in 2s 1;
-  position: relative;
-  top: 0;
-} */
+
 .show-left {
   visibility: visible;
   animation: left_in 2s 1;

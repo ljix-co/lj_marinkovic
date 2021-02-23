@@ -6,10 +6,16 @@ import Artworks from '../views/Artworks.vue'
 import Projects from '../views/Projects.vue'
 import Exhibitions from '../views/Exhibitions.vue'
 import Contact from '../views/Contact.vue'
+import Error_404 from '../views/Error_404.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
+  {
+    path: '*',
+    name: 'Error_404',
+    component: Error_404
+  },
   {
     path: '/',
     name: 'Home',

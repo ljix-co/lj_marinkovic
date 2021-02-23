@@ -32,7 +32,7 @@
               class="prev-img"
               :src="art.artwork_imgpath"
               alt=""
-              
+              @load="imgLoaded()"
             />
             <div class="prev-desc">
               <p>{{ art.artwork_title.toUpperCase() }}</p>
@@ -81,7 +81,7 @@ export default {
   },
   mounted() {
     this.getArtworks();
-    this.imgLoaded();
+    this.changeLoadedImg(false);
   },
 };
 </script>
@@ -117,7 +117,6 @@ export default {
   margin-bottom: 2rem;
   box-shadow: 0px 5px 15px 2px rgba(0, 0, 0, 0.48);
   height: fit-content;
-  /* align-self: stretch; */
 }
 .prev-desc {
   display: flex;
@@ -126,20 +125,15 @@ export default {
   justify-content: flex-start;
   gap: 0.5rem;
   margin-left: 1rem;
-  /* margin-top: 1rem; */
   margin-bottom: 1rem;
 }
 .prev-gallery {
   width: 70vw;
-  /* display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  align-items: baseline; */
+
   column-count: 2;
   column-gap: 1rem;
   height: fit-content;
 
-  /* position: absolute; */
 }
 .up-sqr {
   height: 15vh;
@@ -172,9 +166,7 @@ export default {
   justify-content: center;
   height: fit-content;
   margin-left: 2rem;
-  /* position: fixed; */
-  /* left: 0;
- top: 15vh; */
+
 }
 @media only screen and (max-width: 768px) {
   .pg-col {
@@ -192,7 +184,6 @@ export default {
   }
   .prev-img {
   width: 80vw;
-  /* height: 50vh; */
   object-fit: cover;
 }
 .prev-gallery {
@@ -202,11 +193,9 @@ export default {
   column-gap: 1rem;
   height: fit-content;
 
-  /* position: absolute; */
 }
 .shop-instruction{
   width: 70vw;
-  /* align-self: center; */
 
 }
 .shop-instruction-div{
