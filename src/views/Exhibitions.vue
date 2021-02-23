@@ -72,6 +72,7 @@ export default {
       this.showGallery = false;
     },
     imgLoaded() {
+      
       this.changeLoadedImg(true);
     },
     showExh(exh) {

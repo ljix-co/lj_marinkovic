@@ -81,7 +81,7 @@ export default {
   },
   mounted() {
     this.getArtworks();
-    this.changeLoadedImg(false);
+    // this.changeLoadedImg(false);
   },
 };
 </script>
