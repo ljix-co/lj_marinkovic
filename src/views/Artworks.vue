@@ -32,7 +32,7 @@
               class="prev-img"
               :src="art.artwork_imgpath"
               alt=""
-              @load="imgLoaded()"
+              
             />
             <div class="prev-desc">
               <p>{{ art.artwork_title.toUpperCase() }}</p>
@@ -81,7 +81,7 @@ export default {
   },
   mounted() {
     this.getArtworks();
-    this.changeLoadedImg(false);
+    this.imgLoaded();
   },
 };
 </script>
