@@ -86,6 +86,14 @@ export default {
 };
 </script>
 <style scoped>
+@keyframes in {
+  from {
+    top: -100px;
+  }
+  to {
+    top: 6vh;
+  }
+}
 .pg-col {
   display: flex;
   flex-direction: column;
@@ -95,7 +103,7 @@ export default {
   height: 100%;
   align-self: center;
   justify-self: center;
-  margin-left: 6rem;
+  margin-left: 4rem;
   animation: in 2s 1;
   position: relative;
   top: 6vh;

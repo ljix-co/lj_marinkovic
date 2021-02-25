@@ -2,7 +2,7 @@
   <div id="app">
     <div id="nav">
       <div class="nav">
-        <img class="logo" src="../public/images/logo_slovo.png" alt="" />
+        <img class="logo" src="../public/images/logo_slovo.png" alt="" @click="$router.push({name: 'Home'})"/>
         <i
           :class="{
             'fas fa-bars menu-bar': showMenu === false,
@@ -118,13 +118,14 @@ li {
   visibility: hidden;
 }
 .link {
-  margin-left: 1rem;
+  margin-right: 1rem;
 }
 .logo {
   position: absolute;
   top: 2px;
   left: 2px;
   width: 150px;
+  cursor: pointer;
 }
 @media only screen and (max-width: 768px) {
   .hide {
