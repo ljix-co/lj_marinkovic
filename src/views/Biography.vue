@@ -26,7 +26,7 @@ export default {
       axios.get(this.baseUrl + "author_info").then((res) => {
         console.log(res);
         this.author_info.push(res.data.data[0]);
-        console.log(res.data.data[0].aut_fullname);
+        // console.log(res.data.data[0].aut_fullname);
         this.changeLoader(false);
       });
     },

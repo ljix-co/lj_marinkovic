@@ -2,7 +2,12 @@
   <div id="app">
     <div id="nav">
       <div class="nav">
-        <img class="logo" src="../public/images/logo_slovo.png" alt="" @click="$router.push({name: 'Home'})"/>
+        <img
+          class="logo"
+          src="../public/images/logo_slovo.png"
+          alt=""
+          @click="$router.push({ name: 'Home' })"
+        />
         <i
           :class="{
             'fas fa-bars menu-bar': showMenu === false,
@@ -17,10 +22,15 @@
           <router-link class="link" to="/projects">PROJECTS</router-link>
           <router-link class="link" to="/exhibitions">EXHIBITIONS</router-link>
           <router-link class="link" to="/contact">CONTACT</router-link>
+        
+        <div class="logged-icons">
+          <a class="logout" v-if="loggedIn" @click="logout()">LOGOUT</a>
+          <router-link v-if="loggedIn" class="link" to="/admin"><i class="far fa-edit prof-link"></i></router-link>
+        </div>
         </div>
       </div>
     </div>
-    <router-view :class="{ 'no-show': loader || loaded_img === false}" />
+    <router-view :class="{ 'no-show': loader || loaded_img === false }" />
     <Loader v-if="loader || loaded_img === false"></Loader>
     <footer>
       <Footer></Footer>
@@ -36,6 +46,7 @@ export default {
   data() {
     return {
       showMenu: false,
+      loggedIn: false,
     };
   },
   methods: {
@@ -43,25 +54,34 @@ export default {
     showMenuList() {
       if (this.showMenu == false) {
         this.showMenu = true;
-      }
-      else if(this.showMenu == true) {
+      } else if (this.showMenu == true) {
         this.showMenu = false;
       }
+    },
+    isLogged() {
+      if (localStorage.getItem("sid")) {
+        this.loggedIn = true;
+      }
+    },
+    logout() {
+      localStorage.removeItem("sid");
+      this.$router.push({ name: "Login" });
+      this.loggedIn = false;
     },
   },
   computed: {
     ...mapState(["loader", "loaded_img"]),
   },
   mounted() {
+    this.isLogged();
   },
   watch: {
     $route: {
       handler() {
         this.showMenu = false;
-      
-      }
-    }
-  }
+      },
+    },
+  },
 };
 </script>
 <style>
@@ -127,17 +147,27 @@ li {
   width: 150px;
   cursor: pointer;
 }
+.logged-icons{
+  position: absolute;
+  top: 3vh;
+  left: 85vw;
+}
+.logout{
+  cursor: pointer;
+}
+.prof-link{
+  font-size: 1.5rem;
+  margin-left: 1rem;
+}
 @media only screen and (max-width: 768px) {
   .hide {
     visibility: hidden;
-   
   }
-  .nav{
+  .nav {
     width: 65vw;
     margin-left: 15vw;
     /* height: 4vh; */
     border: none;
-    
   }
   .menu-bar {
     visibility: visible;
@@ -150,7 +180,7 @@ li {
     width: 100px;
     z-index: 2;
   }
- 
+
   .show {
     display: flex;
     flex-direction: column;

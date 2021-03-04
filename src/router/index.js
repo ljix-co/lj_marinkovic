@@ -7,6 +7,9 @@ import Projects from '../views/Projects.vue'
 import Exhibitions from '../views/Exhibitions.vue'
 import Contact from '../views/Contact.vue'
 import Error_404 from '../views/Error_404.vue'
+import Login from '../views/Login.vue'
+import Admin from '../views/Admin.vue'
+// import Store from '../store/index.js'
 
 Vue.use(VueRouter)
 
@@ -49,6 +52,32 @@ const routes = [
     path: '/contact',
     name: 'Contact',
     component: Contact
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: Login
+  },
+  {
+    path: '/admin',
+    name: 'Admin',
+    component: Admin,
+
+    meta: {
+      requiresLogin: true
+    },
+    beforeEnter(to, from, next) {
+
+      if (to.meta.requiresLogin) {
+        if (localStorage.getItem("sid")) {
+          next()
+        } else {
+          (next('/login'))
+        }
+      } else {
+        next()
+      }
+    }
   }
 ]
 
