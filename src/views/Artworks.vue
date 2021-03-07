@@ -27,12 +27,12 @@
           </div>
         </div>
         <div class="prev-gallery">
-          <div class="prev-div" v-for="(art, index) in artworks" :key="index">
+          <div v-lazyload class="prev-div" v-for="(art, index) in artworks" :key="index">
             <img
               class="prev-img"
-              :src="art.artwork_imgpath"
+              :data-url="art.artwork_imgpath"
               alt=""
-              @load="imgLoaded()"
+              src="../../public/images/placeholder_photo_l.gif"
             />
             <div class="prev-desc">
               <p>{{ art.artwork_title.toUpperCase() }}</p>
@@ -81,7 +81,7 @@ export default {
   },
   mounted() {
     this.getArtworks();
-    // this.changeLoadedImg(false);
+    this.imgLoaded();
   },
 };
 </script>

@@ -24,12 +24,12 @@
         </div>
       </div>
       <div class="images">
-        <div v-for="(image, index) in images" :key="index">
+        <div v-lazyload v-for="(image, index) in images" :key="index">
           <img
-            :src="image.img_path"
+            :data-url="image.img_path"
             alt=""
             @click="showLarge(image, index)"
-            @load="imgLoaded()"
+            src="../../public/images/placeholder_photo_l.gif"
           />
         </div>
       </div>
@@ -107,6 +107,7 @@ export default {
 
   mounted() {
     this.changeLoader(true);
+    this.imgLoaded();
   },
 };
 </script>
@@ -122,11 +123,12 @@ export default {
 img {
   width: 20vw;
   /* height: fit-content; */
-  object-fit: contain;
+  /* object-fit: contain; */
   margin-left: 1rem;
   margin-bottom: 0.7rem;
   cursor: pointer;
   /* align-self: space; */
+  min-height: 200px;
 }
 .content {
   display: flex;
@@ -202,7 +204,8 @@ img {
   /* visibility: hidden; */
   display: none;
 }
-.left-side-bar, .rigth-side-bar {
+.left-side-bar,
+.rigth-side-bar {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -230,7 +233,7 @@ img {
   .description {
     width: 80vw;
   }
-  .enlarged-img{
+  .enlarged-img {
     width: 100vw;
   }
   .exit {
@@ -255,17 +258,17 @@ img {
     align-items: center;
     justify-content: center;
   }
-  .left-side-bar{
+  .left-side-bar {
     position: absolute;
     left: 8vw;
     width: 2vw;
   }
-  .rigth-side-bar{
+  .rigth-side-bar {
     position: absolute;
     left: 90vw;
     width: 2vw;
   }
-  .link-btn{
+  .link-btn {
     font-size: 1.5rem;
   }
   .txt {

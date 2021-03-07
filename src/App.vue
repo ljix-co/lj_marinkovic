@@ -110,7 +110,7 @@ li {
   width: 100%;
   background-color: white;
   position: fixed;
-  z-index: 1;
+  z-index: 2;
   /* margin-left: 20%; */
 }
 

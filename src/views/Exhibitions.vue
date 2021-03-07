@@ -6,17 +6,13 @@
       </div>
       <div class="preview">
         <div
+          v-lazyload
           class="prev-div"
           v-for="(exh, index) in exhibitions"
           :key="'e' + index"
           @click="showExh(exh)"
         >
-          <img
-            class="prev-img"
-            :src="exh.coverphoto_path"
-            alt=""
-            @load="imgLoaded()"
-          />
+          <img class="prev-img" :data-url="exh.coverphoto_path" alt="" />
           <div class="prev-title">
             <h3>{{ exh.exh_title.toUpperCase() }}</h3>
           </div>
@@ -72,7 +68,6 @@ export default {
       this.showGallery = false;
     },
     imgLoaded() {
-      
       this.changeLoadedImg(true);
     },
     showExh(exh) {
@@ -96,6 +91,7 @@ export default {
   mounted() {
     this.getExhbtns();
     this.changeLoadedImg(false);
+    this.imgLoaded();
   },
 };
 </script>
