@@ -47,10 +47,7 @@
     <div class="gallery-div">
       <h1>Gallery content:</h1>
       <div
-        :class="{
-          gallery: images.length > 2 || newImages.length > 2,
-          'add-gallery': images.length < 2 || newImages.length < 2,
-        }"
+      class="gallery"
       >
         <div class="add-img-div" v-if="newImgUrl === ''">
           <label for="img">
@@ -64,133 +61,15 @@
         </div>
         <div v-if="newImgUrl">
           <div class="add-new-img-div">
-            <div class="delete-img-div">
+            <div class="delconf-img-div">
               <i
                 class="fas fa-trash-alt delete-img"
                 @click="deleteNewImg()"
               ></i>
+              <i class="far fa-check-circle" @click="addNewImg()"></i>
             </div>
             <img class="gallery-img" :src="newImgUrl" alt="" />
-            <!-- NEW IMG DETAILS -->
-            <div class="a-details">
-              <div class="a-input-div">
-                <label>Artwork title:</label>
-                <input class="a-input" type="text" v-model="aTitle" />
-              </div>
-              <div class="a-input-div">
-                <label>Materials:</label>
-                <input class="a-input" type="text" v-model="aMaterial" />
-              </div>
-              <div class="a-input-div">
-                <label>Technique:</label>
-                <input class="a-input" type="text" v-model="aTechnique" />
-              </div>
-              <div class="a-input-div">
-                <label>Price:</label>
-                <input class="a-input" type="text" v-model="aPrice" />
-              </div>
-              <div class="a-input-div">
-                <label>For sale ?</label>
-                <select class="a-select" v-model="aForSale" name="">
-                  <option value="0">No</option>
-                  <option value="1">Yes</option>
-                </select>
-              </div>
-              <div class="a-input-div">
-                <label>Sold:</label>
-                <select class="a-select" v-model="aSold">
-                  <option value="0">No</option>
-                  <option value="1">Yes</option>
-                </select>
-              </div>
-                <div class="a-input-div">
-                <label>Year:</label>
-                <input class="a-input" type="number" v-model="aYear" />
-              </div>
-              <div class="a-btns">
-                <button class="a-confirm" @click="confirmAddImg()">
-                  CONFIRM
-                </button>
-              </div>
             </div>
-          </div>
-        </div>
-        <!-- NEW IMAGES GALLERY -->
-        <div v-if="newImages.length > 0">
-          <div v-lazyload v-for="(img, index) in newImages" :key="'n' + index">
-            <div class="delete-img-div">
-              <i
-                class="fas fa-trash-alt delete-img"
-                @click="deleteNewArtwork(img)"
-              ></i>
-              <i class="far fa-edit edit" @click="editImage(index)"></i>
-            </div>
-            <img
-              class="gallery-img"
-              :data-url="img.img_path"
-              alt=""
-              src="../../public/images/placeholder_photo_l.gif"
-            />
-            <!-- EDIT NEW IMG DETAILS -->
-            <div class="a-details" v-if="editImg && indexImg === index">
-              <div class="a-input-div">
-                <label for="a-title">Artwork title:</label>
-                <input
-                  class="a-input"
-                  id="a-title"
-                  type="text"
-                  v-model="aTitle"
-                />
-              </div>
-              <div class="a-input-div">
-                <label for="a-material">Materials:</label>
-                <input
-                  class="a-input"
-                  id="a-material"
-                  type="text"
-                  v-model="aMaterial"
-                />
-              </div>
-              <div class="a-input-div">
-                <label for="a-technique">Technique:</label>
-                <input
-                  class="a-input"
-                  type="text"
-                  id="a-technique"
-                  v-model="aTechnique"
-                />
-              </div>
-              <div class="a-input-div">
-                <label for="a-price">Price:</label>
-                <input
-                  class="a-input"
-                  type="text"
-                  id="a-price"
-                  v-model="aPrice"
-                />
-              </div>
-              <div class="a-input-div">
-                <label for="forsale">For sale ?</label>
-                <select class="a-select" name="" id="forsale">
-                  <option value="0">No</option>
-                  <option value="1">Yes</option>
-                </select>
-              </div>
-              <div class="a-input-div">
-                <label for="sold">Sold:</label>
-                <select class="a-select" name="" id="sold">
-                  <option value="0">No</option>
-                  <option value="1">Yes</option>
-                </select>
-              </div>
-              <div class="a-btns">
-                <button class="a-btn" @click="confirmAddImg(img)">
-                  CONFIRM
-                </button>
-                <button class="a-btn" @click="exitEditImg()">EXIT</button>
-              </div>
-            </div>
-          </div>
         </div>
         <div v-if="images.length > 0">
           <div v-lazyload v-for="(img, index) in images" :key="'i' + index">
@@ -199,7 +78,6 @@
                 class="fas fa-trash-alt delete-img"
                 @click="deleteImg(img)"
               ></i>
-              <i class="far fa-edit edit" @click="editImage(index)"></i>
             </div>
             <img
               class="gallery-img"
@@ -207,65 +85,6 @@
               alt=""
               src="../../public/images/placeholder_photo_l.gif"
             />
-            <!-- EDIT IMG DETAILS -->
-            <div class="a-details" v-if="editImg && indexImg === index">
-              <div class="a-input-div">
-                <label for="a-title">Artwork title:</label>
-                <input
-                  class="a-input"
-                  id="a-title"
-                  type="text"
-                  v-model="aTitle"
-                />
-              </div>
-              <div class="a-input-div">
-                <label for="a-material">Materials:</label>
-                <input
-                  class="a-input"
-                  id="a-material"
-                  type="text"
-                  v-model="aMaterial"
-                />
-              </div>
-              <div class="a-input-div">
-                <label for="a-technique">Technique:</label>
-                <input
-                  class="a-input"
-                  type="text"
-                  id="a-technique"
-                  v-model="aTechnique"
-                />
-              </div>
-              <div class="a-input-div">
-                <label for="a-price">Price:</label>
-                <input
-                  class="a-input"
-                  type="text"
-                  id="a-price"
-                  v-model="aPrice"
-                />
-              </div>
-              <div class="a-input-div">
-                <label for="forsale">For sale ?</label>
-                <select class="a-select" name="" id="forsale">
-                  <option value="0">No</option>
-                  <option value="1">Yes</option>
-                </select>
-              </div>
-              <div class="a-input-div">
-                <label for="sold">Sold:</label>
-                <select class="a-select" name="" id="sold">
-                  <option value="0">No</option>
-                  <option value="1">Yes</option>
-                </select>
-              </div>
-              <div class="a-btns">
-                <button class="a-btn" @click="confirmAddImg(img)">
-                  CONFIRM
-                </button>
-                <button class="a-btn" @click="exitEditImg()">EXIT</button>
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -290,34 +109,15 @@ export default {
       placeholderImg: "../../public/images/placeholder_photo.jpg",
       url: "",
       newCover: "",
-      // newImages: [],
       newImgUrl: "",
-      newImg: null,
-      aTitle: "",
-      aMaterial: "",
-      aTechnique: "",
-      aPrice: null,
-      aForSale: null,
-      aSold: null,
-      aYear: null,
-      editImg: false,
-      indexImg: null,
-      editNewImg: false,
+      newImg: null
     };
   },
   methods: {
-    confirmAddImg() {
-      let newArtwork = {
-        title: this.aTitle,
-        material: this.aMaterial,
-        technique: this.aTechnique,
-        price: this.aPrice,
-        sold: this.aSold,
-        forsale: this.aForSale,
-        year: this.aYear,
-        image: this.newImg
-      };
-      this.$emit("add-artwork", newArtwork);
+    addNewImg() {
+      let newImage = this.newImg;
+      this.$emit('add-new-img', newImage);
+      this.newImgUrl = "";
     },
     deleteImg(img) {
       this.$emit("delete-img", img);
@@ -329,17 +129,6 @@ export default {
     deleteNewImg() {
       this.newImgUrl = "";
     },
-    deleteNewArtwork(img) {
-      this.$emit("delete-new-artwork", img)
-    },
-    editImage(index) {
-      this.indexImg = index;
-      this.editImg = true;
-    },
-    exitEditImg() {
-      this.indexImg = null;
-      this.editImg = false;
-    },
     getFile(e) {
       this.newCover = e.target.files[0];
       this.url = URL.createObjectURL(this.newCover);
@@ -349,89 +138,37 @@ export default {
       this.newImgUrl = URL.createObjectURL(this.newImg);
     },
     submitEdit() {
-      this.editObject.title = this.title;
-      this.editObject.description = this.description;
-      this.editObject.review = this.rev;
-      this.editObject.yearstart = this.yearStart;
-      this.editObject.yearfinish = this.yearFinish;
-      this.editObject.coverphoto = this.newCover;
-      this.editObject.images = this.newImages;
+      let editedObject = {};
+      editedObject.type = this.editObject.type;
+      if(this.title != this.editObject.title) {
+      editedObject.title = this.title;
+      }
+      if(this.desc != this.editObject.description) {
+       editedObject.description = this.desc;
+        console.log("def")
+      }
+      if(this.rev != this.editObject.review) {
+       editedObject.review = this.rev;
+      }
+      if(this.yearStart != this.editObject.yearstart) {
+       editedObject.yearstart = this.yearStart;
+      }
+      if(this.yearFinish != this.editObject.yearfinish) {
+       editedObject.yearfinish = this.yearFinish;
+      }
+      if(this.newCover != this.editObject.coverphoto) {
+       editedObject.coverphoto = this.newCover;
+      }
+      
+      // this.editObject.images = this.newImages;
 
-      this.$emit("submit-edit", this.editObject);
+      this.$emit("submit-edit", editedObject);
     },
-  },
-  mounted() {
-    console.log(this.images.length);
-  },
+  }
 };
 </script>
 <style scoped>
-.a-btns {
-  width: 30vw;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 2rem;
-  gap: 0.5rem;
-}
-.a-confirm,
-.a-btn {
-  width: 10vh;
-  height: 5vh;
-  border-radius: 10px;
-  border: none;
-  background-color: #214478;
-  color: white;
-  cursor: pointer;
-  margin-top: 2rem;
-  font-size: 1rem;
-  font-family: "Forum", cursive;
-  text-align: center;
-}
-.a-details {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  width: 30vw;
-  position: absolute;
-  background-color: white;
-  z-index: 2;
-}
-.a-input {
-  outline: none;
-  border: none;
-  width: 10vw;
-  height: 3vh;
-  background-color: #d3dff0;
-  font-size: 1.2rem;
-  font-family: "Forum", cursive;
-  text-align: center;
-}
-.a-input:focus {
-  outline: none;
-}
-.a-input-div {
-  display: flex;
-  flex-direction: column;
-}
-.a-select {
-  width: 10vw;
 
-  background-color: #d3dff0;
-  font-size: 1.2rem;
-  font-family: "Forum", cursive;
-  text-align: center;
-  border: none;
-}
-.a-select:focus {
-  outline: none;
-}
-.add-gallery {
-  width: 90vw;
-  margin-top: 5vh;
-}
 .add-img {
   width: 10vw;
   height: 10vw;
@@ -452,7 +189,6 @@ export default {
   margin-bottom: 0.5rem;
 }
 .add-new-img-div {
-  /* position: absolute; */
   z-index: 3;
 }
 .basic-info {
@@ -475,10 +211,7 @@ export default {
   align-items: center;
   justify-content: center;
 }
-/* .delete-img{
-  margin-top: 1vh;
-} */
-.delete-img-div {
+.delconf-img-div {
   position: absolute;
   background-color: white;
   width: 6rem;
@@ -493,6 +226,21 @@ export default {
   cursor: pointer;
   z-index: 1;
 }
+.delete-img-div{
+  position: absolute;
+  background-color: white;
+  width: 3rem;
+  height: 2.5rem;
+  font-size: 2rem;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-left: 27vw;
+  cursor: pointer;
+  z-index: 1;  
+}
 .editor {
   margin-top: 10vh;
   display: flex;
@@ -504,7 +252,6 @@ export default {
 .edited {
   margin-top: 5vh;
   display: flex;
-  /* flex-direction: column; */
   align-items: flex-start;
   justify-content: center;
   align-self: center;
@@ -518,7 +265,6 @@ export default {
   font-size: 2rem;
   font-family: "Forum", cursive;
   text-align: center;
-  /* font-weight: bold; */
   border: none;
   cursor: pointer;
   border-bottom: 1.5px solid gray;
@@ -580,7 +326,6 @@ export default {
 .time-period {
   display: flex;
   font-size: 2rem;
-  /* margin-left: 2rem; */
 }
 .txt-editor-div {
   text-align: start;
@@ -599,12 +344,5 @@ export default {
   border-bottom: 1.5px solid gray;
   text-align: center;
 }
-/* .v-lazy-image {
-  filter: blur(10px);
-  transition: filter 0.7s;
-}
 
-.v-lazy-image-loaded {
-  filter: blur(0);
-} */
 </style>

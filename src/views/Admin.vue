@@ -89,14 +89,16 @@
       v-if="edit"
       :editObject="editObject"
       :images="images"
-      :newImages="newImages"
       @delete-img="deleteImg"
       @submit-edit="submitEdit"
-      @add-artwork="addArtwork"
+      @add-new-img="addNewImg"
     ></Edit>
     <Warning
+      class="warning"
       v-if="warning"
       :message="message"
+      :images="images"
+      :id="id"
       :confirmEditFunction="confirmEditFunction"
       @confirm="confirm"
       @deny="deny"
@@ -124,7 +126,8 @@ export default {
       editObject: {},
       newEditedObject: {},
       newImg: "",
-      newImages: [],
+      newGalleryImg: {},
+      id: null,
       url: "",
       projects: [],
       exh: [],
@@ -136,34 +139,21 @@ export default {
   },
   methods: {
     ...mapActions(["changeLoadedImg", "changeLoader"]),
-    addArtwork(newArtwork) {
+    addNewImg(newImage) {
       let formData = new FormData();
 
       formData.append("sid", localStorage.getItem("sid"));
-      formData.append("artwork_title", newArtwork.title);
-      formData.append("artwork_material", newArtwork.material);
-      formData.append("artwork_technique", newArtwork.technique);
-      formData.append("artwork_price", newArtwork.price);
-      formData.append("artwork_year", newArtwork.year);
-      formData.append("artwork_sold", newArtwork.sold);
-      formData.append("artwork_forsale", newArtwork.forsale);
-      axios.post(this.baseUrl + "artworks", formData).then((res) => {
-        console.log(res);
-        this.artwork_id = res.data.id;
-        formData.delete("artwork_title");
-        formData.delete("artwork_material");
-        formData.delete("artwork_technique");
-        formData.delete("artwork_price");
-        formData.delete("artwork_year");
-        formData.delete("artwork_sold");
-        formData.delete("artwork_forsale");
-      });
-      formData.append("img_image", newArtwork.image);
-      formData.append("artwork_id", this.artwork_id);
+      formData.append("img_image", newImage);
+      formData.append("proj_id", this.editObject.id);
 
-      axios.post(this.baseUrl + 'images', formData).then((res) => {
-        console.log(res)
-      })
+      axios.post(this.baseUrl + "project_images", formData).then((res) => {
+        console.log(res);
+        this.newGalleryImg.img_path =
+          this.baseUrl + "images/" + res.data.img_id + "/image";
+        this.newGalleryImg.id = res.data.img_id;
+        this.images.push(this.newGalleryImg);
+        console.log(this.newGalleryImg);
+      });
     },
     addProject() {
       this.edit = true;
@@ -193,20 +183,29 @@ export default {
     },
     confirm() {
       this.warning = false;
-      this.edit = false;
+      //this.edit = false;
     },
     deleteImg(img) {
-      let img_id = img.img_id;
-      axios
-        .delete(this.baseUrl + "project_images", {
-          params: {
-            img_id: img_id,
-          },
-        })
-        .then((res) => {
-          console.log(res);
-          this.editProj();
-        });
+      this.id = img.img_id;
+      this.warning = true;
+      this.message = "Are you sure you want to delete this image?";
+      this.confirmEditFunction = function () {
+        axios
+          .delete(this.baseUrl + "project_images", {
+            params: {
+              img_id: this.id,
+              sid: localStorage.getItem("sid"),
+            },
+          })
+          .then((res) => {
+            console.log(res);
+            for (let i = 0; i < this.images.length; i++) {
+              if (this.id === this.images[i].img_id) {
+                this.images.splice(i, 1);
+              }
+            }
+          });
+      };
     },
     deny() {
       this.message = "";
@@ -259,39 +258,27 @@ export default {
     imgLoaded() {
       this.changeLoadedImg(true);
     },
-    submitEdit(editObject) {
-      this.confirmEditFunction = null;
-      this.newEditedObject = editObject;
+    submitEdit(editedObject) {
       this.message = "Are you sure you want to submit these changes?";
       this.warning = true;
-      if (editObject.type === "project") {
-        if (editObject.id != null) {
-          this.confirmEditFunction = function () {
-            axios
-              .put(this.baseUrl + "projects", {
-                params: {
-                  proj_id: editObject.id,
-                },
-              })
-              .then((res) => {
-                console.log(res);
-                this.editObject = {};
-                this.images = [];
-              });
-          };
-        } else if (this.editObject.id == null) {
-          this.confirmEditFunction = function () {
-            axios
-              .post(this.baseUrl + "projects") //dovrši
-              .then((res) => {
-                // let projj_id = null;
-                console.log(res);
-                // proj_id = res.proj_id;
-                this.editObject = {};
-                this.images = [];
-              });
-          };
-        }
+      if (editedObject.type === "project") {
+        this.confirmEditFunction = function() {
+          console.log(editedObject);
+          axios
+            .patch(this.baseUrl + "projects", {
+              params: {
+                proj_id: editedObject.id,
+                sid: localStorage.getItem("sid"),
+              },
+            })
+            .then((res) => {
+              console.log(res);
+              this.editObject = {};
+              this.images = [];
+              this.edit = false;
+              // this.confirmEditFunction = null;
+            });
+        };
       }
     },
   },
@@ -452,5 +439,15 @@ button {
   /* margin-top: 17vh; */
   height: 10vh;
   width: 20vw;
+}
+.warning {
+  position: fixed;
+  top: 30vh;
+  width: 40vw;
+  height: 50vh;
+  align-self: center;
+  justify-self: center;
+  box-shadow: 0px 5px 15px 2px rgba(0, 0, 0, 0.48);
+  border: 3px solid rgb(190, 3, 3);
 }
 </style>

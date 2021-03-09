@@ -35,11 +35,11 @@ export default {};
   justify-content: flex-start;
 }
 .sqr {
-  border: 4px solid #214478;
+  border: 8px solid #214478;
   width: 150px;
   height: 150px;
   position: relative;
-  animation: left-right 5s infinite linear;
+  animation: left-right 10s infinite linear;
 }
 @media only screen and (max-width: 768px) {
   .sqr{
