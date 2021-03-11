@@ -15,6 +15,7 @@ export default {
     confirmEditFunction: Function,
     id: Number,
     images: Array,
+    editObject: Object
   },
   methods: {
     confirm() {

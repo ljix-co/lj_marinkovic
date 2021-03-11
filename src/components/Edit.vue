@@ -15,6 +15,14 @@
             <input class="year" type="text" v-model="yearFinish" />
           </div>
         </div>
+          <div class="edit-content" v-if="editObject.type === 'exh'">
+          <h1>Place:</h1>
+          <input class="e-title" v-model="place" />
+        </div>
+         <div class="edit-content" v-if="editObject.type === 'exh'">
+          <h1>Solo/group:</h1>
+          <input class="e-title" v-model="exhType" />
+        </div>
         <div class="cover-img-div">
           <!-- ADD NEW COVER -->
           <div class="add-cover" v-if="cover">
@@ -106,9 +114,11 @@ export default {
       yearStart: this.editObject.yearstart,
       yearFinish: this.editObject.yearfinish,
       cover: this.editObject.coverphoto_path,
+      place: this.editObject.place,
+      exhType: this.editObject.exhtype,
       placeholderImg: "../../public/images/placeholder_photo.jpg",
       url: "",
-      newCover: "",
+      newCover: this.editObject.coverphoto,
       newImgUrl: "",
       newImg: null
     };
@@ -138,26 +148,15 @@ export default {
       this.newImgUrl = URL.createObjectURL(this.newImg);
     },
     submitEdit() {
-      let editedObject = {};
-      editedObject.type = this.editObject.type;
-      if(this.title != this.editObject.title) {
-      editedObject.title = this.title;
-      }
-      if(this.desc != this.editObject.description) {
-       editedObject.description = this.desc;
-        console.log("def")
-      }
-      if(this.rev != this.editObject.review) {
-       editedObject.review = this.rev;
-      }
-      if(this.yearStart != this.editObject.yearstart) {
-       editedObject.yearstart = this.yearStart;
-      }
-      if(this.yearFinish != this.editObject.yearfinish) {
-       editedObject.yearfinish = this.yearFinish;
-      }
-      if(this.newCover != this.editObject.coverphoto) {
-       editedObject.coverphoto = this.newCover;
+      let editedObject= {
+        title: this.title,
+        desc: this.desc,
+        rev: this.rev,
+        yearStart: this.yearStart,
+        yearFinish: this.yearFinish,
+        newCover: this.newCover,
+        place: this.place,
+        exhType: this.exhType
       }
       
       // this.editObject.images = this.newImages;
@@ -260,9 +259,9 @@ export default {
   width: 90vw;
 }
 .e-title {
-  width: fit-content;
+  width: 40vw;
   height: 5vh;
-  font-size: 2rem;
+  font-size: 1.2rem;
   font-family: "Forum", cursive;
   text-align: center;
   border: none;
@@ -338,7 +337,7 @@ export default {
 .year {
   outline: none;
   border: none;
-  width: 4rem;
+  width: 8rem;
   font-size: 1.2rem;
   font-family: "Forum", cursive;
   border-bottom: 1.5px solid gray;
