@@ -120,10 +120,12 @@ export default {
 }
 .preview {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   margin-bottom: 20vh;
   flex-wrap: wrap;
   width: 100vw;
+  margin-left: 4rem;
+  
 }
 .prev-img {
   width: 30vw;
@@ -133,6 +135,7 @@ export default {
 .prev-div {
   width: 30vw;
   margin-left: 2rem;
+  margin-bottom: 2rem;
   box-shadow: 0px 5px 15px 2px rgba(0, 0, 0, 0.48);
   cursor: pointer;
 }

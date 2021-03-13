@@ -1,6 +1,10 @@
 <template>
   <div class="admin">
-    <div v-if="edit === false && addNew === false" :class="{ fade: warning }">
+    <div
+      class="admin-list-options"
+      v-if="edit === false && addNew === false && edit_artworks === false"
+      :class="{ fade: warning || add_artwork }"
+    >
       <div class="aut-info" v-for="(info, index) in aut_info" :key="index">
         <div class="title"><h1>Biography and author's image</h1></div>
         <img
@@ -17,7 +21,7 @@
           <input id="real-btn" type="file" hidden @change="getFile" />
           <img v-if="url" :src="url" alt="" />
           <div class="btns">
-            <button>CONFIRM</button>
+            <button @click="confrmNewAutImg()">CONFIRM</button>
             <button @click="closeImgEdit()">DISMISS</button>
           </div>
         </div>
@@ -73,21 +77,41 @@
         <div class="title"><h1>Exhibitions</h1></div>
 
         <div class="list-exh">
-          <div class="add-container">
+          <div class="add-container" @click="addNewExh()">
             <div class="add">
               <i class="fas fa-plus"></i>
             </div>
           </div>
           <div class="exh" v-for="(exh, index) in exh" :key="'e' + index">
+            <div class="delete-img-div">
+              <i
+                class="fas fa-trash-alt delete-img"
+                @click="deleteExh(exh)"
+              ></i>
+            </div>
             <img
               class="img-art"
               :src="exh.coverphoto_path"
               @load="imgLoaded()"
             />
-
             <div class="bottom-line">
               <h3 class="bottom-title">{{ exh.exh_title.toUpperCase() }}</h3>
               <i class="far fa-edit icon" @click="editExh(exh)"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="artworks">
+        <div class="title"><h1>Artworks (shop)</h1></div>
+        <div class="artworks-mng">
+          <div class="add-artwork-container" @click="addArtwork()">
+            <div class="add">
+              <i class="fas fa-plus"></i>
+            </div>
+          </div>
+          <div class="edit-container" @click="editArtworks()">
+            <div class="edit-artwork">
+              <i class="far fa-edit"></i>
             </div>
           </div>
         </div>
@@ -124,12 +148,21 @@
       @add-new-img="addNewImg"
       @delete-new-img="deleteNewImg"
     ></AddNew>
+    <AddArtwork
+      class="add-artwork"
+      v-if="add_artwork"
+      @add-artwork="addNewArtwork"
+      @exit-add-artwork="exitAddArtwork"
+    ></AddArtwork>
+    <EditArtworks v-if="edit_artworks" :artworks="artworks" @delete-artwork="deleteArtwork"></EditArtworks>
   </div>
 </template>
 <script>
 import Edit from "../components/Edit.vue";
 import Warning from "../components/Warning";
 import AddNew from "../components/AddNew.vue";
+import AddArtwork from "../components/AddArtwork.vue";
+import EditArtworks from "../components/EditArtworks.vue";
 import { mapState, mapActions } from "vuex";
 import axios from "axios";
 export default {
@@ -137,14 +170,19 @@ export default {
     Edit,
     Warning,
     AddNew,
+    AddArtwork,
+    EditArtworks
   },
   data() {
     return {
+      add_artwork: false,
       artwork_id: null,
+      artworks: [],
       aut_info: [],
       txt: "",
       editor: false,
       edit: false,
+      edit_artworks: false,
       editImg: false,
       editObject: {},
       newEditedObject: {},
@@ -161,14 +199,43 @@ export default {
       type: "",
       addNew: false,
       newId: null,
+      newArtworkId: null
     };
   },
   methods: {
     ...mapActions(["changeLoadedImg", "changeLoader"]),
-    addNewProjExh(newObject) {
+    addArtwork() {
+      this.add_artwork = true;
+    },
+    addNewArtwork(newArtwork) {
       let formData = new FormData();
       formData.append("sid", localStorage.getItem("sid"));
+      formData.append("artwork_title", newArtwork.title);
+      formData.append("artwork_material", newArtwork.material);
+      formData.append("artwork_technique", newArtwork.technique);
+      formData.append("artwork_price", newArtwork.price);
+      formData.append("artwork_year", newArtwork.year);
+      formData.append("artwork_sold", newArtwork.sold);
+      formData.append("artwork_forsale", newArtwork.forSale);
+      axios.post(this.baseUrl + 'artworks', formData).then((res) => {
+        console.log(res);
+        this.newArtworkId = res.data.artwork_id;
+        formData.append('artwork_id', this.newArtworkId);
+        formData.append('img_image', newArtwork.artworkImage);
+        axios.post(this.baseUrl + 'images', formData).then((res) => {
+          console.log(res);
+          this.$router.go();
+        })
+      })
+    },
+    addNewExh() {
+      this.addNew = true;
+      this.type = "newExh";
+    },
+    addNewProjExh(newObject) {
       if (this.type === "newProject") {
+        let formData = new FormData();
+        formData.append("sid", localStorage.getItem("sid"));
         formData.append("proj_title", newObject.title);
         formData.append("proj_desc", newObject.desc);
         formData.append("proj_year_start", newObject.yearStart);
@@ -180,6 +247,22 @@ export default {
         axios.post(this.baseUrl + "projects", formData).then((res) => {
           console.log(res);
           this.newId = res.data.proj_id;
+        });
+      }
+      if (this.type === "newExh") {
+        let formData = new FormData();
+        formData.append("sid", localStorage.getItem("sid"));
+        formData.append("exh_title", newObject.title);
+        formData.append("exh_desc", newObject.desc);
+        formData.append("exh_rec", newObject.rev);
+        formData.append("exh_date_start", newObject.yearStart);
+        formData.append("exh_date_finish", newObject.yearFinish);
+        formData.append("exh_place", newObject.place);
+        formData.append("exh_type", newObject.exhType);
+        formData.append("exh_coverphoto", newObject.cover);
+        axios.post(this.baseUrl + "exhibitions", formData).then((res) => {
+          console.log(res);
+          this.newId = res.data.exh_id;
         });
       }
     },
@@ -224,6 +307,17 @@ export default {
           console.log(this.newGalleryImg);
         });
       }
+      if (this.type === "newExh") {
+        formData.append("exh_id", this.newId);
+        axios.post(this.baseUrl + "exh_images", formData).then((res) => {
+          console.log(res);
+          this.newGalleryImg.img_path =
+            this.baseUrl + "images/" + res.data.img_id + "/image";
+          this.newGalleryImg.img_id = res.data.img_id;
+          this.images.push(this.newGalleryImg);
+          console.log(this.newGalleryImg);
+        });
+      }
     },
     addProject() {
       this.addNew = true;
@@ -254,7 +348,44 @@ export default {
     },
     confirm() {
       this.warning = false;
-      //this.edit = false;
+    },
+    confrmNewAutImg() {
+      if (this.newImg != "") {
+        let formData = new FormData();
+        formData.append("sid", localStorage.getItem("sid"));
+        formData.append("aut_profimg", this.newImg);
+        axios.patch(this.baseUrl + "author_info", formData).then((res) => {
+          console.log(res);
+          this.$router.go();
+        });
+      }
+    },
+    deleteArtwork(art){
+      let formData = new FormData();
+      formData.append("sid", localStorage.getItem("sid"));
+      formData.append("artwork_id", art.artwork_id);
+      axios.delete(this.baseUrl + 'artworks', {params: {
+        sid: localStorage.getItem("sid"),
+        artwork_id: art.artwork_id
+      }}).then((res) => {
+        console.log(res);
+        this.$router.go();
+      })
+    },
+    deleteExh(exh) {
+      let exh_id = exh.exh_id;
+      this.message = `Are you sure you want to delete '${exh.exh_title}' exhibition?`;
+      this.warning = true;
+      this.confirmEditFunction = function () {
+        axios
+          .delete(this.baseUrl + "exhibitions", {
+            params: { exh_id: exh_id, sid: localStorage.getItem("sid") },
+          })
+          .then((res) => {
+            console.log(res);
+            this.$router.go();
+          });
+      };
     },
     deleteImg(img) {
       this.id = img.img_id;
@@ -332,6 +463,12 @@ export default {
       this.message = "";
       this.warning = false;
     },
+    editArtworks(){
+      axios.get(this.baseUrl + 'artworks').then((res) => {
+        this.artworks = res.data.data;
+        this.edit_artworks = true;
+      })
+    },
     editExh(exh) {
       this.editObject = {};
       this.images = [];
@@ -377,7 +514,9 @@ export default {
           this.edit = true;
         });
     },
-
+    exitAddArtwork() {
+      this.add_artwork = false;
+    },
     getAutInfo() {
       this.changeLoader(true);
       axios.get(this.baseUrl + "author_info").then((res) => {
@@ -512,7 +651,8 @@ button {
   font-family: "Forum", cursive;
   text-align: center;
 }
-.add {
+.add,
+.edit-artwork {
   width: 10vw;
   height: 10vw;
   display: flex;
@@ -520,7 +660,26 @@ button {
   justify-content: center;
   border: 3px dashed #214478;
   cursor: pointer;
-  font-size: 2rem;
+  font-size: 3rem;
+}
+.add-artwork {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.add-artwork-container,
+.edit-container {
+  box-shadow: 0px 5px 15px 2px rgba(0, 0, 0, 0.48);
+  width: 30vw;
+  height: 35vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 4rem;
+  margin-left: -3rem;
 }
 .add-container {
   box-shadow: 0px 5px 15px 2px rgba(0, 0, 0, 0.48);
@@ -548,11 +707,30 @@ button {
   justify-content: flex-start;
   width: 100vw;
 }
-
+.admin-list-options {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.artworks {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: 15vh;
+  width: 90vw;
+}
+.artworks-mng {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 2rem;
+}
 .aut-info {
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  width: 90vw;
 }
 .bio {
   width: 35vw;
@@ -613,6 +791,9 @@ button {
   left: 17vw;
   margin-top: 15vh;
 }
+.exhbs {
+  margin-left: 6rem;
+}
 .fade {
   opacity: 0.1;
 }
@@ -648,6 +829,8 @@ button {
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  width: 90vw;
+  /* margin-left: 2rem; */
 }
 .project,
 .exh {
