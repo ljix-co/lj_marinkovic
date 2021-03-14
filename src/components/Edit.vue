@@ -1,5 +1,6 @@
 <template>
   <div class="editor">
+    <i class="far fa-arrow-alt-circle-left go-back" @click="goBack()"></i>
     <div class="edited">
       <button class="submit" @click="submitEdit()">SUBMIT</button>
       <div class="basic-info">
@@ -15,11 +16,11 @@
             <input class="year" type="text" v-model="yearFinish" />
           </div>
         </div>
-          <div class="edit-content" v-if="editObject.type === 'exh'">
+        <div class="edit-content" v-if="editObject.type === 'exh'">
           <h1>Place:</h1>
           <input class="e-title" v-model="place" />
         </div>
-         <div class="edit-content" v-if="editObject.type === 'exh'">
+        <div class="edit-content" v-if="editObject.type === 'exh'">
           <h1>Solo/group:</h1>
           <input class="e-title" v-model="exhType" />
         </div>
@@ -35,8 +36,7 @@
               <i class="far fa-times-circle exit" @click="delNewCover()"></i>
             </div>
           </div>
-         
-        
+
           <h3 class="cover-title">COVER PHOTO</h3>
         </div>
       </div>
@@ -54,9 +54,7 @@
     <!-- GALLERY -->
     <div class="gallery-div">
       <h1>Gallery content:</h1>
-      <div
-      class="gallery"
-      >
+      <div class="gallery">
         <div class="add-img-div" v-if="newImgUrl === ''">
           <label for="img">
             <div class="add-img-div">
@@ -77,7 +75,7 @@
               <i class="far fa-check-circle" @click="addNewImg()"></i>
             </div>
             <img class="gallery-img" :src="newImgUrl" alt="" />
-            </div>
+          </div>
         </div>
         <div v-if="images.length > 0">
           <div v-lazyload v-for="(img, index) in images" :key="'i' + index">
@@ -104,7 +102,7 @@ export default {
   props: {
     editObject: Object,
     images: Array,
-    newImages: Array
+    newImages: Array,
   },
   data() {
     return {
@@ -120,13 +118,13 @@ export default {
       url: "",
       newCover: this.editObject.coverphoto,
       newImgUrl: "",
-      newImg: null
+      newImg: null,
     };
   },
   methods: {
     addNewImg() {
       let newImage = this.newImg;
-      this.$emit('add-new-img', newImage);
+      this.$emit("add-new-img", newImage);
       this.newImgUrl = "";
     },
     deleteImg(img) {
@@ -147,8 +145,11 @@ export default {
       this.newImg = e.target.files[0];
       this.newImgUrl = URL.createObjectURL(this.newImg);
     },
+    goBack() {
+      this.$emit("go-back");
+    },
     submitEdit() {
-      let editedObject= {
+      let editedObject = {
         title: this.title,
         desc: this.desc,
         rev: this.rev,
@@ -156,18 +157,17 @@ export default {
         yearFinish: this.yearFinish,
         newCover: this.newCover,
         place: this.place,
-        exhType: this.exhType
-      }
-      
+        exhType: this.exhType,
+      };
+
       // this.editObject.images = this.newImages;
 
       this.$emit("submit-edit", editedObject);
     },
-  }
+  },
 };
 </script>
 <style scoped>
-
 .add-img {
   width: 10vw;
   height: 10vw;
@@ -225,7 +225,7 @@ export default {
   cursor: pointer;
   z-index: 1;
 }
-.delete-img-div{
+.delete-img-div {
   position: absolute;
   background-color: white;
   width: 3rem;
@@ -238,7 +238,7 @@ export default {
   gap: 0.5rem;
   margin-left: 27vw;
   cursor: pointer;
-  z-index: 1;  
+  z-index: 1;
 }
 .editor {
   margin-top: 10vh;
@@ -306,6 +306,14 @@ export default {
   width: 30vw;
   height: fit-content;
 }
+.go-back {
+  font-size: 2rem;
+  position: fixed;
+  left: 22vw;
+  top: 1rem;
+  cursor: pointer;
+  z-index: 2;
+}
 .submit {
   position: absolute;
   left: 85vw;
@@ -343,5 +351,4 @@ export default {
   border-bottom: 1.5px solid gray;
   text-align: center;
 }
-
 </style>

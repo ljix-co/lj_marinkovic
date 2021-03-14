@@ -126,6 +126,7 @@
       @delete-img="deleteImg"
       @submit-edit="submitEdit"
       @add-new-img="addNewImg"
+      @go-back="goBack"
     ></Edit>
     <div class="warning-div" v-if="warning">
       <Warning
@@ -135,6 +136,8 @@
         :id="id"
         :confirmEditFunction="confirmEditFunction"
         :editObject="editObject"
+        :array="array"
+        :artworks="artworks"
         @confirm="confirm"
         @deny="deny"
       ></Warning>
@@ -147,14 +150,22 @@
       @add-new="addNewProjExh"
       @add-new-img="addNewImg"
       @delete-new-img="deleteNewImg"
+      @go-back="goBack"
     ></AddNew>
     <AddArtwork
       class="add-artwork"
       v-if="add_artwork"
       @add-artwork="addNewArtwork"
       @exit-add-artwork="exitAddArtwork"
+      @go-back="goBack"
     ></AddArtwork>
-    <EditArtworks v-if="edit_artworks" :artworks="artworks" @delete-artwork="deleteArtwork"></EditArtworks>
+    <EditArtworks
+      v-if="edit_artworks"
+      :artworks="artworks"
+      @delete-artwork="deleteArtwork"
+      @update-artwork="updateArtwork"
+      @go-back="goBack"
+    ></EditArtworks>
   </div>
 </template>
 <script>
@@ -171,13 +182,14 @@ export default {
     Warning,
     AddNew,
     AddArtwork,
-    EditArtworks
+    EditArtworks,
   },
   data() {
     return {
       add_artwork: false,
       artwork_id: null,
       artworks: [],
+      array: [],
       aut_info: [],
       txt: "",
       editor: false,
@@ -199,7 +211,7 @@ export default {
       type: "",
       addNew: false,
       newId: null,
-      newArtworkId: null
+      newArtworkId: null,
     };
   },
   methods: {
@@ -213,20 +225,24 @@ export default {
       formData.append("artwork_title", newArtwork.title);
       formData.append("artwork_material", newArtwork.material);
       formData.append("artwork_technique", newArtwork.technique);
-      formData.append("artwork_price", newArtwork.price);
-      formData.append("artwork_year", newArtwork.year);
+      if (newArtwork.price != null) {
+        formData.append("artwork_price", newArtwork.price);
+      }
+      if (newArtwork.year != null) {
+        formData.append("artwork_year", newArtwork.year);
+      }
       formData.append("artwork_sold", newArtwork.sold);
       formData.append("artwork_forsale", newArtwork.forSale);
-      axios.post(this.baseUrl + 'artworks', formData).then((res) => {
+      axios.post(this.baseUrl + "artworks", formData).then((res) => {
         console.log(res);
         this.newArtworkId = res.data.artwork_id;
-        formData.append('artwork_id', this.newArtworkId);
-        formData.append('img_image', newArtwork.artworkImage);
-        axios.post(this.baseUrl + 'images', formData).then((res) => {
+        formData.append("artwork_id", this.newArtworkId);
+        formData.append("img_image", newArtwork.artworkImage);
+        axios.post(this.baseUrl + "images", formData).then((res) => {
           console.log(res);
           this.$router.go();
-        })
-      })
+        });
+      });
     },
     addNewExh() {
       this.addNew = true;
@@ -360,17 +376,31 @@ export default {
         });
       }
     },
-    deleteArtwork(art){
-      let formData = new FormData();
-      formData.append("sid", localStorage.getItem("sid"));
-      formData.append("artwork_id", art.artwork_id);
-      axios.delete(this.baseUrl + 'artworks', {params: {
-        sid: localStorage.getItem("sid"),
-        artwork_id: art.artwork_id
-      }}).then((res) => {
-        console.log(res);
-        this.$router.go();
-      })
+    deleteArtwork(art) {
+      this.message = `Are you sure you want to delete '${art.artwork_title}' artwork?`;
+      this.warning = true;
+      // this.array = this.artworks;
+      this.confirmEditFunction = function () {
+        let formData = new FormData();
+        formData.append("sid", localStorage.getItem("sid"));
+        formData.append("artwork_id", art.artwork_id);
+        axios
+          .delete(this.baseUrl + "artworks", {
+            params: {
+              sid: localStorage.getItem("sid"),
+              artwork_id: art.artwork_id,
+            },
+          })
+          .then((res) => {
+            console.log(res);
+            for (let i = 0; i < this.artworks.length; i++) {
+              if (this.artworks[i].artwork_id == art.artwork_id) {
+                this.artworks.splice(i, 1);
+                this.warning = false;
+              }
+            }
+          });
+      };
     },
     deleteExh(exh) {
       let exh_id = exh.exh_id;
@@ -463,11 +493,11 @@ export default {
       this.message = "";
       this.warning = false;
     },
-    editArtworks(){
-      axios.get(this.baseUrl + 'artworks').then((res) => {
+    editArtworks() {
+      axios.get(this.baseUrl + "artworks").then((res) => {
         this.artworks = res.data.data;
         this.edit_artworks = true;
-      })
+      });
     },
     editExh(exh) {
       this.editObject = {};
@@ -543,8 +573,50 @@ export default {
         console.log(res.data.data);
       });
     },
+    goBack() {
+      this.$router.go();
+    },
     imgLoaded() {
       this.changeLoadedImg(true);
+    },
+    updateArtwork(updatedArtwork) {
+      this.message = "Are you sure you want to submit these changes?";
+      this.warning = true;
+      this.array = this.artworks;
+      this.confirmEditFunction = function () {
+        let formData = new FormData();
+        formData.append("sid", localStorage.getItem("sid"));
+        formData.append("artwork_id", updatedArtwork.id);
+        for (let i = 0; i < this.array.length; i++) {
+          if (this.array[i].artwork_id == updatedArtwork.id) {
+            let artwork = this.array[i];
+            if (artwork.artwork_title !== updatedArtwork.title) {
+              formData.append("artwork_title", updatedArtwork.title);
+            }
+            if (artwork.artwork_material !== updatedArtwork.material) {
+              formData.append("artwork_material", updatedArtwork.material);
+            }
+            if (artwork.artwork_technique !== updatedArtwork.technique) {
+              formData.append("artwork_technique", updatedArtwork.technique);
+            }
+            if (artwork.artwork_price !== updatedArtwork.price) {
+              formData.append("artwork_price", updatedArtwork.price);
+            }
+            if (artwork.artwork_year !== updatedArtwork.year) {
+              formData.append("artwork_year", updatedArtwork.year);
+            }
+            if (artwork.artwork_sold !== updatedArtwork.sold) {
+              formData.append("artwork_sold", updatedArtwork.sold);
+            }
+            if (artwork.artwork_forsale !== updatedArtwork.forSale) {
+              formData.append("artwork_forsale", updatedArtwork.forSale);
+            }
+            axios.patch(this.baseUrl + "artworks", formData).then((res) => {
+              console.log(res);
+            });
+          }
+        }
+      };
     },
     submitBioChanges() {
       let formData = new FormData();

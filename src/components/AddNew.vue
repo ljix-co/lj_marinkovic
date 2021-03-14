@@ -1,5 +1,6 @@
 <template>
   <div class="add-new">
+    <i class="far fa-arrow-alt-circle-left go-back" @click="goBack()"></i>
     <div class="edited" v-if="newId === null">
       <button class="submit" @click="addNew()">ADD</button>
       <div class="basic-info">
@@ -128,13 +129,13 @@ export default {
     },
     addNewImg() {
       let newImage = this.newImg;
-     
+
       this.$emit("add-new-img", newImage);
       // this.newImg = "";
       this.newImgUrl = "";
     },
-    deleteImg(img){
-      this.$emit('delete-new-img', img);
+    deleteImg(img) {
+      this.$emit("delete-new-img", img);
     },
     delNewCover() {
       this.cover = "";
@@ -151,6 +152,9 @@ export default {
     getNewImg(e) {
       this.newImg = e.target.files[0];
       this.newImgUrl = URL.createObjectURL(this.newImg);
+    },
+    goBack() {
+      this.$emit("go-back");
     },
   },
 };
@@ -297,6 +301,14 @@ export default {
   box-shadow: 0px 5px 15px 2px rgba(0, 0, 0, 0.48);
   width: 30vw;
   height: fit-content;
+}
+.go-back {
+  font-size: 2rem;
+  position: fixed;
+  left: 22vw;
+  top: 1rem;
+  cursor: pointer;
+  z-index: 2;
 }
 .submit {
   position: absolute;

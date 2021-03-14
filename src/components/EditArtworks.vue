@@ -1,5 +1,6 @@
 <template>
   <div class="edit-artworks">
+    <i class="far fa-arrow-alt-circle-left go-back" @click="goBack()"></i>
     <div class="prev-gallery" :class="{ fade: edit }">
       <div
         v-lazyload
@@ -51,18 +52,18 @@
           />
           <div class="selects">
             <label for="for-sale">For sale?</label>
-            <select v-model="forSale" id="for-sale">
+            <select v-model="forSale" id="for-sale" @change="updateForSale">
               <option value="0">No</option>
               <option value="1">Yes</option>
             </select>
-            <label for="for-sale" v-if="forSale === 1">Sold?</label>
+            <label for="for-sale" v-show="forSale === 1">Sold?</label>
             <select v-model="sold" id="for-sale" v-if="forSale === 1">
               <option value="0">No</option>
               <option value="1">Yes</option>
             </select>
           </div>
         </div>
-        <button>SUBMIT</button>
+        <button @click="submitChanges()">SUBMIT</button>
       </div>
     </div>
   </div>
@@ -94,11 +95,48 @@ export default {
       this.edit = true;
       this.id = art.artwork_id;
       this.title = art.artwork_title;
+      this.material = art.artwork_material;
+      this.technique = art.artwork_technique;
+      this.price = art.artwork_price;
+      this.year = art.artwork_year;
+      this.type = art.artwork_type;
+      this.forSale = art.artwork_forsale;
+      this.sold = art.artwork_sold;
+      if (this.forSale === null) {
+        this.forSale = 0;
+      }
+      if (this.sold === null) {
+        this.sold = 0;
+      }
     },
     exit() {
-        this.edit = false;
-        this.id = null;
-    }
+      this.edit = false;
+      this.id = null;
+    },
+    goBack() {
+      this.$emit("go-back");
+    },
+    submitChanges() {
+      let updatedArtwork = {
+        id: this.id,
+        title: this.title,
+        material: this.material,
+        technique: this.technique,
+        price: this.price,
+        year: this.year,
+        type: this.type,
+        forSale: this.forSale,
+        sold: this.sold,
+      };
+      this.$emit("update-artwork", updatedArtwork);
+    },
+    updateForSale() {
+      if (this.forSale == 1) {
+        this.forSale = 1;
+      } else if (this.forSale == 0) {
+        this.forSale = 0;
+      }
+    },
   },
 };
 </script>
@@ -195,6 +233,14 @@ select:focus {
 }
 .fade {
   opacity: 0.1;
+}
+.go-back {
+  font-size: 2rem;
+  position: fixed;
+  left: 22vw;
+  top: 1rem;
+  cursor: pointer;
+  z-index: 2;
 }
 .icon {
   font-size: 1.5rem;
