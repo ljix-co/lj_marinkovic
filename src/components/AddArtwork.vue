@@ -70,9 +70,9 @@ export default {
         type: this.type,
         forSale: this.forSale,
         sold: this.sold,
-        artworkImage: this.artworkImage
+        artworkImage: this.artworkImage,
       };
-      this.$emit('add-artwork', newArtwork);
+      this.$emit("add-artwork", newArtwork);
     },
     changeValue() {
       console.log(this.forSale);
@@ -197,5 +197,46 @@ select:focus {
   justify-content: flex-start;
   gap: 0.5rem;
   font-size: 1.2rem;
+}
+
+@media only screen and (max-width: 768px) {
+  input {
+    width: 80vw;
+    height: 4vh;
+  }
+  img{
+    height: 30vw;
+  }
+  select {
+    width: 30vw;
+  }
+  .add-artworks {
+    width: 90vw;
+    
+  }
+  .add-container{
+    width: 30vw;
+    height: 30vw;
+    margin-top: 0.5rem;
+  }
+  .add{
+    width: 30vw;
+    height: 30vw;
+  }
+  .delete-img{
+    margin-left: 75vw;
+  }
+  .exit {
+    margin-top: -85vh;
+    margin-left: 75vw;
+  }
+  .inpts{
+    width: 90vw;
+    gap: 0.5rem;
+  }
+  .selects {
+    display: flex;
+    flex-direction: column;
+  }
 }
 </style>

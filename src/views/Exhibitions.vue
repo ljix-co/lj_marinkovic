@@ -161,6 +161,7 @@ export default {
     flex-direction: column;
     gap: 1rem;
     width: 100vw;
+    margin-left: 0;
   }
   .prev-div {
     width: 80vw;

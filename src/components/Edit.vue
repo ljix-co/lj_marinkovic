@@ -351,4 +351,76 @@ export default {
   border-bottom: 1.5px solid gray;
   text-align: center;
 }
+@media only screen and (max-width: 768px) {
+
+  .add-new {
+    margin-left: 0%;
+  }
+  .add-img-div {
+    width: 90vw;
+  }
+  .add-img {
+    width: 30vw;
+    height: 30vw;
+  }
+  .basic-info {
+    width: 90vw;
+  }
+    .cover-img-div {
+    width: 90vw;
+  }
+  .cover-img{
+    width: 90vw;
+  }
+  .delete-img-div{
+    margin-left: 77vw;
+  }
+  .edited {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    align-items: center;
+    justify-content: center;
+  }
+  .edit-content {
+    width: 90vw;
+    display: flex;
+    flex-direction: column;
+  }
+  .gallery{
+    width: 90vw;
+    columns: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .gallery-img{
+    width: 90vw;
+  }
+  .go-back {
+    top: 4rem;
+    left: 1rem;
+    background-color: white;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .txt-editor-div {
+    width: 90vw;
+  }
+  .vue_editor {
+    width: 90vw;
+  }
+  .submit {
+    position: fixed;
+    /* order: 3; */
+    top: 5vh;
+    left: 75vw;
+    z-index: 2;
+  }
+}
 </style>

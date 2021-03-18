@@ -377,7 +377,7 @@ export default {
       }
     },
     deleteArtwork(art) {
-      this.message = `Are you sure you want to delete '${art.artwork_title}' artwork?`;
+      this.message = `Are you sure you want to remove '${art.artwork_title}' from artworks?`;
       this.warning = true;
       // this.array = this.artworks;
       this.confirmEditFunction = function () {
@@ -935,5 +935,101 @@ button {
   align-items: center;
   justify-content: center;
   z-index: 4;
+}
+@media only screen and (max-width: 768px) {
+  .add, .edit-artwork {
+    width: 30vw;
+    height: 30vw;
+  }
+  .add-artwork-container, .edit-container{
+    width: 90vw;
+    margin-left: 0%;
+    margin-right: 0%;
+  }
+
+  .add-container {
+    width: 90vw;
+    margin-left: 0%;
+  }
+  .add-file{
+    width: 30vw;
+    height: 30vw;
+    font-size: 2rem;
+  }
+  .artworks{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .artworks-mng{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .aut-info {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    align-items: center;
+    justify-content: center;
+  }
+  .bio {
+    width: 90vw;
+  }
+  .bio-content {
+    width: 80vw;
+  }
+  .bottom-title{
+    width: 80vw;
+  }
+  .delete-img-div{
+    margin-left: 77%;
+  }
+  .edit-container{
+    width: 90vw;
+  }
+  .edit-img{
+    top: 20vh;
+    left: 30vw;
+  
+  }
+  .img-art{
+    width: 90vw;
+  }
+  .img-prof {
+    width: 90vw;
+    margin-top: 10vh;
+  }
+  .list-projects,
+  .list-exh {
+    width: 90vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+  }
+  .project, .exh{
+    width: 90vw;
+    margin-left: 0%;
+  }
+  .projects,
+  .exhbs {
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-left: 0;
+  }
+  .title {
+    transform: none;
+    width: 90vw;
+    font-size: 1rem;
+    margin-top: 10vh;
+  }
 }
 </style>

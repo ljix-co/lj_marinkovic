@@ -86,7 +86,8 @@ img {
 }
 .txt {
   border: 10px solid #adadb0;
-  border-top: 1px solid #adadb0;
+  /* border-top: 1px solid #adadb0; */
+  border-top: none;
   height: 90vh;
   width: 35vw;
   position: absolute;

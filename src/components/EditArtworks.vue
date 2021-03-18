@@ -3,7 +3,7 @@
     <i class="far fa-arrow-alt-circle-left go-back" @click="goBack()"></i>
     <div class="prev-gallery" :class="{ fade: edit }">
       <div
-        v-lazyload
+       
         class="prev-div"
         v-for="(art, index) in artworks"
         :key="index"
@@ -16,9 +16,9 @@
         </div>
         <img
           class="prev-img"
-          :data-url="art.artwork_imgpath"
+          :src="art.artwork_imgpath"
           alt=""
-          src="../../public/images/placeholder_photo_l.gif"
+          
         />
         <div class="prev-desc">
           <p>{{ art.artwork_title.toUpperCase() }}</p>
@@ -277,6 +277,7 @@ select:focus {
   width: 90vw;
   margin-bottom: 2rem;
   column-count: 3;
+  grid-row: auto;
   column-gap: 1rem;
   height: fit-content;
 }
@@ -286,5 +287,53 @@ select:focus {
   justify-content: flex-start;
   gap: 0.5rem;
   font-size: 1.2rem;
+}
+@media only screen and (max-width: 768px) {
+  input {
+    width: 80vw;
+  }
+  select {
+    width: 30vw;
+  }
+  .delete-img-div {
+    margin-left: 77vw;
+  }
+  .edit {
+    width: 90vw;
+    left: 1rem;
+  }
+  .exit {
+    margin-left: 65vw;
+  }
+  .go-back {
+    top: 4rem;
+    left: 1rem;
+    background-color: white;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .prev-div {
+    width: 90vw;
+    margin: 0;
+    margin-left: 1rem;
+  }
+  .prev-gallery {
+    width: 100vw;
+    columns: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .prev-img {
+    width: 90vw;
+  }
+  .selects{
+    display: flex;
+    flex-direction: column;
+  }
 }
 </style>

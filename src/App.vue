@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div id="nav">
-      <div class="nav">
+      <div class="nav" :class="{'long-border': bio}">
         <img
           class="logo"
           src="../public/images/logo_slovo.png"
@@ -15,7 +15,7 @@
           }"
           @click="showMenuList()"
         ></i>
-        <div :class="{ hide: showMenu === false, show: showMenu }">
+        <div :class="{ hide: showMenu === false, show: showMenu, 'long-menu': bio }">
           <router-link class="link" to="/">HOME</router-link>
           <router-link class="link" to="/biography">BIOGRAPHY</router-link>
           <router-link class="link" to="/artworks">ARTWORKS</router-link>
@@ -47,6 +47,7 @@ export default {
     return {
       showMenu: false,
       loggedIn: false,
+      bio: false
     };
   },
   methods: {
@@ -79,6 +80,12 @@ export default {
     $route: {
       handler() {
         this.showMenu = false;
+        if(this.$route.name === 'Biography') {
+          this.bio = true;
+        }
+        else{
+          this.bio = false;
+        }
       },
     },
   },
@@ -155,19 +162,31 @@ li {
 .logout{
   cursor: pointer;
 }
+.long-border{
+width: 80%;
+text-align: start;
+margin-left: 18%;
+}
+.long-menu{
+  margin-left: 15vw;
+}
 .prof-link{
   font-size: 1.5rem;
   margin-left: 1rem;
 }
 @media only screen and (max-width: 768px) {
+  #nav{
+z-index: 3;
+  }
   .hide {
     visibility: hidden;
   }
   .nav {
     width: 65vw;
     margin-left: 15vw;
-    /* height: 4vh; */
+    margin-top: -2vh;
     border: none;
+   
   }
   .menu-bar {
     visibility: visible;
@@ -175,17 +194,23 @@ li {
     position: absolute;
     left: 90vw;
     top: 1vh;
+     
   }
   .logo {
     width: 100px;
     z-index: 2;
   }
-
+  .logged-icons{
+    position: unset;
+  }
+  .long-menu{
+    margin-left: 0;
+  }
   .show {
     display: flex;
     flex-direction: column;
     width: 100vw;
-    height: 40vh;
+    height: fit-content;
     position: absolute;
     left: 0;
     top: 6vh;
@@ -194,6 +219,7 @@ li {
     justify-content: center;
     text-align: center;
     gap: 2rem;
+    
   }
 }
 </style>
