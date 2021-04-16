@@ -1,20 +1,26 @@
 <template>
   <div class="exhibitions">
     <div class="pg-col" v-if="showGallery === false">
-      <div class="up-sqr">
-        <h1>EXHIBITIONS</h1>
-      </div>
       <div class="preview">
         <div
           v-lazyload
-          class="prev-div"
+          class="prev-div tooltip"
           v-for="(exh, index) in exhibitions"
           :key="'e' + index"
           @click="showExh(exh)"
         >
           <img class="prev-img" :data-url="exh.coverphoto_path" alt="" />
-          <div class="prev-title">
-            <h3>{{ exh.exh_title.toUpperCase() }}</h3>
+
+          <span class="tooltiptxt">{{ $t("tooltips.nav") }}</span>
+          <div class="prev-dsc">
+            <p class="exh-title">{{ exh.exh_title.toUpperCase() }}</p>
+            <!-- <div class="date">
+              <p>{{ exh - exh_date_start }}</p>
+              <p>-</p>
+              <p>{{ exh.exh_date_finish }}</p>
+            </div> -->
+            <p>{{ date }}</p>
+            <p>{{ exh.exh_place }}</p>
           </div>
         </div>
       </div>
@@ -104,54 +110,73 @@ export default {
     top: 6vh;
   }
 }
+p {
+  text-align: center;
+  font-size: 1.5rem;
+}
+.date {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.exh-title {
+  font-size: 2rem;
+  color: #545454;
+}
 .pg-col {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 90vw;
+  width: 100vw;
   height: 100%;
   align-self: center;
   justify-self: center;
-  margin-left: 4rem;
+  margin-top: 5vh;
   animation: in 2s 1;
   position: relative;
   top: 6vh;
 }
 .preview {
   display: flex;
-  justify-content: flex-start;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   margin-bottom: 20vh;
   flex-wrap: wrap;
   width: 100vw;
-  margin-left: 4rem;
-  
+}
+.prev-dsc {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 .prev-img {
-  width: 30vw;
-  height: 30vh;
+  width: 40vw;
+  /* height: 30vh;
   object-fit: cover;
+  border-radius: 2rem;*/
 }
 .prev-div {
-  width: 30vw;
-  margin-left: 2rem;
+  width: 40vw;
+
   margin-bottom: 2rem;
-  box-shadow: 0px 5px 15px 2px rgba(0, 0, 0, 0.48);
+
   cursor: pointer;
 }
-
-.up-sqr {
-  height: 15vh;
-  margin-bottom: 30vh;
-  /* border-top: none; */
+.tooltip .tooltiptxt {
+  position: absolute;
+  margin-left: -35vw;
+  background-color: #63f8daab;
   width: 30vw;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0px 5px 15px 2px rgba(0, 0, 0, 0.48);
-  border: 10px solid #adadb0;
-  border-top: none;
+  transition-delay: 0.2s;
+  visibility: hidden;
+  border-bottom-left-radius: 1rem;
+  border-bottom-right-radius: 1rem;
 }
+.tooltip:hover .tooltiptxt {
+  visibility: visible;
+}
+
 @media only screen and (max-width: 768px) {
   .pg-col {
     margin-left: 2rem;

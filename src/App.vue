@@ -1,37 +1,49 @@
 <template>
   <div id="app">
     <div id="nav">
-      <div class="nav" :class="{'long-border': bio}">
-        <img
-          class="logo"
-          src="../public/images/logo_slovo.png"
-          alt=""
-          @click="$router.push({ name: 'Home' })"
-        />
-        <i
-          :class="{
-            'fas fa-bars menu-bar': showMenu === false,
-            'far fa-times-circle menu-bar': showMenu,
-          }"
-          @click="showMenuList()"
-        ></i>
-        <div :class="{ hide: showMenu === false, show: showMenu, 'long-menu': bio }">
-          <router-link class="link" to="/">HOME</router-link>
-          <router-link class="link" to="/biography">BIOGRAPHY</router-link>
-          <router-link class="link" to="/artworks">ARTWORKS</router-link>
-          <router-link class="link" to="/projects">PROJECTS</router-link>
-          <router-link class="link" to="/exhibitions">EXHIBITIONS</router-link>
-          <router-link class="link" to="/contact">CONTACT</router-link>
-        
+      <img
+        class="logo"
+        src="../public/images/logo.png"
+        alt=""
+        @click="$router.push({ name: 'Home' })"
+      />
+      <i
+        :class="{
+          'fas fa-bars menu-bar': showMenu === false,
+          'far fa-times-circle menu-bar': showMenu,
+        }"
+        @click="showMenuList()"
+      ></i>
+      <div class="nav" :class="{ hide: showMenu === false, show: showMenu }">
+        <router-link class="link" to="/">{{
+          $t("links[0].title")
+        }}</router-link>
+        <router-link class="link" to="/biography">{{
+          $t("links[1].title")
+        }}</router-link>
+        <router-link class="link" to="/artworks">{{
+          $t("links[2].title")
+        }}</router-link>
+        <router-link class="link" to="/projects">{{
+          $t("links[3].title")
+        }}</router-link>
+        <router-link class="link" to="/exhibitions">{{
+          $t("links[4].title")
+        }}</router-link>
+        <router-link class="link" to="/contact">{{
+          $t("links[5].title")
+        }}</router-link>
+        <local-switcher></local-switcher>
         <div class="logged-icons">
           <a class="logout" v-if="loggedIn" @click="logout()">LOGOUT</a>
-          <router-link v-if="loggedIn" class="link" to="/admin"><i class="far fa-edit prof-link"></i></router-link>
-        </div>
+          <router-link v-if="loggedIn" class="link" to="/admin"
+            ><i class="far fa-edit prof-link"></i
+          ></router-link>
         </div>
       </div>
     </div>
-    <router-view :class="{ 'no-show': loader || loaded_img === false }" />
-    <Loader v-if="loader || loaded_img === false"></Loader>
+    <router-view :class="{ 'no-show': loader }" />
+    <Loader v-if="loader"></Loader>
     <footer>
       <Footer></Footer>
     </footer>
@@ -41,13 +53,13 @@
 import { mapState, mapActions } from "vuex";
 import Footer from "./components/Footer.vue";
 import Loader from "./components/Loader.vue";
+import LocalSwitcher from "./components/LocalSwitcher.vue";
 export default {
-  components: { Footer, Loader },
+  components: { Footer, Loader, LocalSwitcher },
   data() {
     return {
       showMenu: false,
       loggedIn: false,
-      bio: false
     };
   },
   methods: {
@@ -76,16 +88,11 @@ export default {
   mounted() {
     this.isLogged();
   },
+
   watch: {
     $route: {
       handler() {
         this.showMenu = false;
-        if(this.$route.name === 'Biography') {
-          this.bio = true;
-        }
-        else{
-          this.bio = false;
-        }
       },
     },
   },
@@ -108,34 +115,41 @@ li {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #214478;
+  color: #545454;
 }
 
 #nav {
-  padding: 20px;
+  padding: 10px;
   height: 7vh;
   width: 100%;
   background-color: white;
   position: fixed;
   z-index: 2;
-  /* margin-left: 20%; */
+  position: fixed;
+  top: 0;
+
 }
 
 #nav a {
-  font-weight: bold;
-  color: #214478;
+  font-weight: 400;
+  color: #545454;
   text-decoration: none;
+  font-size: 1.5rem;
 }
 
 #nav a.router-link-exact-active {
-  color: #0a6c85;
+  color: #27f2cb;
+  border-bottom: 1px solid #545454;
 }
 .nav {
-  width: 60%;
-  margin-left: 20%;
-  border-bottom: 1px solid #adadb0;
-  /* margin-top: 1vh; */
+  width: 70%;
+ margin-left: 15%;
   background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+ 
+  gap: 1rem;
 }
 .no-show {
   /* visibility: hidden; */
@@ -144,39 +158,30 @@ li {
 .menu-bar {
   visibility: hidden;
 }
-.link {
-  margin-right: 1rem;
-}
+
 .logo {
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 150px;
+ position: absolute;
+  top: 1.2rem;
+  left: 5vw;
+  width: 10vw;
   cursor: pointer;
 }
-.logged-icons{
+.logged-icons {
   position: absolute;
   top: 3vh;
   left: 85vw;
 }
-.logout{
+.logout {
   cursor: pointer;
 }
-.long-border{
-width: 80%;
-text-align: start;
-margin-left: 18%;
-}
-.long-menu{
-  margin-left: 15vw;
-}
-.prof-link{
+
+.prof-link {
   font-size: 1.5rem;
   margin-left: 1rem;
 }
 @media only screen and (max-width: 768px) {
-  #nav{
-z-index: 3;
+  #nav {
+    z-index: 3;
   }
   .hide {
     visibility: hidden;
@@ -186,7 +191,6 @@ z-index: 3;
     margin-left: 15vw;
     margin-top: -2vh;
     border: none;
-   
   }
   .menu-bar {
     visibility: visible;
@@ -194,16 +198,15 @@ z-index: 3;
     position: absolute;
     left: 90vw;
     top: 1vh;
-     
   }
   .logo {
     width: 100px;
     z-index: 2;
   }
-  .logged-icons{
+  .logged-icons {
     position: unset;
   }
-  .long-menu{
+  .long-menu {
     margin-left: 0;
   }
   .show {
@@ -219,7 +222,6 @@ z-index: 3;
     justify-content: center;
     text-align: center;
     gap: 2rem;
-    
   }
 }
 </style>

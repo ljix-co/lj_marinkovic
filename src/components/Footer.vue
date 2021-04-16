@@ -1,12 +1,16 @@
 <template>
   <div class="footer">
     <div class="footer-content">
+    <div class="footer-txt">
+      <p>Designed and coded by</p>
+      <img src="../../public/images/logo_transp.png" alt="" />
       <p>
-        Designed and coded by Ljiljana Marinković. Supported and hosted by
+        Supported and hosted by
         <a href="https://www.mars-server.net/"
           ><img src="../../public/images/mars.svg" alt="" /></a
         >.
       </p>
+      </div>
       <p>&copy; 2021</p>
     </div>
   </div>
@@ -15,9 +19,9 @@
 export default {};
 </script>
 <style scoped>
-img{
-    width: 100px;
-    margin-left: 0.2rem;
+img {
+  width: 100px;
+  margin-left: 0.5rem;
 }
 .footer {
   width: 100vw;
@@ -31,8 +35,14 @@ img{
   justify-content: center;
   width: 100vw;
 }
+.footer-txt{
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 0.5rem;
+}
 @media only screen and (max-width: 768px) {
-  .footer-content{
+  .footer-content {
     width: 90vw;
     margin-left: 1rem;
   }

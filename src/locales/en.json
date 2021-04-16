@@ -1,0 +1,47 @@
+{
+  "home": {
+    "categories": [
+      {
+        "title": "ART"
+      },
+      {
+        "title": "WEB"
+      }
+    ],
+    "description": "Ljiljana Marinković is both artist and front end programmer, whose main occupation is web development. Considering art, her main medium is ceramics, but she also greatly uses other media such as video, photography, painting, etc. Regarding web development, her prime language and tool is javascript.",
+    "nav": [
+      {
+        "txt": "BUY ART"
+      },
+      {
+        "txt": "ORDER WEBSITE"
+      }
+    ],
+    "subtitle": "Visual artist and Web developer"
+  
+  },
+  "links": [
+    {
+      "title": "HOME"
+    },
+    {
+      "title": "BIOGRAPHY"
+    },
+    {
+      "title": "ARTWORKS"
+    },
+    {
+      "title": "PROJECTS"
+    },
+    {
+      "title": "EXHIBITIONS"
+    },
+    {
+      "title": "CONTACT"
+    }
+  ],
+  "tooltips": {
+    "gallery": "CLICK TO SEE ALL IMAGES",
+    "nav": "CLICK TO SEE MORE"
+  }
+}

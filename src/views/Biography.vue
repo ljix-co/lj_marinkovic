@@ -5,7 +5,7 @@
         <img :src="info.profimg_path" alt="" @load="imgLoaded()" />
       </div>
       <div class="txt">
-        <h2 class="title">BIOGRAPHY</h2>
+        <!-- <h2 class="title">BIOGRAPHY</h2> -->
         <div class="bio" v-html="info.aut_bio"></div>
       </div>
     </div>
@@ -58,7 +58,8 @@ img {
   width: 50vw;
   margin-left: 0;
   margin-top: 15vh;
-  box-shadow: 0px 5px 10px 1px rgba(0, 0, 0, 0.23);
+  box-shadow: 0px 5px 10px 1px rgba(0, 0, 0, 0.23);/*
+  border-radius: 2rem;*/
 }
 .author-info {
   display: flex;
@@ -85,9 +86,7 @@ img {
   font-size: 2.5rem;
 }
 .txt {
-  border: 10px solid #adadb0;
-  /* border-top: 1px solid #adadb0; */
-  border-top: none;
+
   height: 90vh;
   width: 35vw;
   position: absolute;
@@ -97,7 +96,7 @@ img {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  box-shadow: 0px 5px 10px 1px rgba(0, 0, 0, 0.23);
+  
 }
 @media only screen and (max-width: 768px) {
   img{

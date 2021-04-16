@@ -1,0 +1,47 @@
+{
+  "home": {
+    "categories": [
+      {
+        "title": "UMETNOST"
+      },
+      {
+        "title": "VEB"
+      }
+    ],
+    "description": "Ljiljana Marinković je umetnik i front end promgramer, čija je glavna delatnost veb razvoj. U pogledu umetnosti, njen osnovni medij je keramika, ali u velikoj meri koristi i druge medije kao što su video, fotografija, slika, itd. Što se tiče izrade veb stranica, njen glavni jezik i alat je javascript.",
+    "nav": [
+      {
+        "txt": "KUPI UMETNINU"
+      },
+      {
+        "txt": "NARUČI VEBSAJT"
+      }
+    ],
+    "subtitle": "Vizuelni umetnik i Veb developer"
+   
+  },
+  "links": [
+    {
+      "title": "POČETNA"
+    },
+    {
+      "title": "BIOGRAFIJA"
+    },
+    {
+      "title": "RADOVI"
+    },
+    {
+      "title": "PROJEKTI"
+    },
+    {
+      "title": "IZLOŽBE"
+    },
+    {
+      "title": "KONTAKT"
+    }
+  ],
+  "tooltips": {
+    "gallery": "KLIKNITE DA VIDITE SVE SLIKE",
+    "nav": "KLIKNITE DA VIDITE VIŠE"
+  }
+}

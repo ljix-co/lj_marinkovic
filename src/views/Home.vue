@@ -1,28 +1,56 @@
 <template>
   <div class="home">
-    <div>
-      <div class="pg">
-        <div class="l-sqr">
-          <div class="decor">
-            <img
-              class="left-decor"
-              src="../../public/images/snovulje_dve3.png"
-              alt=""
-            />
+    <div class="home-nav">
+      <div class="nav">
+        <p>{{ $t("home.nav[0].txt") }}</p>
+      </div>
+      <div class="nav">
+        <p>{{ $t("home.nav[1].txt") }}</p>
+      </div>
+    </div>
+    <div class="pg">
+      <div class="web-title">
+        <div class="name-div">
+          <div class="f-name">
+            <p class="f-letter">LJ</p>
+            <p class="name">ILJANA</p>
           </div>
-          <div class="web-title">
-            <p class="name">LJILJANA MARINKOVIĆ</p>
-            <p class="occup">Visual Artist and Web Developer</p>
-          </div>
-          <div class="decor">
-            <img
-              class="right-decor"
-              src="../../public/images/snovulje_dve3.png"
-              alt=""
-            />
+          <div class="f-name">
+            <p class="f-letter">M</p>
+            <p class="name">ARINKOVIC</p>
           </div>
         </div>
-        <img class="intro-photo" :src="image" alt="" />
+        <p class="occup">{{ $t("home.subtitle") }}</p>
+      </div>
+      <div class="content">
+        <p class="intro-txt" v-if="scrollIndex === 0">
+          {{ $t("home.description") }}
+        </p>
+
+        <div class="category" v-if="scrollIndex === 1">
+          <p class="cat-title car-left">{{ $t("home.categories[0].title") }}</p>
+          <div class="tooltip">
+            <img
+              src="../../public/images/art.png"
+              alt=""
+              @click="goToArtworks"
+            />
+            <span class="tooltiptxt">{{ $t("tooltips.nav") }}</span>
+          </div>
+        </div>
+        <div class="category" v-if="scrollIndex === 2">
+          <p class="cat-title car-right">
+            {{ $t("home.categories[1].title") }}
+          </p>
+          <div class="tooltip">
+            <img
+              src="../../public/images/nat.png"
+              alt=""
+              @click="goToProjects"
+            />
+            <span class="tooltiptxt">{{ $t("tooltips.nav") }}</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -31,149 +59,157 @@
 <script>
 // @ is an alias to /src
 
-import { mapActions, mapState } from "vuex";
-
 export default {
   name: "Home",
 
   data() {
     return {
-      image: null,
-      index: 0,
-      baseImgPath: "../../public/images/",
-      images: [
-        "pillow.png",
-        "hibrid.png",
-        
-        "umorna.png",
-      ],
-      interval: null,
+      scrollIndex: 0,
     };
   },
   methods: {
-    ...mapActions(["changeLoadedImg"]),
-    imgLoaded() {
-      this.changeLoadedImg(true);
+    goToArtworks() {
+      this.$router.push({ name: "Artworks" });
     },
-    getImgUrl() {
-      this.image = require("../../public/images/" +
-        this.images[this.images.length - 1]);
-      this.interval = setInterval(() => {
-        this.image = require("../../public/images/" + this.images[this.index]);
-        this.index = (this.index + 1) % this.images.length;
-      }, 5000);
+    goToProjects() {
+      this.$router.push({ name: "Projects" });
     },
-    
   },
-  computed: {
-    ...mapState(["loader"]),
-  },
-  mounted() {
-    this.imgLoaded();
-    //  this.image = this.baseImgPath + this.images[0];
-    this.getImgUrl();
-  },
-  beforeDestroy() {
-    clearInterval(this.interval)
-  }
+  computed: {},
+  mounted() {},
 };
 </script>
 <style scoped>
-@keyframes left_in {
+@import url("https://fonts.googleapis.com/css2?family=Megrim&display=swap");
+@keyframes down_in {
   from {
-    left: -100px;
+    top: -100px;
   }
   to {
-    left: 0px;
+    top: 0px;
   }
 }
 
 h3 {
   margin-top: 1vh;
 }
+img {
+  width: 30vw;
+  margin-top: 2rem;
+  height: 35vh;
+  cursor: pointer;
+  object-fit: cover;
+  /*
+border-radius: 2rem;*/
+  border-bottom: 7px solid #27f2cb;
+}
 
-.show-left {
-  visibility: visible;
-  animation: left_in 2s 1;
-  position: relative;
+.category {
+  width: 40vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 5vh;
+  width: 90vw;
+}
+.car-left {
+  text-align: start;
+}
+.car-right {
+  text-align: end;
+}
+.cat-title {
+  font-size: 3rem;
+
+  width: 30vw;
+  border-bottom: 1px solid #27f2cb;
+}
+.f-letter {
+  color: #27f2cb;
+  font-size: 5rem;
+  font-family: "Megrim", "Open Sans", cursive;
+}
+.f-name {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .home {
   height: 100%;
 }
-.intro-photo {
-  height: 100vh;
-  margin-top: 6vh;
-  box-shadow: 0px 5px 10px 1px rgba(0, 0, 0, 0.23);
+.home-nav{
+position: fixed;
+width: 15vw;
+height: 60vh;
+left: 85vw;
+top: 30vh;
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+justify-content: flex-start;
+gap: 30vh;
 }
-.intro-logo {
-  width: 40vw;
-  margin-left: 3rem;
-}
-.l-sqr {
-  margin-left: 0vw;
-  margin-right: 15vw;
-  width: 60vw;
-  height: 65vh;
-  display: flex;
-  /* flex-direction: column; */
-  align-items: center;
-  justify-content: center;
-  /* border: 10px solid #adadb0; */
-  border-left: none;
-  /* box-shadow: 0px 5px 15px 2px rgba(0, 0, 0, 0.48); */
-}
-.left-decor {
-  width: 44vw;
-  position: absolute;
-  height: 60vh;
-  object-fit: cover;
-  border-bottom-right-radius: 350px;
-  /* border-bottom-left-radius:-550px; */
-  border-top-right-radius: 250px;
-  border-top-left-radius: 500px;
-  /* position: absolute; */
-  margin-top: -30vh;
-  /* margin-left: 1rem; */
-  opacity: 0.3;
-}
-.left-decor:hover {
-  opacity: 0.05;
+.intro-txt {
+  text-align: justify;
+  width: 30vw;
+  align-self: center;
+
+  margin-top: 2rem;
 }
 .name {
-  font-size: 6rem;
-  color: #214478;
+  font-size: 5rem;
+  font-family: "Megrim", cursive;
+  color: #323131;
+}
+.name-div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+.nav{
+  width: 15vw;
+  border-bottom: 5px solid #27f2cb;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
 }
 .occup {
   font-size: 2rem;
 }
-.page-out {
-  animation: out 2s 1;
-}
+
 .pg {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 90vw;
+  width: 100vw;
   align-self: center;
-  animation: left_in 2s 1;
+  animation: down_in 2s 1;
   position: relative;
+  margin-top: 15vh;
 }
-.right-decor {
-  height: 30vh;
-  width: 10vw;
-  object-fit: cover;
+.tooltip .tooltiptxt {
   position: absolute;
-  margin-top: 5vh;
-  margin-left: -12vw;
-  transform: rotate(90deg);
-  opacity: 0.1;
-  border-top-left-radius: 300px;
+  margin-left: -30vw;
+  background-color: #27f2c93b;
+  width: 30vw;
+  transition-delay: 0.2s;
+  visibility: hidden;
 }
-
+.tooltip:hover .tooltiptxt {
+  visibility: visible;
+}
 .web-title {
-  text-align: start;
-  margin-left: 3rem;
-  /* font-weight: 400; */
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 2px solid #27f2cb;
+  width: 35vw;
+  margin-top: 10vh;
 }
 @media only screen and (max-width: 768px) {
   .pg {

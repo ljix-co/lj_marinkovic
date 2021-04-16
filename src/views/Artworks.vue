@@ -1,9 +1,6 @@
 <template>
   <div class="artworks">
     <div class="pg-col">
-      <div class="up-sqr">
-        <h1>ARTWORKS</h1>
-      </div>
       <div class="preview">
         <div class="shop-instruction-div">
           <div class="shop-instruction">
@@ -27,7 +24,12 @@
           </div>
         </div>
         <div class="prev-gallery">
-          <div v-lazyload class="prev-div" v-for="(art, index) in artworks" :key="index">
+          <div
+            v-lazyload
+            class="prev-div"
+            v-for="(art, index) in artworks"
+            :key="index"
+          >
             <img
               class="prev-img"
               :data-url="art.artwork_imgpath"
@@ -35,7 +37,7 @@
               src="../../public/images/placeholder_photo_l.gif"
             />
             <div class="prev-desc">
-              <p>{{ art.artwork_title.toUpperCase() }}</p>
+              <p class="artw-title">{{ art.artwork_title.toUpperCase() }}</p>
               <p>
                 Tehcnique: <b>{{ art.artwork_technique }}</b>
               </p>
@@ -94,6 +96,16 @@ export default {
     top: 6vh;
   }
 }
+p {
+  color: #545454;
+  text-align: start;
+}
+.artw-title {
+  font-size: 1.2rem;
+  font-weight: 800;
+  text-align: start;
+  width: 20vw;
+}
 .pg-col {
   display: flex;
   flex-direction: column;
@@ -117,14 +129,21 @@ export default {
   justify-content: flex-start;
 }
 .prev-img {
-  width: 30vw;
+  width: 20vw;
+  height: 30vh;
+  object-fit: cover;
+  background-color: #d4d4d4;/*
+  border-top-left-radius: 2rem;
+  border-top-right-radius: 2rem;*/
 }
 .prev-div {
-  width: 30vw;
+  width: 20vw;
   margin-left: 2rem;
   margin-bottom: 2rem;
-  box-shadow: 0px 5px 15px 2px rgba(0, 0, 0, 0.48);
-  height: fit-content;
+  background-color: #ced0d1;
+  height: 55vh;/*
+  border-radius: 2rem;*/
+  border-bottom: 5px solid #27f2cb;
 }
 .prev-desc {
   display: flex;
@@ -133,15 +152,16 @@ export default {
   justify-content: flex-start;
   gap: 0.5rem;
   margin-left: 1rem;
-  margin-bottom: 1rem;
+  margin-top: 1rem;
+  width: 20vw;
+  height: 25vh;
 }
 .prev-gallery {
   width: 70vw;
-
-  column-count: 2;
-  column-gap: 1rem;
-  height: fit-content;
-
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
 }
 .up-sqr {
   height: 15vh;
@@ -174,7 +194,6 @@ export default {
   justify-content: center;
   height: fit-content;
   margin-left: 2rem;
-
 }
 @media only screen and (max-width: 768px) {
   .pg-col {
@@ -186,30 +205,28 @@ export default {
     gap: 1rem;
     width: 100vw;
   }
-  .prev-div{
+  .prev-div {
     width: 80vw;
     margin-left: 1.5rem;
   }
   .prev-img {
-  width: 80vw;
-  object-fit: cover;
-}
-.prev-gallery {
-  width: 90vw;
-  margin-left: 0.7rem;
-  column-count: 1;
-  column-gap: 1rem;
-  height: fit-content;
-
-}
-.shop-instruction{
-  width: 70vw;
-
-}
-.shop-instruction-div{
-  width: 80vw;
-  margin-left: 2rem;
-}
+    width: 80vw;
+    object-fit: cover;
+  }
+  .prev-gallery {
+    width: 90vw;
+    margin-left: 0.7rem;
+    column-count: 1;
+    column-gap: 1rem;
+    height: fit-content;
+  }
+  .shop-instruction {
+    width: 70vw;
+  }
+  .shop-instruction-div {
+    width: 80vw;
+    margin-left: 2rem;
+  }
   .up-sqr {
     width: 80vw;
     margin-left: 0;
