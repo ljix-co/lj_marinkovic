@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home" @scroll="scrollEvent">
     <div class="home-nav">
       <div class="nav">
         <p>{{ $t("home.nav[0].txt") }}</p>
@@ -7,6 +7,9 @@
       <div class="nav">
         <p>{{ $t("home.nav[1].txt") }}</p>
       </div>
+    </div>
+    <div class="start-img" v-if="scrollIndex === 0">
+    <img class="img-prof" src="../../public/images/portret.png" alt="">
     </div>
     <div class="pg">
       <div class="web-title">
@@ -23,14 +26,23 @@
         <p class="occup">{{ $t("home.subtitle") }}</p>
       </div>
       <div class="content">
+      <div class="category">
         <p class="intro-txt" v-if="scrollIndex === 0">
           {{ $t("home.description") }}
         </p>
-
+        <div class="scroll">
+        <div class="arrow-line">
+        <div class="line"></div>
+        <div class="arrow"></div>
+        </div>
+        <p class="nav-scroll">{{$t('home.nav[2].txt')}}</p>
+        </div>
+      </div>
         <div class="category" v-if="scrollIndex === 1">
           <p class="cat-title car-left">{{ $t("home.categories[0].title") }}</p>
           <div class="tooltip">
             <img
+            class="img"
               src="../../public/images/art.png"
               alt=""
               @click="goToArtworks"
@@ -44,6 +56,7 @@
           </p>
           <div class="tooltip">
             <img
+            class="img"
               src="../../public/images/nat.png"
               alt=""
               @click="goToProjects"
@@ -65,6 +78,7 @@ export default {
   data() {
     return {
       scrollIndex: 0,
+      lastScrollPosition: 0
     };
   },
   methods: {
@@ -74,9 +88,26 @@ export default {
     goToProjects() {
       this.$router.push({ name: "Projects" });
     },
+    scrollEvent() {
+         // Get the current scroll position
+    const currentScrollPosition = window.pageYOffset || document.documentElement.scrollTop
+    // Because of momentum scrolling on mobiles, we shouldn't continue if it is less than zero
+    if (currentScrollPosition < 0) {
+      return
+    }
+    if(currentScrollPosition > this.lastScrollPosition){
+      this.scrollIndex++;
+      console.log(this.scrollIndex)
+    }
+   
+    // Set the current scroll position as the last scroll position
+    this.lastScrollPosition = currentScrollPosition
+    }
   },
   computed: {},
-  mounted() {},
+  mounted() {
+    window.addEventListener('scroll', this.scrollEvent())
+  },
 };
 </script>
 <style scoped>
@@ -93,25 +124,29 @@ export default {
 h3 {
   margin-top: 1vh;
 }
-img {
-  width: 30vw;
-  margin-top: 2rem;
-  height: 35vh;
-  cursor: pointer;
-  object-fit: cover;
-  /*
-border-radius: 2rem;*/
-  border-bottom: 7px solid #27f2cb;
-}
 
+.arrow{
+width: 1rem;
+height: 1rem;
+border-bottom: 4px solid #27f2cb;
+border-left: 4px solid #27f2cb;
+transform: rotate(-45deg);
+}
+.arrow-line{
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+}
 .category {
   width: 40vw;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   margin-top: 5vh;
   width: 90vw;
+  min-height: 50vh;
 }
 .car-left {
   text-align: start;
@@ -127,7 +162,7 @@ border-radius: 2rem;*/
 }
 .f-letter {
   color: #27f2cb;
-  font-size: 5rem;
+  font-size: 4.5rem;
   font-family: "Megrim", "Open Sans", cursive;
 }
 .f-name {
@@ -143,12 +178,25 @@ position: fixed;
 width: 15vw;
 height: 60vh;
 left: 85vw;
-top: 30vh;
+top: 20vh;
 display: flex;
 flex-direction: column;
 align-items: flex-start;
 justify-content: flex-start;
-gap: 30vh;
+gap: 40vh;
+}
+.img {
+  width: 30vw;
+  margin-top: 2rem;
+  height: 35vh;
+  cursor: pointer;
+  object-fit: cover;
+  /*
+border-radius: 2rem;*/
+  border-bottom: 7px solid #27f2cb;
+}
+.img-prof{
+width: 25vw;
 }
 .intro-txt {
   text-align: justify;
@@ -157,8 +205,14 @@ gap: 30vh;
 
   margin-top: 2rem;
 }
+.line{
+width: 2px;
+height: 10vh;
+background-color: #27f2cb;
+
+}
 .name {
-  font-size: 5rem;
+  font-size: 4.5rem;
   font-family: "Megrim", cursive;
   color: #323131;
 }
@@ -175,6 +229,12 @@ gap: 30vh;
   align-items: flex-start;
   justify-content: flex-start;
 }
+.nav-scroll{
+transform: rotate(90deg);
+margin-left: -2rem;
+font-size: .7rem;
+color: #323131;
+}
 .occup {
   font-size: 2rem;
 }
@@ -189,6 +249,18 @@ gap: 30vh;
   animation: down_in 2s 1;
   position: relative;
   margin-top: 15vh;
+}
+.scroll{
+margin-top: 10vh;
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 0;
+}
+.start-img{
+position: absolute;
+left: -4rem;
+top: 20vh;
 }
 .tooltip .tooltiptxt {
   position: absolute;
