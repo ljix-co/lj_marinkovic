@@ -1,28 +1,39 @@
 <template>
   <div class="artworks">
+    <photo-slider v-if="images.length > 0" :images="images"></photo-slider>
+    <div class="buy-nav">
+      <p class="nav" @click="showInstr" v-if="how_to_buy === false">
+        {{ $t("artworks.nav") }}
+      </p>
+      <i class="fas fa-times exit" @click="hideInstr" v-if="how_to_buy"></i>
+    </div>
+    <div
+      :class="{
+        'shop-instruction-div': how_to_buy,
+        hide: how_to_buy === false,
+      }"
+    >
+      <div class="shop-instruction">
+        <h2>How to buy</h2>
+        <p>
+          If you are interested in buying artworks, please contact the author
+          via email and specify which artwork would you like to buy.
+        </p>
+        <p>
+          If the artwork is not already sold, the next step would be signing the
+          contract that guarantees that there will be no copies of a sold art
+          piece, but also obliges the buyer to borrow purchased artwork to be
+          exposed on significant exhibitions.
+        </p>
+        <p>
+          After signing the document, money should be transferred directly to
+          the author's bank account. The instructions will be sent via email.
+        </p>
+        <p>All the taxes are included in the price.</p>
+      </div>
+    </div>
     <div class="pg-col">
       <div class="preview">
-        <div class="shop-instruction-div">
-          <div class="shop-instruction">
-            <h2>How to buy</h2>
-            <p>
-              If you are interested in buying artworks, please contact the
-              author via email and specify which artwork would you like to buy.
-            </p>
-            <p>
-              If the artwork is not already sold, the next step would be signing
-              the contract that guarantees that there will be no copies of a
-              sold art piece, but also obliges the buyer to borrow purchased
-              artwork to be exposed on significant exhibitions.
-            </p>
-            <p>
-              After signing the document, money should be transferred directly
-              to the author's bank account. The instructions will be sent via
-              email.
-            </p>
-            <p>All the taxes are included in the price.</p>
-          </div>
-        </div>
         <div class="prev-gallery">
           <div
             v-lazyload
@@ -57,10 +68,14 @@
 <script>
 import { mapState, mapActions } from "vuex";
 import axios from "axios";
+import PhotoSlider from "../components/PhotoSlider.vue";
 export default {
+  components: { PhotoSlider },
   data() {
     return {
       artworks: [],
+      how_to_buy: false,
+      images: [],
     };
   },
   methods: {
@@ -70,12 +85,27 @@ export default {
       axios.get(this.baseUrl + "artworks").then((res) => {
         this.artworks = res.data.data;
         this.changeLoader(false);
+        this.getImages();
       });
+    },
+    getImages() {
+      for (let i = 0; i < this.artworks.length; i++) {
+        this.images.push({
+          path: this.artworks[i].artwork_imgpath,
+          id: this.artworks[i].artwork_id,
+        });
+      }
+    },
+    hideInstr() {
+      this.how_to_buy = false;
     },
     imgLoaded() {
       setTimeout(() => {
         this.changeLoadedImg(true);
       }, 1000);
+    },
+    showInstr() {
+      this.how_to_buy = true;
     },
   },
   computed: {
@@ -106,6 +136,23 @@ p {
   text-align: start;
   width: 20vw;
 }
+.buy-nav {
+  position: fixed;
+  top: 15vh;
+  left: -2rem;
+}
+.hide {
+  visibility: hidden;
+}
+.nav,
+.exit {
+  width: 10vw;
+  border-bottom: 5px solid #27f2cb;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  cursor: pointer;
+}
 .pg-col {
   display: flex;
   flex-direction: column;
@@ -125,14 +172,14 @@ p {
   margin-bottom: 20vh;
   width: 100vw;
   height: fit-content;
-  align-items: flex-start;
-  justify-content: flex-start;
+  align-items: center;
+  justify-content: center;
 }
 .prev-img {
   width: 20vw;
   height: 30vh;
   object-fit: cover;
-  background-color: #d4d4d4;/*
+  background-color: #d4d4d4; /*
   border-top-left-radius: 2rem;
   border-top-right-radius: 2rem;*/
 }
@@ -141,7 +188,7 @@ p {
   margin-left: 2rem;
   margin-bottom: 2rem;
   background-color: #ced0d1;
-  height: 55vh;/*
+  height: 55vh; /*
   border-radius: 2rem;*/
   border-bottom: 5px solid #27f2cb;
 }
@@ -187,13 +234,16 @@ p {
   margin-top: 2rem;
 }
 .shop-instruction-div {
-  width: 25vw;
-  box-shadow: 0px 5px 15px 2px rgba(0, 0, 0, 0.48);
+  width: 15vw;
+  background-color: white;
   display: flex;
   align-items: center;
   justify-content: center;
   height: fit-content;
-  margin-left: 2rem;
+  position: fixed;
+  top: 20vh;
+  left: 1rem;
+  z-index: 2;
 }
 @media only screen and (max-width: 768px) {
   .pg-col {

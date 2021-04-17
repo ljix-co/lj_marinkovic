@@ -5,6 +5,7 @@ import router from './router'
 import Vue2Editor from "vue2-editor"
 import VueI18n from 'vue-i18n';
 import LazyLoadDirective from './directives/LazyLoadDirective';
+import OnScroll from './directives/OnScroll';
 import i18n from './i18n'
 
 Vue.use(Vue2Editor);
@@ -12,6 +13,7 @@ Vue.use(VueI18n)
 Vue.config.productionTip = false
 
 Vue.directive("lazyload", LazyLoadDirective);
+Vue.directive("scroll", OnScroll);
 
 new Vue({
   store,

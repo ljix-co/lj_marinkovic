@@ -1,15 +1,27 @@
 <template>
-  <div class="home" @scroll="scrollEvent">
+  <div class="home" v-scroll="scrollEvent">
     <div class="home-nav">
       <div class="nav">
-        <p>{{ $t("home.nav[0].txt") }}</p>
+        <p @click="goToArtworks">{{ $t("home.nav[0].txt") }}</p>
       </div>
       <div class="nav">
         <p>{{ $t("home.nav[1].txt") }}</p>
       </div>
     </div>
     <div class="start-img" v-if="scrollIndex === 0">
-    <img class="img-prof" src="../../public/images/portret.png" alt="">
+      <img class="img-prof" src="../../public/images/portret.png" alt="" />
+    </div>
+    <div class="web-img" v-if="scrollIndex === 1">
+      <img class="logo-img" src="../../public/images/mars.svg" alt="" />
+      <img class="logo-img" src="../../public/images/vue_logo.png" alt="" />
+      <img class="logo-img" src="../../public/images/js_logo.png" alt="" />
+    </div>
+    <div class="art-img" v-if="scrollIndex === 2">
+      <img
+        class="detail-img"
+        src="../../public/images/art_detail_2.png"
+        alt=""
+      />
     </div>
     <div class="pg">
       <div class="web-title">
@@ -26,43 +38,60 @@
         <p class="occup">{{ $t("home.subtitle") }}</p>
       </div>
       <div class="content">
-      <div class="category">
-        <p class="intro-txt" v-if="scrollIndex === 0">
-          {{ $t("home.description") }}
-        </p>
-        <div class="scroll">
-        <div class="arrow-line">
-        <div class="line"></div>
-        <div class="arrow"></div>
+        <div class="category-txt" v-if="scrollIndex === 0">
+          <p class="intro-txt">
+            {{ $t("home.description") }}
+          </p>
         </div>
-        <p class="nav-scroll">{{$t('home.nav[2].txt')}}</p>
-        </div>
-      </div>
         <div class="category" v-if="scrollIndex === 1">
-          <p class="cat-title car-left">{{ $t("home.categories[0].title") }}</p>
-          <div class="tooltip">
-            <img
-            class="img"
-              src="../../public/images/art.png"
-              alt=""
-              @click="goToArtworks"
-            />
-            <span class="tooltiptxt">{{ $t("tooltips.nav") }}</span>
-          </div>
-        </div>
-        <div class="category" v-if="scrollIndex === 2">
-          <p class="cat-title car-right">
+          <p class="cat-title">
             {{ $t("home.categories[1].title") }}
           </p>
+          <div class="cat-line"></div>
           <div class="tooltip">
             <img
-            class="img"
+              class="img"
               src="../../public/images/nat.png"
               alt=""
               @click="goToProjects"
             />
             <span class="tooltiptxt">{{ $t("tooltips.nav") }}</span>
           </div>
+          <p class="cat-desc">{{ $t("home.web_desc") }}</p>
+        </div>
+        <div class="category" v-if="scrollIndex === 2">
+          <p class="cat-title">{{ $t("home.categories[0].title") }}</p>
+          <div class="cat-line"></div>
+          <div class="tooltip">
+            <img
+              class="img"
+              src="../../public/images/art.png"
+              alt=""
+              @click=" goToExhibitions"
+            />
+            <span class="tooltiptxt">{{ $t("tooltips.nav") }}</span>
+          </div>
+          <p class="cat-desc">{{ $t("home.art_desc") }}</p>
+        </div>
+
+        <div
+          class="scroll"
+          :class="{
+            'scroll-top': scrollIndex === 0,
+            'scroll-med': scrollIndex === 1,
+            'scroll-bottom': scrollIndex === 2,
+          }"
+        >
+          <div class="arrow-line">
+            <div class="line"></div>
+            <div class="arrow"></div>
+          </div>
+          <p class="nav-scroll" v-if="scrollIndex !== 2">
+            {{ $t("home.nav[2].txt") }}
+          </p>
+          <p class="nav-scroll-back" v-if="scrollIndex === 2">
+            {{ $t("home.nav[3].txt") }}
+          </p>
         </div>
       </div>
     </div>
@@ -78,35 +107,34 @@ export default {
   data() {
     return {
       scrollIndex: 0,
-      lastScrollPosition: 0
+      lastScrollPosition: 0,
     };
   },
   methods: {
     goToArtworks() {
       this.$router.push({ name: "Artworks" });
     },
+    goToExhibitions() {
+      this.$router.push({ name: "Exhibitions" });
+    },
     goToProjects() {
       this.$router.push({ name: "Projects" });
     },
     scrollEvent() {
-         // Get the current scroll position
-    const currentScrollPosition = window.pageYOffset || document.documentElement.scrollTop
-    // Because of momentum scrolling on mobiles, we shouldn't continue if it is less than zero
-    if (currentScrollPosition < 0) {
-      return
-    }
-    if(currentScrollPosition > this.lastScrollPosition){
-      this.scrollIndex++;
-      console.log(this.scrollIndex)
-    }
-   
-    // Set the current scroll position as the last scroll position
-    this.lastScrollPosition = currentScrollPosition
-    }
+      if (window.scrollY < 150) {
+        this.scrollIndex = 0;
+      }
+      if (window.scrollY > 200 && window.scrollY < 490) {
+        this.scrollIndex = 1;
+      }
+      if (window.scrollY > 500) {
+        this.scrollIndex = 2;
+      }
+    },
   },
   computed: {},
   mounted() {
-    window.addEventListener('scroll', this.scrollEvent())
+    // window.addEventListener('scroll', this.scrollEvent())
   },
 };
 </script>
@@ -125,40 +153,69 @@ h3 {
   margin-top: 1vh;
 }
 
-.arrow{
-width: 1rem;
-height: 1rem;
-border-bottom: 4px solid #27f2cb;
-border-left: 4px solid #27f2cb;
-transform: rotate(-45deg);
+.arrow {
+  width: 1rem;
+  height: 1rem;
+  border-bottom: 4px solid #27f2cb;
+  border-left: 4px solid #27f2cb;
+  transform: rotate(-45deg);
 }
-.arrow-line{
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
-}
-.category {
-  width: 40vw;
+.arrow-line {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+}
+.art-img {
+  position: fixed;
+  left: 0;
+  top: 20vh;
+}
+.category {
+  width: 55vw;
+  display: flex;
+
+  align-items: center;
   justify-content: flex-start;
-  margin-top: 5vh;
-  width: 90vw;
+
   min-height: 50vh;
+  position: fixed;
+  top: 30vh;
+  left: 25vw;
 }
-.car-left {
-  text-align: start;
+.cat-desc {
+  width: 25vw;
+  text-align: justify;
+  margin-left: 1rem;
 }
-.car-right {
-  text-align: end;
+.cat-line {
+  width: 2px;
+  background-color: #27f2cb;
+  height: 30vh;
+  margin-right: 1rem;
+}
+.category-txt {
+  width: 40vw;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 40vw;
+  min-height: 50vh;
+  position: fixed;
+  top: 35vh;
+  left: 30vw;
 }
 .cat-title {
-  font-size: 3rem;
-
-  width: 30vw;
-  border-bottom: 1px solid #27f2cb;
+  font-size: 2rem;
+  transform: rotate(270deg);
+  width: 5vw;
+  margin-top: 20vh;
+}
+.detail-img {
+  width: 20vw;
+  filter: grayscale(50%);
+  opacity: 0.7;
 }
 .f-letter {
   color: #27f2cb;
@@ -171,19 +228,20 @@ justify-content: center;
   justify-content: center;
 }
 .home {
-  height: 100%;
+  height: 1500px;
+ 
 }
-.home-nav{
-position: fixed;
-width: 15vw;
-height: 60vh;
-left: 85vw;
-top: 20vh;
-display: flex;
-flex-direction: column;
-align-items: flex-start;
-justify-content: flex-start;
-gap: 40vh;
+.home-nav {
+  position: fixed;
+  width: 15vw;
+  height: 60vh;
+  left: 85vw;
+  top: 20vh;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 40vh;
 }
 .img {
   width: 30vw;
@@ -195,8 +253,8 @@ gap: 40vh;
 border-radius: 2rem;*/
   border-bottom: 7px solid #27f2cb;
 }
-.img-prof{
-width: 25vw;
+.img-prof {
+  width: 25vw;
 }
 .intro-txt {
   text-align: justify;
@@ -205,11 +263,15 @@ width: 25vw;
 
   margin-top: 2rem;
 }
-.line{
-width: 2px;
-height: 10vh;
-background-color: #27f2cb;
-
+.line {
+  width: 2px;
+  height: 10vh;
+  background-color: #27f2cb;
+}
+.logo-img {
+  width: 10vw;
+  filter: grayscale(30%);
+  opacity: 0.8;
 }
 .name {
   font-size: 4.5rem;
@@ -222,18 +284,25 @@ background-color: #27f2cb;
   justify-content: center;
   gap: 1rem;
 }
-.nav{
+.nav {
   width: 15vw;
   border-bottom: 5px solid #27f2cb;
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
+  cursor: pointer;
 }
-.nav-scroll{
-transform: rotate(90deg);
-margin-left: -2rem;
-font-size: .7rem;
-color: #323131;
+.nav-scroll {
+  transform: rotate(90deg);
+  margin-left: -2rem;
+  font-size: 0.7rem;
+  color: #323131;
+}
+.nav-scroll-back {
+  transform: rotate(90deg);
+  margin-left: -1rem;
+  font-size: 0.7rem;
+  color: #323131;
 }
 .occup {
   font-size: 2rem;
@@ -250,21 +319,31 @@ color: #323131;
   position: relative;
   margin-top: 15vh;
 }
-.scroll{
-margin-top: 10vh;
-display: flex;
-align-items: center;
-justify-content: center;
-gap: 0;
+.scroll {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  position: fixed;
+  top: 80vh;
 }
-.start-img{
-position: absolute;
-left: -4rem;
-top: 20vh;
+.scroll-top {
+  top: 60vh;
 }
+.scroll-bottom {
+  transform: rotate(180deg);
+  margin-left: -1rem;
+}
+.start-img {
+  position: fixed;
+  left: -4rem;
+  top: 20vh;
+}
+
 .tooltip .tooltiptxt {
   position: absolute;
   margin-left: -30vw;
+  margin-top: 1rem;
   background-color: #27f2c93b;
   width: 30vw;
   transition-delay: 0.2s;
@@ -272,6 +351,16 @@ top: 20vh;
 }
 .tooltip:hover .tooltiptxt {
   visibility: visible;
+}
+.web-img {
+  position: fixed;
+  top: 30vh;
+  left: 5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
 }
 .web-title {
   text-align: center;
@@ -281,7 +370,9 @@ top: 20vh;
   justify-content: center;
   border-bottom: 2px solid #27f2cb;
   width: 35vw;
-  margin-top: 10vh;
+
+  position: fixed;
+  top: 20vh;
 }
 @media only screen and (max-width: 768px) {
   .pg {

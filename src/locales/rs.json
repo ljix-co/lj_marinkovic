@@ -1,4 +1,7 @@
 {
+  "artworks": {
+    "nav": "UPUTSVO ZA KUPOVINU"
+  },
   "home": {
     "categories": [
       {
@@ -23,7 +26,9 @@
         "txt": "SKROL ZA NAZAD"
       }
     ],
-    "subtitle": "Vizuelni umetnik i Veb developer"
+    "subtitle": "Vizuelni umetnik i Veb developer",
+    "art_desc": "Okruženje 21-og veka je globalno i kao takvo održivo uz pomoć sveprosutne tehnologije. Granice prostora i vremena se svakodnevno prevazilaze, fizički i kroz on-line mrežu. Savremeni umetnik je deo takvog društva. Jedan medij više ne može da zadovolji sve potrebe umetnika ni njegove publike. Kreativna radoznalost tera nas na ekperiment i pomeranje granica. Za nastanak dela više nije važan proces, već osnova u ideji i konačan rezultat. Varijacije na temu ogledaju se u samom rezultatu, a moja tema je socijalni status običnog, savremenog čoveka.",
+    "web_desc": "Jednostavnost korišćenja i održavanja sadržaja sajta, kao i preglednost veb stranice predstavljaju osnovu pri razvoju veb sajta. Dizajn treba biti prilagođen potrebama klijenta i korisnika, tako da na najbolji mogući način vizuelno opiše klijenta i njegovu delatnost, a da pritom funkcionalnosti ostanu intuitivne za korisnika tako da može dobiti sve potrebne informacije."
    
   },
   "links": [

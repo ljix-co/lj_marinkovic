@@ -18,9 +18,7 @@
         <router-link class="link" to="/">{{
           $t("links[0].title")
         }}</router-link>
-        <router-link class="link" to="/biography">{{
-          $t("links[1].title")
-        }}</router-link>
+
         <router-link class="link" to="/artworks">{{
           $t("links[2].title")
         }}</router-link>
@@ -29,6 +27,9 @@
         }}</router-link>
         <router-link class="link" to="/exhibitions">{{
           $t("links[4].title")
+        }}</router-link>
+        <router-link class="link" to="/biography">{{
+          $t("links[1].title")
         }}</router-link>
         <router-link class="link" to="/contact">{{
           $t("links[5].title")
@@ -116,18 +117,19 @@ li {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #545454;
+  overflow-x: hidden;
 }
 
 #nav {
   padding: 10px;
-  height: 7vh;
+  height: 8vh;
   width: 100%;
   background-color: white;
   position: fixed;
   z-index: 2;
   position: fixed;
   top: 0;
-
+  border-bottom: 1px dotted #27f2cb;
 }
 
 #nav a {
@@ -143,12 +145,12 @@ li {
 }
 .nav {
   width: 70%;
- margin-left: 15%;
+  margin-left: 15%;
   background-color: white;
   display: flex;
   align-items: center;
   justify-content: center;
- 
+
   gap: 1rem;
 }
 .no-show {
@@ -160,7 +162,7 @@ li {
 }
 
 .logo {
- position: absolute;
+  position: absolute;
   top: 1.2rem;
   left: 5vw;
   width: 10vw;

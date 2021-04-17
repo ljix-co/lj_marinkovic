@@ -1,4 +1,7 @@
 {
+  "artworks": {
+    "nav": "HOW TO BUY"
+  },
   "home": {
     "categories": [
       {
@@ -23,7 +26,9 @@
         "txt": "SCROLL BACK"
       }
     ],
-    "subtitle": "Visual artist and Web developer"
+    "subtitle": "Visual artist and Web developer",
+    "art_desc": "The surrounding of the 21st century is global and sustainable by everpresent technology. The boundaries of space and time are crossed each day, physically and through the online network. The contemporary artist is a part of that society. One media could not satisfy the artist or his audience. Creative curiosity forces us to experiment and by it to move boundaries. For the creation of the artworks, the process is no longer important, but the base in the idea and the outcome. Variations on the subject could be observed in the final results, and my subject is the social status of an ordinary, contemporary human.",
+    "web_desc": "The simplicity of usage and content maintenance, as well as the clarity of the web page, represent the base of web development. Design should be adjusted to the needs of the client and the user so that it could represent the client and its business in the best possible way, thereby functionalities and access to the information should remain intuitive for the user. "
   
   },
   "links": [
