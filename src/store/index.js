@@ -5,7 +5,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    baseUrl: "http://219u122.mars1.mars-hosting.com/",
+    baseUrl: "http://219u122.mars1.mars-hosting.com/api/",
     loader: false,
     loaded_img: false,
     // isLogged: localStorage.getItem("sid")

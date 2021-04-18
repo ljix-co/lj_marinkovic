@@ -49,6 +49,7 @@ export default {
     ...mapActions(["changeLoader", "changeLoadedImg"]),
     getProjects() {
       axios.get(this.baseUrl + "projects").then((res) => {
+        console.log(res)
         this.projects.push(res.data.data[0]);
         for (let i = 0; i < res.data.data.length; i++) {
           if (res.data.data[i].proj_id != this.projects[0].proj_id) {

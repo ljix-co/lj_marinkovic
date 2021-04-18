@@ -5,20 +5,38 @@
       <button class="submit" @click="addNew()">ADD</button>
       <div class="basic-info">
         <div class="edit-content">
-          <h1>Title:</h1>
+          <h1>Title (EN):</h1>
           <input class="e-title" v-model="title" />
         </div>
         <div class="edit-content">
-          <h1>Time period:</h1>
+          <h1>Title (RS):</h1>
+          <input class="e-title" v-model="title_rs" />
+        </div>
+        <div class="edit-content">
+          <h1 v-if="type === 'newExh'">Time period:</h1>
+          <h1>Year:</h1>
           <div class="time-period">
-            <input class="year" type="text" v-model="yearStart" />
-            <p>-</p>
+            <input
+              class="year"
+              type="text"
+              v-model="yearStart"
+              v-if="type === 'newExh'"
+            />
+            <p v-if="type === 'newExh'">-</p>
             <input class="year" type="text" v-model="yearFinish" />
           </div>
         </div>
+         <div class="edit-content" v-if="type !== 'newExh'">
+          <h1>Link to project:</h1>
+          <input class="e-title" v-model="link_project" />
+        </div>
         <div class="edit-content" v-if="type === 'newExh'">
-          <h1>Place:</h1>
+          <h1>Place (EN):</h1>
           <input class="e-title" v-model="place" />
+        </div>
+         <div class="edit-content" v-if="type === 'newExh'">
+          <h1>Place (RS):</h1>
+          <input class="e-title" v-model="place_rs" />
         </div>
         <div class="edit-content" v-if="type === 'newExh'">
           <h1>Solo/group:</h1>
@@ -40,17 +58,26 @@
               <i class="far fa-times-circle exit" @click="delNewCover()"></i>
             </div>
           </div>
+          <!-- END COVER -->
           <h3 class="cover-title">COVER PHOTO</h3>
         </div>
       </div>
       <div>
         <div class="txt-editor-div">
-          <h1>Description:</h1>
+          <h1>Description (EN):</h1>
           <vue-editor class="vue_editor" v-model="desc" />
         </div>
+        <div class="txt-editor-div">
+          <h1>Description (RS):</h1>
+          <vue-editor class="vue_editor" v-model="desc_rs" />
+        </div>
         <div class="txt-editor-div" v-if="type === 'newExh'">
-          <h1>Review:</h1>
+          <h1>Review (EN):</h1>
           <vue-editor class="vue_editor" v-model="rev" />
+        </div>
+          <div class="txt-editor-div" v-if="type === 'newExh'">
+          <h1>Review (RS):</h1>
+          <vue-editor class="vue_editor" v-model="rev_rs" />
         </div>
       </div>
     </div>
@@ -66,6 +93,7 @@
         </label>
         <input type="file" id="img" hidden @change="getNewImg" />
       </div>
+      <!-- END IMGS -->
       <div v-if="newImgUrl">
         <div class="add-new-img-div">
           <div class="delconf-img-div">
@@ -101,29 +129,39 @@ export default {
   data() {
     return {
       title: "",
+      title_rs: "",
       yearStart: "",
       yearFinish: "",
       cover: "",
       rev: "",
+      rev_rs: "",
       desc: "",
+      desc_rs: "",
       url: "",
       newImg: "",
       newImgUrl: "",
       exhType: "",
       place: "",
+      place_rs: "",
+      link_project: ""
     };
   },
   methods: {
     addNew() {
       let newObject = {
         title: this.title,
+        title_rs: this.title_rs,
         yearStart: this.yearStart,
         yearFinish: this.yearFinish,
         cover: this.cover,
         desc: this.desc,
+        desc_rs: this.desc_rs,
         rev: this.rev,
+        rev_rs: this.rev_rs,
         exhType: this.exhType,
         place: this.place,
+        place_rs: this.place_rs,
+        link_project: this.link_project
       };
       this.$emit("add-new", newObject);
     },

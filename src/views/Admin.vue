@@ -39,7 +39,7 @@
         </div>
       </div>
       <div class="projects">
-        <div class="title"><h1>Projects</h1></div>
+        <div class="title"><h1>Web projects</h1></div>
 
         <div class="list-projects">
           <div class="add-container">
@@ -253,11 +253,11 @@ export default {
         let formData = new FormData();
         formData.append("sid", localStorage.getItem("sid"));
         formData.append("proj_title", newObject.title);
+        formData.append("proj_title_rs", newObject.title_rs);
         formData.append("proj_desc", newObject.desc);
-        formData.append("proj_year_start", newObject.yearStart);
-        if (newObject.yearFinish != "") {
-          formData.append("proj_year_finish", newObject.yearFinish);
-        }
+        formData.append("proj_desc_rs", newObject.desc_rs);
+        formData.append('proj_link', newObject.link_project);
+        formData.append("proj_year", newObject.yearFinish);
 
         formData.append("proj_coverphoto", newObject.cover);
         axios.post(this.baseUrl + "projects", formData).then((res) => {
@@ -269,11 +269,15 @@ export default {
         let formData = new FormData();
         formData.append("sid", localStorage.getItem("sid"));
         formData.append("exh_title", newObject.title);
+        formData.append("exh_title_rs", newObject.title_rs);
         formData.append("exh_desc", newObject.desc);
+        formData.append("exh_desc_rs", newObject.desc_rs);
         formData.append("exh_rec", newObject.rev);
+        formData.append("exh_rec_rs", newObject.rev_rs);
         formData.append("exh_date_start", newObject.yearStart);
         formData.append("exh_date_finish", newObject.yearFinish);
         formData.append("exh_place", newObject.place);
+        formData.append("exh_place_rs", newObject.place_rs);
         formData.append("exh_type", newObject.exhType);
         formData.append("exh_coverphoto", newObject.cover);
         axios.post(this.baseUrl + "exhibitions", formData).then((res) => {
@@ -937,11 +941,13 @@ button {
   z-index: 4;
 }
 @media only screen and (max-width: 768px) {
-  .add, .edit-artwork {
+  .add,
+  .edit-artwork {
     width: 30vw;
     height: 30vw;
   }
-  .add-artwork-container, .edit-container{
+  .add-artwork-container,
+  .edit-container {
     width: 90vw;
     margin-left: 0%;
     margin-right: 0%;
@@ -951,19 +957,19 @@ button {
     width: 90vw;
     margin-left: 0%;
   }
-  .add-file{
+  .add-file {
     width: 30vw;
     height: 30vw;
     font-size: 2rem;
   }
-  .artworks{
+  .artworks {
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
   }
-  .artworks-mng{
+  .artworks-mng {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -982,21 +988,20 @@ button {
   .bio-content {
     width: 80vw;
   }
-  .bottom-title{
+  .bottom-title {
     width: 80vw;
   }
-  .delete-img-div{
+  .delete-img-div {
     margin-left: 77%;
   }
-  .edit-container{
+  .edit-container {
     width: 90vw;
   }
-  .edit-img{
+  .edit-img {
     top: 20vh;
     left: 30vw;
-  
   }
-  .img-art{
+  .img-art {
     width: 90vw;
   }
   .img-prof {
@@ -1012,7 +1017,8 @@ button {
     justify-content: center;
     flex-wrap: nowrap;
   }
-  .project, .exh{
+  .project,
+  .exh {
     width: 90vw;
     margin-left: 0%;
   }

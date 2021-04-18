@@ -83,6 +83,7 @@ export default {
     getArtworks() {
       this.changeLoader(true);
       axios.get(this.baseUrl + "artworks").then((res) => {
+        console.log(res)
         this.artworks = res.data.data;
         this.changeLoader(false);
         this.getImages();

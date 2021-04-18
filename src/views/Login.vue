@@ -68,7 +68,7 @@ input {
   height: 5vh;
   border-radius: 10px;
   border: none;
-  background-color: #d3dff0;
+  background-color: #bebebe;
   font-size: 1.2rem;
   font-family: "Forum", cursive;
   text-align: center;
@@ -82,8 +82,8 @@ button {
   border-radius: 10px;
   border: none;
   box-shadow: 0px 5px 15px 2px rgba(0, 0, 0, 0.48);
-  background-color: #214478;
-  color: white;
+  background-color: #27f2cb;
+  color: #545454;
   cursor: pointer;
   margin-top: 2rem;
   font-size: 1rem;

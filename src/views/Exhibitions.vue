@@ -3,13 +3,13 @@
     <div class="pg-col" v-if="showGallery === false">
       <div class="preview">
         <div
-          v-lazyload
+         
           class="prev-div tooltip"
           v-for="(exh, index) in exhibitions"
           :key="'e' + index"
           @click="showExh(exh)"
         >
-          <img class="prev-img" :data-url="exh.coverphoto_path" alt="" />
+          <img class="prev-img" :src="exh.coverphoto_path" alt="" />
 
           <span class="tooltiptxt">{{ $t("tooltips.nav") }}</span>
           <div class="prev-dsc">
@@ -58,9 +58,9 @@ export default {
   methods: {
     ...mapActions(["changeLoader", "changeLoadedImg"]),
     getExhbtns() {
-      this.changeLoader(true);
+   
       axios.get(this.baseUrl + "exhibitions").then((res) => {
-        console.log(res.data.data);
+        console.log(res);
         this.exhibitions.push(res.data.data[0]);
         for (let i = 0; i < res.data.data.length; i++) {
           if (res.data.data[i].exh_id != this.exhibitions[0].exh_id) {
