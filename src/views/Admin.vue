@@ -220,11 +220,17 @@ export default {
       this.add_artwork = true;
     },
     addNewArtwork(newArtwork) {
+      console.log(newArtwork.dtl_images);
       let formData = new FormData();
       formData.append("sid", localStorage.getItem("sid"));
       formData.append("artwork_title", newArtwork.title);
+      formData.append("artwork_title_rs", newArtwork.title_rs);
       formData.append("artwork_material", newArtwork.material);
+      formData.append("artwork_material_rs", newArtwork.material_rs);
       formData.append("artwork_technique", newArtwork.technique);
+      formData.append("artwork_technique_rs", newArtwork.technique_rs);
+      formData.append("artwork_artform", newArtwork.artform);
+      formData.append("artwork_artform_rs", newArtwork.artform_rs);
       if (newArtwork.price != null) {
         formData.append("artwork_price", newArtwork.price);
       }
@@ -233,15 +239,22 @@ export default {
       }
       formData.append("artwork_sold", newArtwork.sold);
       formData.append("artwork_forsale", newArtwork.forSale);
+      formData.append("artwork_coverphoto", newArtwork.artworkImage);
       axios.post(this.baseUrl + "artworks", formData).then((res) => {
         console.log(res);
         this.newArtworkId = res.data.artwork_id;
-        formData.append("artwork_id", this.newArtworkId);
-        formData.append("img_image", newArtwork.artworkImage);
-        axios.post(this.baseUrl + "images", formData).then((res) => {
-          console.log(res);
-          this.$router.go();
-        });
+
+        for (let i = 0; i < newArtwork.dtl_images.length; i++) {
+          let imgFormData = new FormData();
+          imgFormData.append("sid", localStorage.getItem("sid"));
+          imgFormData.append("artwork_id", this.newArtworkId);
+          imgFormData.append("img_image", newArtwork.dtl_images[i].dtl_image);
+
+          axios.post(this.baseUrl + "images", imgFormData).then((res) => {
+            console.log(res);
+            this.$router.go();
+          });
+        }
       });
     },
     addNewExh() {
@@ -256,7 +269,7 @@ export default {
         formData.append("proj_title_rs", newObject.title_rs);
         formData.append("proj_desc", newObject.desc);
         formData.append("proj_desc_rs", newObject.desc_rs);
-        formData.append('proj_link', newObject.link_project);
+        formData.append("proj_link", newObject.link_project);
         formData.append("proj_year", newObject.yearFinish);
 
         formData.append("proj_coverphoto", newObject.cover);
@@ -425,10 +438,9 @@ export default {
       this.id = img.img_id;
       this.warning = true;
       this.message = "Are you sure you want to delete this image?";
-      if (this.editObject.type === "project") {
-        this.confirmEditFunction = function () {
+         this.confirmEditFunction = function () {
           axios
-            .delete(this.baseUrl + "project_images", {
+            .delete(this.baseUrl + "images", {
               params: {
                 img_id: this.id,
                 sid: localStorage.getItem("sid"),
@@ -443,26 +455,28 @@ export default {
               }
             });
         };
-      }
-      if (this.editObject.type === "exh") {
-        this.confirmEditFunction = function () {
-          axios
-            .delete(this.baseUrl + "exh_images", {
-              params: {
-                img_id: this.id,
-                sid: localStorage.getItem("sid"),
-              },
-            })
-            .then((res) => {
-              console.log(res);
-              for (let i = 0; i < this.images.length; i++) {
-                if (this.id === this.images[i].img_id) {
-                  this.images.splice(i, 1);
-                }
-              }
-            });
-        };
-      }
+      // if (this.editObject.type === "project") {
+     
+      // }
+      // if (this.editObject.type === "exh") {
+      //   this.confirmEditFunction = function () {
+      //     axios
+      //       .delete(this.baseUrl + "exh_images", {
+      //         params: {
+      //           img_id: this.id,
+      //           sid: localStorage.getItem("sid"),
+      //         },
+      //       })
+      //       .then((res) => {
+      //         console.log(res);
+      //         for (let i = 0; i < this.images.length; i++) {
+      //           if (this.id === this.images[i].img_id) {
+      //             this.images.splice(i, 1);
+      //           }
+      //         }
+      //       });
+      //   };
+      // }
     },
     deleteNewImg(img) {
       axios
@@ -509,8 +523,12 @@ export default {
       this.editObject.id = exh.exh_id;
       this.editObject.title = exh.exh_title;
       this.editObject.description = exh.exh_desc;
-      this.editObject.review = exh.exh_rec;
+      this.editObject.review = exh.exh_rec_rs;
+      this.editObject.title_rs = exh.exh_title_rs;
+      this.editObject.description_rs = exh.exh_desc_rs;
+      this.editObject.review_rs = exh.exh_rec;
       this.editObject.place = exh.exh_place;
+      this.editObject.place_rs = exh.exh_place_rs;
       this.editObject.coverphoto_path = exh.coverphoto_path;
       this.editObject.coverphoto = exh.exh_coverphoto;
       this.editObject.yearstart = exh.exh_date_start;
@@ -533,9 +551,10 @@ export default {
       this.editObject.id = project.proj_id;
       this.editObject.title = project.proj_title;
       this.editObject.description = project.proj_desc;
+      this.editObject.title_rs = project.proj_title_rs;
+      this.editObject.description_rs = project.proj_desc_rs;
       this.editObject.coverphoto_path = project.coverphoto_path;
-      this.editObject.yearstart = project.proj_year_start;
-      this.editObject.yearfinish = project.proj_year_finish;
+      this.editObject.yearfinish = project.proj_year;
       this.editObject.coverphoto = project.proj_coverphoto;
       this.editObject.type = "project";
 
@@ -650,11 +669,15 @@ export default {
           if (editedObject.desc != this.editObject.description) {
             formData.append("proj_desc", editedObject.desc);
           }
-          if (editedObject.yearStart != this.editObject.yearstart) {
-            formData.append("proj_year_start", editedObject.yearStart);
+          if (editedObject.title_rs != this.editObject.title_rs) {
+            formData.append("proj_title_rs", editedObject.title_rs);
           }
+          if (editedObject.desc_rs != this.editObject.description_rs) {
+            formData.append("proj_desc_rs", editedObject.desc_rs);
+          }
+
           if (editedObject.yearFinish != this.editObject.yearfinish) {
-            formData.append("proj_year_finish", editedObject.yearFinish);
+            formData.append("proj_year", editedObject.yearFinish);
           }
           if (editedObject.newCover != this.editObject.coverphoto) {
             formData.append("proj_coverphoto", editedObject.newCover);
@@ -682,6 +705,18 @@ export default {
           }
           if (editedObject.place != this.editObject.place) {
             formData.append("exh_place", editedObject.place);
+          }
+          if (editedObject.title_rs != this.editObject.title_rs) {
+            formData.append("exh_title_rs", editedObject.title_rs);
+          }
+          if (editedObject.desc_rs != this.editObject.description_rs) {
+            formData.append("exh_desc_rs", editedObject.desc_rs);
+          }
+          if (editedObject.rev_rs != this.editObject.review_rs) {
+            formData.append("exh_rec_rs", editedObject.rev_rs);
+          }
+          if (editedObject.place_rs != this.editObject.place_rs) {
+            formData.append("exh_place_rs", editedObject.place_rs);
           }
           if (editedObject.exhType != this.editObject.exhtype) {
             formData.append("exh_type", editedObject.exhType);
@@ -719,8 +754,8 @@ button {
   height: 5vh;
   border-radius: 10px;
   border: none;
-  background-color: #214478;
-  color: white;
+  background-color: #27f2cb;
+  color: #545454;
   cursor: pointer;
   margin-top: 2rem;
   font-size: 1rem;
@@ -734,21 +769,21 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 3px dashed #214478;
+  border: 3px dashed #27f2cb;
   cursor: pointer;
   font-size: 3rem;
 }
 .add-artwork {
   width: 100vw;
-  height: 100vh;
+  /*height: 100vh;*/
   position: fixed;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: 3vh;
 }
 .add-artwork-container,
 .edit-container {
-  box-shadow: 0px 5px 15px 2px rgba(0, 0, 0, 0.48);
   width: 30vw;
   height: 35vh;
   display: flex;
@@ -758,7 +793,6 @@ button {
   margin-left: -3rem;
 }
 .add-container {
-  box-shadow: 0px 5px 15px 2px rgba(0, 0, 0, 0.48);
   width: 30vw;
   height: 35vh;
   display: flex;
@@ -769,7 +803,7 @@ button {
 .add-file {
   width: 5vw;
   height: 5vw;
-  border: 3px dashed #214478;
+  border: 3px dashed #27f2cb;
   display: flex;
   align-items: center;
   justify-content: center;

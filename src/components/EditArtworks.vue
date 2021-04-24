@@ -1,25 +1,15 @@
 <template>
   <div class="edit-artworks">
     <i class="far fa-arrow-alt-circle-left go-back" @click="goBack()"></i>
-    <div class="prev-gallery" :class="{ fade: edit }">
-      <div
-       
-        class="prev-div"
-        v-for="(art, index) in artworks"
-        :key="index"
-      >
+    <div class="prev-gallery" :class="{ fade: edit }" v-if="edit === false">
+      <div class="prev-div" v-for="(art, index) in artworks" :key="index">
         <div class="delete-img-div">
           <i
             class="fas fa-trash-alt delete-img"
             @click="deleteArtwork(art)"
           ></i>
         </div>
-        <img
-          class="prev-img"
-          :src="art.artwork_imgpath"
-          alt=""
-          
-        />
+        <img class="prev-img" :src="art.artwork_imgpath" alt="" />
         <div class="prev-desc">
           <p>{{ art.artwork_title.toUpperCase() }}</p>
           <p>
@@ -35,21 +25,26 @@
         </div>
       </div>
     </div>
-    <div class="edit-container">
-      <div class="edit" v-if="edit">
+    <div class="edit-container" v-if="edit">
+      <div class="edit">
         <i class="far fa-times-circle exit" @click="exit()"></i>
         <h1>Artwork details</h1>
         <div class="inpts">
-          <input v-model="title" type="text" placeholder="Title" />
-          <input v-model="material" type="text" placeholder="Material" />
-          <input v-model="technique" type="text" placeholder="Technique" />
+          <input v-model="title" type="text" placeholder="Title(EN)" />
+          <input v-model="title_rs" type="text" placeholder="Title(RS)" />
+          <input v-model="material" type="text" placeholder="Material(EN)" />
+          <input v-model="material_rs" type="text" placeholder="Material(RS)" />
+          <input v-model="technique" type="text" placeholder="Technique(EN)" />
+          <input
+            v-model="technique_rs"
+            type="text"
+            placeholder="Technique(RS)"
+          />
+          <input v-model="artform" type="text" placeholder="Artform(RS)" />
+          <input v-model="artform_rs" type="text" placeholder="Artform(RS)" />
           <input v-model="price" type="number" placeholder="Price" />
           <input v-model="year" type="number" placeholder="Year" />
-          <input
-            v-model="type"
-            type="text"
-            placeholder="Type (photography, ceramics, etc.)"
-          />
+         
           <div class="selects">
             <label for="for-sale">For sale?</label>
             <select v-model="forSale" id="for-sale" @change="updateForSale">
@@ -63,12 +58,44 @@
             </select>
           </div>
         </div>
+        <div class="imgs">
+          <div class="cover">
+            <h2>Cover</h2>
+            <label for="cover">
+              <i class="far fa-edit edit-icon"></i>
+            </label>
+            <input type="file" id="cover" @change="getCover" hidden />
+            <img
+              class="cover-img"
+              :src="cover.path"
+              alt=""
+              v-if="coverUrl === ''"
+            />
+            <div class="" v-if="coverUrl !== ''">
+              <i class="fas fa-trash-alt" @click="deleteNewCover()"></i>
+            </div>
+            <img
+              class="cover-img"
+              :src="coverUrl"
+              alt=""
+              v-if="coverUrl !== ''"
+            />
+          </div>
+          <div class="dtls" >
+          <div class="dtl-images" v-for="(img, index) in dtl_images" :key="'img' + index">
+          <i class="fas fa-trash-alt" @click="deleteDtlImg(img)"></i>
+          <img class="cover-img" :src="img.img_image" alt="">
+          </div>
+          </div>
+        </div>
         <button @click="submitChanges()">SUBMIT</button>
       </div>
     </div>
   </div>
 </template>
 <script>
+import axios from "axios";
+import { mapState } from "vuex";
 export default {
   props: {
     artworks: Array,
@@ -82,24 +109,58 @@ export default {
       technique: "",
       price: null,
       year: null,
-      type: "",
+
       forSale: 1,
       sold: 0,
+      title_rs: "",
+      material_rs: "",
+      technique_rs: "",
+      artform: "",
+      artform_rs: "",
+      cover: new Object(),
+      newCover: "",
+      coverUrl: "",
+      dtl_images: []
     };
   },
   methods: {
     deleteArtwork(art) {
       this.$emit("delete-artwork", art);
     },
+    deleteDtlImg(img) {
+      axios.delete(this.baseUrl + 'images', {params: {
+        sid: localStorage.getItem('sid'),
+        img_id: img.img_id
+      }}).then(res => {
+        console.log(res)
+        for(let i = 0; i < this.dtl_images.length; i++) {
+          if(img === this.dtl_images[i]) {
+            this.dtl_images.splice(i ,1);
+          }
+        }
+      })
+    },
+    deleteNewCover() {
+      this.newCover = "";
+      this.coverUrl = "";
+    },
     editArtwork(art) {
+      console.log(art);
       this.edit = true;
       this.id = art.artwork_id;
       this.title = art.artwork_title;
+      this.title_rs = art.artwork_title_rs;
       this.material = art.artwork_material;
+      this.material_rs = art.artwork_material_rs;
       this.technique = art.artwork_technique;
+      this.technique_rs = art.artwork_technique_rs;
+      this.artform = art.artwork_artform;
+      this.artform_rs = art.artwork_artform_rs;
+      this.cover.coverphoto = art.artwork_coverphoto;
+      this.cover.path = art.artwork_imgpath;
       this.price = art.artwork_price;
       this.year = art.artwork_year;
-      this.type = art.artwork_type;
+     
       this.forSale = art.artwork_forsale;
       this.sold = art.artwork_sold;
       if (this.forSale === null) {
@@ -108,10 +169,28 @@ export default {
       if (this.sold === null) {
         this.sold = 0;
       }
+      axios
+        .get(this.baseUrl + "images", {
+          params: { artwork_id: art.artwork_id },
+        })
+        .then((res) => {
+          console.log(res);
+          for (let i = 0; i < res.data.data.length; i++) {
+            this.dtl_images.push({
+              img_id: res.data.data[i].img_id,
+              img_image: res.data.data[i].img_path,
+            });
+          }
+        });
     },
     exit() {
       this.edit = false;
       this.id = null;
+      this.dtl_images = [];
+    },
+    getCover(e) {
+      this.newCover = e.target.files[0];
+      this.coverUrl = URL.createObjectURL(this.newCover);
     },
     goBack() {
       this.$emit("go-back");
@@ -122,9 +201,14 @@ export default {
         title: this.title,
         material: this.material,
         technique: this.technique,
+        artform: this.artform,
+        title_rs: this.title_rs,
+        material_rs: this.material_rs,
+        technique_rs: this.technique_rs,
+        artform_rs: this.artform_rs,
         price: this.price,
         year: this.year,
-        type: this.type,
+        
         forSale: this.forSale,
         sold: this.sold,
       };
@@ -138,46 +222,27 @@ export default {
       }
     },
   },
+  computed: {
+    ...mapState(["baseUrl"]),
+  },
 };
 </script>
 <style scoped>
 button {
-  width: 10vh;
-  height: 5vh;
-  border-radius: 10px;
-  border: none;
-  background-color: #214478;
-  color: white;
-  cursor: pointer;
+  position: absolute;
+  top: 5vh;
+  left: 10vw;
+}
+
+h1 {
   margin-top: 2rem;
-  margin-bottom: 1rem;
-  font-size: 1rem;
-  font-family: "Forum", cursive;
-  text-align: center;
+  margin-bottom: 2rem;
+  position: absolute;
+  top: 5vh;
+  font-size: 3rem;
 }
-input {
-  width: 20vw;
-  height: 5vh;
-  border-radius: 10px;
-  border: none;
-  background-color: #d3dff0;
-  font-size: 1.2rem;
-  font-family: "Forum", cursive;
-  text-align: center;
-}
-input:focus {
-  outline: none;
-}
-select {
-  border: none;
-  width: 5vw;
-  font-size: 1.2rem;
-  font-family: "Forum", cursive;
-  background-color: #d3dff0;
-  text-align: center;
-}
-select:focus {
-  outline: none;
+.cover-img {
+  width: 15vw;
 }
 .delete-img-div {
   position: absolute;
@@ -194,18 +259,26 @@ select:focus {
   cursor: pointer;
   z-index: 1;
 }
+.dtls{
+display: flex;
+flex-wrap: wrap;
+align-items: flex-start;
+justify-content: flex-start;
+width: 60vw;
+gap: 1rem;
+}
 .edit {
-  top: 15vh;
-  left: 35vw;
+  top: 5vh;
+
   box-shadow: 0px 5px 15px 2px rgba(0, 0, 0, 0.48);
-  width: 30vw;
-  height: 80vh;
+  width: 80vw;
+  height: 150vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   background-color: white;
-  position: fixed;
+  position: absolute;
 }
 
 .edit-artworks {
@@ -217,18 +290,19 @@ select:focus {
   justify-content: center;
 }
 .edit-container {
-  position: fixed;
+  position: absolute;
   width: 100vw;
   height: 100vh;
   display: flex;
+  top: 5vh;
   align-items: center;
   justify-content: center;
 }
 .exit {
   position: absolute;
-  margin-top: -70vh;
-  margin-left: 25vw;
-  font-size: 2rem;
+  top: 5vh;
+  left: 70vw;
+  font-size: 3rem;
   cursor: pointer;
 }
 .fade {
@@ -246,12 +320,24 @@ select:focus {
   font-size: 1.5rem;
   cursor: pointer;
 }
+.imgs {
+  width: 80vw;
+  height: 40vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  margin-top: 5vh;
+  margin-left: 15vw;
+  gap: 10vw;
+}
 .inpts {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 40vw;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: flex-start;
+  margin-left: 15vw;
+  margin-top: 2rem;
+  width: 80vw;
   gap: 1rem;
 }
 .prev-img {
@@ -276,9 +362,10 @@ select:focus {
 .prev-gallery {
   width: 90vw;
   margin-bottom: 2rem;
-  column-count: 3;
-  grid-row: auto;
-  column-gap: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: flex-start;
   height: fit-content;
 }
 .selects {
@@ -331,7 +418,7 @@ select:focus {
   .prev-img {
     width: 90vw;
   }
-  .selects{
+  .selects {
     display: flex;
     flex-direction: column;
   }

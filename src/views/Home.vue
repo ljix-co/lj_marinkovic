@@ -152,7 +152,9 @@ export default {
 h3 {
   margin-top: 1vh;
 }
-
+p{
+  font-size: 1.2rem;
+}
 .arrow {
   width: 1rem;
   height: 1rem;

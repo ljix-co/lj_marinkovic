@@ -69,6 +69,7 @@
 import { mapState, mapActions } from "vuex";
 import axios from "axios";
 import PhotoSlider from "../components/PhotoSlider.vue";
+import checkLanguage from '../mixins/checkLanguage.js';
 export default {
   components: { PhotoSlider },
   data() {
@@ -78,6 +79,7 @@ export default {
       images: [],
     };
   },
+  mixins: [checkLanguage],
   methods: {
     ...mapActions(["changeLoader", "changeLoadedImg"]),
     getArtworks() {
@@ -114,7 +116,7 @@ export default {
   },
   mounted() {
     this.getArtworks();
-    this.imgLoaded();
+    
   },
 };
 </script>

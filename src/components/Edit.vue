@@ -5,20 +5,33 @@
       <button class="submit" @click="submitEdit()">SUBMIT</button>
       <div class="basic-info">
         <div class="edit-content">
-          <h1>Title:</h1>
+          <h1>Title(EN):</h1>
           <input class="e-title" v-model="title" />
+        </div>
+        <div class="edit-content">
+          <h1>Title(RS):</h1>
+          <input class="e-title" v-model="title_rs" />
         </div>
         <div class="edit-content">
           <h1>Time period:</h1>
           <div class="time-period">
-            <input class="year" type="text" v-model="yearStart" />
-            <p>-</p>
+            <input
+              class="year"
+              type="text"
+              v-model="yearStart"
+              v-if="editObject.type === 'exh'"
+            />
+            <p v-if="editObject.type === 'exh'">-</p>
             <input class="year" type="text" v-model="yearFinish" />
           </div>
         </div>
         <div class="edit-content" v-if="editObject.type === 'exh'">
-          <h1>Place:</h1>
+          <h1>Place(EN):</h1>
           <input class="e-title" v-model="place" />
+        </div>
+        <div class="edit-content" v-if="editObject.type === 'exh'">
+          <h1>Place(RS):</h1>
+          <input class="e-title" v-model="place_rs" />
         </div>
         <div class="edit-content" v-if="editObject.type === 'exh'">
           <h1>Solo/group:</h1>
@@ -41,13 +54,39 @@
         </div>
       </div>
       <div>
-        <div class="txt-editor-div">
-          <h1>Description:</h1>
-          <vue-editor class="vue_editor" v-model="desc" />
+        <div class="links-editor">
+          <h2 class="link-editor" @click="showDescEn()">DESCRIPTION(EN)</h2>
+          <h2 class="link-editor" @click="showDescRs()">DESCRIPTION(RS)</h2>
+          <h2
+            class="link-editor"
+            v-if="editObject.type === 'exh'"
+            @click="showRevEn()"
+          >
+            REVIEW(EN)
+          </h2>
+          <h2
+            class="link-editor"
+            v-if="editObject.type === 'exh'"
+            @click="showRevRs()"
+          >
+            REVIEW(RS)
+          </h2>
         </div>
         <div class="txt-editor-div">
-          <h1>Review:</h1>
-          <vue-editor class="vue_editor" v-model="rev" />
+          <h1 v-if="edit_desc_en">Description(EN):</h1>
+          <vue-editor class="vue_editor" v-if="edit_desc_en" v-model="desc" />
+          <h1 v-if="edit_desc_rs">Description(RS):</h1>
+          <vue-editor
+            class="vue_editor"
+            v-if="edit_desc_rs"
+            v-model="desc_rs"
+          />
+        </div>
+        <div class="txt-editor-div" v-if="editObject.type === 'exh'">
+          <h1 v-if="edit_rev_en">Review(EN):</h1>
+          <vue-editor class="vue_editor" v-if="edit_rev_en" v-model="rev" />
+          <h1 v-if="edit_rev_rs">Review(RS):</h1>
+          <vue-editor class="vue_editor" v-if="edit_rev_rs" v-model="rev_rs" />
         </div>
       </div>
     </div>
@@ -74,16 +113,13 @@
               ></i>
               <i class="far fa-check-circle" @click="addNewImg()"></i>
             </div>
-            <img class="gallery-img" :src="newImgUrl" alt="" />
+            <img class="cover-img" :src="newImgUrl" alt="" />
           </div>
         </div>
-        <div v-if="images.length > 0">
+        <div class="dtl-imgs" v-if="images.length > 0">
           <div v-lazyload v-for="(img, index) in images" :key="'i' + index">
-            <div class="delete-img-div">
-              <i
-                class="fas fa-trash-alt delete-img"
-                @click="deleteImg(img)"
-              ></i>
+            <div class="">
+              <i class="fas fa-trash-alt" @click="deleteImg(img)"></i>
             </div>
             <img
               class="gallery-img"
@@ -107,18 +143,26 @@ export default {
   data() {
     return {
       title: this.editObject.title,
+      title_rs: this.editObject.title_rs,
       desc: this.editObject.description,
       rev: this.editObject.review,
+      desc_rs: this.editObject.description_rs,
+      rev_rs: this.editObject.review_rs,
       yearStart: this.editObject.yearstart,
       yearFinish: this.editObject.yearfinish,
       cover: this.editObject.coverphoto_path,
       place: this.editObject.place,
+      place_rs: this.editObject.place_rs,
       exhType: this.editObject.exhtype,
       placeholderImg: "../../public/images/placeholder_photo.jpg",
       url: "",
       newCover: this.editObject.coverphoto,
       newImgUrl: "",
       newImg: null,
+      edit_desc_en: "",
+      edit_desc_rs: "",
+      edit_rev_en: "",
+      edit_rev_rs: "",
     };
   },
   methods: {
@@ -148,15 +192,43 @@ export default {
     goBack() {
       this.$emit("go-back");
     },
+    showDescEn() {
+      this.edit_desc_en = true;
+      this.edit_desc_rs = false;
+      this.edit_rev_en = false;
+      this.edit_rev_rs = false;
+    },
+    showDescRs() {
+      this.edit_desc_rs = true;
+      this.edit_desc_en = false;
+      this.edit_rev_en = false;
+      this.edit_rev_rs = false;
+    },
+    showRevEn() {
+      this.edit_rev_en = true;
+      this.edit_rev_rs = false;
+      this.edit_desc_en = false;
+      this.edit_desc_rs = false;
+    },
+    showRevRs() {
+      this.edit_rev_rs = true;
+      this.edit_rev_en = false;
+      this.edit_desc_en = false;
+      this.edit_desc_rs = false;
+    },
     submitEdit() {
       let editedObject = {
         title: this.title,
         desc: this.desc,
         rev: this.rev,
+        title_rs: this.title_rs,
+        desc_rs: this.desc_rs,
+        rev_rs: this.rev_rs,
         yearStart: this.yearStart,
         yearFinish: this.yearFinish,
         newCover: this.newCover,
         place: this.place,
+        place_rs: this.place_rs,
         exhType: this.exhType,
       };
 
@@ -240,6 +312,16 @@ export default {
   cursor: pointer;
   z-index: 1;
 }
+.dtl-imgs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 1rem;
+  width: 60vw;
+  height: fit-content;
+  margin-left: 10vw;
+}
 .editor {
   margin-top: 10vh;
   display: flex;
@@ -291,7 +373,9 @@ export default {
 }
 .gallery {
   width: 90vw;
-  columns: 3;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
   margin-top: 5vh;
 }
 .gallery-div {
@@ -299,7 +383,7 @@ export default {
   text-align: start;
 }
 .gallery-img {
-  width: 30vw;
+  width: 15vw;
 }
 .gallery-img-div {
   box-shadow: 0px 5px 15px 2px rgba(0, 0, 0, 0.48);
@@ -314,21 +398,26 @@ export default {
   cursor: pointer;
   z-index: 2;
 }
-.submit {
-  position: absolute;
-  left: 85vw;
-  top: 7vh;
-  width: 10vh;
-  height: 5vh;
-  border-radius: 10px;
-  border: none;
-  background-color: #214478;
-  color: white;
+.link-editor {
+  border-bottom: 2px solid #27f2cb;
   cursor: pointer;
-  margin-top: 2rem;
-  font-size: 1rem;
-  font-family: "Forum", cursive;
-  text-align: center;
+  margin-bottom: 5vh;
+}
+.links-editor {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  width: 30vw;
+  gap: 1rem;
+}
+
+.submit {
+  position: fixed;
+  left: 87vw;
+  top: 7vh;
+  z-index: 2;
+  width: 7vw;
 }
 .time-period {
   display: flex;
@@ -338,7 +427,7 @@ export default {
   text-align: start;
 }
 .vue_editor {
-  width: 50vw;
+  width: 30vw;
   margin-top: 2rem;
   margin-bottom: 1rem;
 }
@@ -352,7 +441,6 @@ export default {
   text-align: center;
 }
 @media only screen and (max-width: 768px) {
-
   .add-new {
     margin-left: 0%;
   }
@@ -366,13 +454,13 @@ export default {
   .basic-info {
     width: 90vw;
   }
-    .cover-img-div {
+  .cover-img-div {
     width: 90vw;
   }
-  .cover-img{
+  .cover-img {
     width: 90vw;
   }
-  .delete-img-div{
+  .delete-img-div {
     margin-left: 77vw;
   }
   .edited {
@@ -387,15 +475,15 @@ export default {
     display: flex;
     flex-direction: column;
   }
-  .gallery{
+  .gallery {
     width: 90vw;
     columns: none;
     display: flex;
     flex-direction: column;
     gap: 1rem;
   }
-  
-  .gallery-img{
+
+  .gallery-img {
     width: 90vw;
   }
   .go-back {

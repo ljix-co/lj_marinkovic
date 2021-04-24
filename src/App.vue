@@ -107,9 +107,48 @@ export default {
   padding: 0;
   box-sizing: border-box;
 }
+button {
+  width: 10vw;
+  height: 7vh;
+  border-radius: 10px;
+  border: none;
+  background-color: #27f2cb;
+  color: #545454;
+  cursor: pointer;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  font-size: 2rem;
+  font-family: "Forum", cursive;
+  text-align: center;
+ 
+}
+input {
+  width: 20vw;
+  height: 5vh;
+  border-radius: 10px;
+  border: none;
+  background-color: #dee0e0;
+  font-size: 1.2rem;
+  font-family: "Forum", cursive;
+  text-align: center;
+}
+input:focus {
+  outline: none;
+}
 p,
 li {
   color: gray;
+}
+select {
+  border: none;
+  width: 5vw;
+  font-size: 1.2rem;
+  font-family: "Forum", cursive;
+  background-color: #bebebe;
+  text-align: center;
+}
+select:focus {
+  outline: none;
 }
 #app {
   font-family: "Forum", cursive;
