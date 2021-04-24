@@ -2,6 +2,9 @@
   "artworks": {
     "nav": "UPUTSVO ZA KUPOVINU"
   },
+  "buttons": {
+    "buy": "KUPI"
+  },
   "home": {
     "categories": [
       {

@@ -1,30 +1,73 @@
-import { mapState } from 'vuex';
-export const checkLanguage = {
-    data() {
-        return {
-           
-        }
-    },
-    methods: {
-        changeToLanguage(object_array) {
-            if (this.curLanguage === "RS") {
-                for (let i = 0; i < object_array.length; i++) {
-                    object_array.title = object_array[i].artwork_title_rs;
-                    object_array.material = object_array[i].artwork_material_rs;
-                    object_array.technique = object_array[i].artwork_tech_rs;
 
+export const checkLanguage = {
+
+    methods: {
+        changeToLanguage() {
+           
+            if (this.curLanguage === "RS") {
+                if (this.artworks) {
+                    for (let i = 0; i < this.artworks.length; i++) {
+                        this.artworks[i].title = this.artworks[i].artwork_title_rs;
+                        this.artworks[i].material = this.artworks[i].artwork_material_rs;
+                        this.artworks[i].technique = this.artworks[i].artwork_technique_rs;
+                        this.artworks[i].artform = this.artworks[i].artwork_artform_rs;
+                    }
                 }
+                if (this.projects) {
+                    for (let i = 0; i < this.projects.length; i++) {
+                        this.projects[i].title = this.projects[i].proj_title_rs;
+                        this.projects[i].desc = this.projects[i].proj_desc_rs;
+                     
+                    }
+                }
+                if (this.exhibitions) {
+                    for (let i = 0; i < this.exhibitions.length; i++) {
+                        this.exhibitions[i].title = this.exhibitions[i].exh_title_rs;
+                        this.exhibitions[i].desc = this.exhibitions[i].exh_desc_rs;
+                        this.exhibitions[i].rev = this.exhibitions[i].exh_rec_rs;
+                        this.exhibitions[i].place = this.exhibitions[i].exh_place_rs;
+                        if(this.exhibitions[i].desc_rs.length > 400) {
+                            this.exhibitions[i].short_desc = this.exhibitions[i].desc_rs.substr(0, 400) + '<p>...</p>';
+                        }
+                        else if(this.exhibitions[i].desc_rs.length <= 400) {
+                            this.exhibitions[i].short_desc = this.exhibitions[i].desc_rs
+                        }
+                    }
+                }
+
             }
             if (this.curLanguage === "EN") {
-                for (let i = 0; i < object_array.length; i++) {
-                    object_array.title = object_array[i].artwork_title_en;
-                    object_array.material = object_array[i].artwork_material_en;
-                    object_array.technique = object_array[i].artwork_tech_en;
+                if (this.artworks) {
+                    for (let i = 0; i < this.artworks.length; i++) {
+                        this.artworks[i].title = this.artworks[i].artwork_title;
+                        this.artworks[i].material = this.artworks[i].artwork_material;
+                        this.artworks[i].technique = this.artworks[i].artwork_technique;
+                        this.artworks[i].artform = this.artworks[i].artwork_artform;
+                    }
+                }
+                if (this.projects) {
+                    for (let i = 0; i < this.projects.length; i++) {
+                        this.projects[i].title = this.projects[i].proj_title;
+                        this.projects[i].desc = this.projects[i].proj_desc;
+                      
+                    }
+                }
+                if (this.exhibitions) {
+                   
+                    for (let i = 0; i < this.exhibitions.length; i++) {
+                        this.exhibitions[i].title = this.exhibitions[i].exh_title;
+                        this.exhibitions[i].desc = this.exhibitions[i].exh_desc;
+                        this.exhibitions[i].rev = this.exhibitions[i].exh_rec;
+                        this.exhibitions[i].place = this.exhibitions[i].exh_place;
+                        if(this.exhibitions[i].desc.length > 400) {
+                            this.exhibitions[i].short_desc = this.exhibitions[i].desc.substr(0, 400) + '<p>...</p>';
+                        }
+                        else if(this.exhibitions[i].desc.length <= 400) {
+                            this.exhibitions[i].short_desc = this.exhibitions[i].desc
+                        }
+                    }
                 }
             }
         }
     },
-    computed: {
-        ...mapState(['curLanguage'])
-    }
 }

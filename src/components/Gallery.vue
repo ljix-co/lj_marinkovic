@@ -59,16 +59,22 @@ import { mapActions } from "vuex";
 export default {
   props: {
     images: Array,
-    description: String,
-    title: String,
-    date: String,
-    review: String,
+    // description: String,
+    // title: String,
+    // date: String,
+    // review: String,
+    chosenExh: Object,
+    chosenProj: Object,
   },
   data() {
     return {
       enlarged: false,
       enlarged_img: "",
       curIndex: null,
+      description: "",
+      title: "",
+      date: "",
+      review: "",
     };
   },
   methods: {
@@ -76,12 +82,26 @@ export default {
     exitLargeGallery() {
       this.enlarged = false;
     },
+    getDetails() {
+      if (this.chosenExh) {
+        this.description = this.chosenExh.desc;
+        this.title = this.chosenExh.title;
+        this.date =
+          this.chosenExh.exh_date_start +
+          " - " +
+          this.chosenExh.exh_date_finish;
+        this.review = this.chosenExh.rev;
+      }
+      if (this.chosenProj) {
+        this.description = this.chosenProj.desc;
+        this.title = this.chosenProj.title;
+        this.date = this.chosenProj.proj_year;
+      }
+    },
     goBack() {
       this.$emit("go-back");
     },
-    imgLoaded() {
-      this.changeLoader(false);
-    },
+
     nextImg(curIndex) {
       this.curIndex = curIndex + 1;
 
@@ -106,8 +126,8 @@ export default {
   },
 
   mounted() {
-    this.changeLoader(true);
-    this.imgLoaded();
+    // this.changeLoader(true);
+    this.getDetails();
   },
 };
 </script>
@@ -179,10 +199,11 @@ img {
 .go-back {
   font-size: 2rem;
   position: fixed;
-  left: 22vw;
-  top: 0.7rem;
+  left: 2vw;
+  top: 1.2rem;
   cursor: pointer;
   z-index: 2;
+  color: #27f2cb;
 }
 .images {
   /* display: flex;

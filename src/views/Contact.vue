@@ -30,10 +30,10 @@
 import { mapActions } from "vuex";
 export default {
   methods: {
-    ...mapActions(["changeLoader", "changeLoadedImg"]),
+    ...mapActions(["changeLoader"]),
     loaded() {
       this.changeLoader(false);
-      this.changeLoadedImg(true);
+     
     },
   },
   mounted() {

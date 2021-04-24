@@ -2,7 +2,7 @@
   <div class="biography">
     <div class="author-info" v-for="(info, index) in author_info" :key="index">
       <div class="prof-img">
-        <img :src="info.profimg_path" alt="" @load="imgLoaded()" />
+        <img :src="info.profimg_path" alt=""  />
       </div>
       <div class="txt">
         <!-- <h2 class="title">BIOGRAPHY</h2> -->
@@ -21,7 +21,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["changeLoader", "changeLoadedImg"]),
+    ...mapActions(["changeLoader"]),
     getAuthInfo() {
       axios.get(this.baseUrl + "author_info").then((res) => {
         console.log(res);
@@ -30,18 +30,14 @@ export default {
         this.changeLoader(false);
       });
     },
-    imgLoaded() {
-      setTimeout(() => {
-        this.changeLoadedImg(true);
-      }, 1000);
-    },
+
   },
   computed: {
     ...mapState(["baseUrl"]),
   },
   mounted() {
     this.getAuthInfo();
-    this.changeLoadedImg(false);
+  
   },
 };
 </script>

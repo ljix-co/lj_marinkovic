@@ -44,7 +44,7 @@
       </div>
     </div>
     <router-view :class="{ 'no-show': loader }" />
-    <Loader v-if="loader"></Loader>
+    <!-- <Loader v-if="loader"></Loader> -->
     <footer>
       <Footer></Footer>
     </footer>
@@ -53,10 +53,11 @@
 <script>
 import { mapState, mapActions } from "vuex";
 import Footer from "./components/Footer.vue";
-import Loader from "./components/Loader.vue";
+// import Loader from "./components/Loader.vue";
 import LocalSwitcher from "./components/LocalSwitcher.vue";
 export default {
-  components: { Footer, Loader, LocalSwitcher },
+  components: { Footer, LocalSwitcher },
+  // Loader,
   data() {
     return {
       showMenu: false,
@@ -64,7 +65,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["changeLoader", "changeLoadedImg"]),
+    ...mapActions(["changeLoader"]),
     showMenuList() {
       if (this.showMenu == false) {
         this.showMenu = true;
@@ -84,7 +85,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(["loader", "loaded_img"]),
+    ...mapState(["loader"]),
   },
   mounted() {
     this.isLogged();
@@ -120,7 +121,6 @@ button {
   font-size: 2rem;
   font-family: "Forum", cursive;
   text-align: center;
- 
 }
 input {
   width: 20vw;

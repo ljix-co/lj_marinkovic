@@ -13,7 +13,7 @@
         hide: how_to_buy === false,
       }"
     >
-      <div class="shop-instruction">
+      <div :class="{'shop-instruction': how_to_buy, hide: how_to_buy === false}">
         <h2>How to buy</h2>
         <p>
           If you are interested in buying artworks, please contact the author
@@ -48,16 +48,20 @@
               src="../../public/images/placeholder_photo_l.gif"
             />
             <div class="prev-desc">
-              <p class="artw-title">{{ art.artwork_title.toUpperCase() }}</p>
-              <p>
-                Tehcnique: <b>{{ art.artwork_technique }}</b>
+              <p class="artw-title">{{ art.title.toUpperCase() }}</p>
+               <p class="prev-desc-txt">
+                Artform: <b>{{ art.artform }}</b>
               </p>
-              <p>
-                Materials: <b>{{ art.artwork_material }}</b>
+              <p class="prev-desc-txt">
+                Tehcnique: <b>{{ art.technique }}</b>
               </p>
-              <p>
+              <p class="prev-desc-txt">
+                Materials: <b>{{ art.material }}</b>
+              </p>
+              <p class="prev-desc-txt">
                 Price: <b>{{ art.artwork_price }}</b> $
               </p>
+              <button class="btn-buy">{{$t('buttons.buy')}}</button>
             </div>
           </div>
         </div>
@@ -69,7 +73,7 @@
 import { mapState, mapActions } from "vuex";
 import axios from "axios";
 import PhotoSlider from "../components/PhotoSlider.vue";
-import checkLanguage from '../mixins/checkLanguage.js';
+import { checkLanguage } from "../mixins/checkLanguage.js";
 export default {
   components: { PhotoSlider },
   data() {
@@ -81,13 +85,14 @@ export default {
   },
   mixins: [checkLanguage],
   methods: {
-    ...mapActions(["changeLoader", "changeLoadedImg"]),
+    ...mapActions(["changeLoader"]),
     getArtworks() {
-      this.changeLoader(true);
+      // this.changeLoader(true);
       axios.get(this.baseUrl + "artworks").then((res) => {
-        console.log(res)
+        console.log(res);
         this.artworks = res.data.data;
-        this.changeLoader(false);
+        // this.changeLoader(false);
+        this.changeToLanguage();
         this.getImages();
       });
     },
@@ -102,21 +107,23 @@ export default {
     hideInstr() {
       this.how_to_buy = false;
     },
-    imgLoaded() {
-      setTimeout(() => {
-        this.changeLoadedImg(true);
-      }, 1000);
-    },
+
     showInstr() {
       this.how_to_buy = true;
     },
   },
   computed: {
-    ...mapState(["baseUrl", "loader"]),
+    ...mapState(["baseUrl", "loader", "curLanguage"]),
   },
   mounted() {
     this.getArtworks();
-    
+  },
+  watch: {
+    curLanguage: {
+      handler() {
+        this.changeToLanguage();
+      },
+    },
   },
 };
 </script>
@@ -129,6 +136,14 @@ export default {
     top: 6vh;
   }
 }
+button{
+width: 5vw;
+height: 2.5vw;
+font-size: 1.2rem;
+font-weight: 800;
+color: #27f2cb;
+background-color: #545454;
+}
 p {
   color: #545454;
   text-align: start;
@@ -136,8 +151,12 @@ p {
 .artw-title {
   font-size: 1.2rem;
   font-weight: 800;
-  text-align: start;
-  width: 20vw;
+  text-align: start;/*
+  width: 20vw;*/
+  align-self: center;
+}
+.btn-buy{
+align-self: center;
 }
 .buy-nav {
   position: fixed;
@@ -146,6 +165,7 @@ p {
 }
 .hide {
   visibility: hidden;
+  height: 0;
 }
 .nav,
 .exit {
@@ -187,11 +207,11 @@ p {
   border-top-right-radius: 2rem;*/
 }
 .prev-div {
-  width: 20vw;
-  margin-left: 2rem;
+  width: 20vw;/*
+  margin-left: 2rem;*/
   margin-bottom: 2rem;
   background-color: #ced0d1;
-  height: 55vh; /*
+  height: 60vh; /*
   border-radius: 2rem;*/
   border-bottom: 5px solid #27f2cb;
 }
@@ -200,11 +220,14 @@ p {
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  gap: 0.5rem;
-  margin-left: 1rem;
+  gap: 0.5rem;/*
+  margin-left: 1rem;*/
   margin-top: 1rem;
   width: 20vw;
-  height: 25vh;
+  height: 30vh;
+}
+.prev-desc-txt{
+margin-left: 1rem;
 }
 .prev-gallery {
   width: 70vw;

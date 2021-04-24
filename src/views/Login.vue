@@ -13,7 +13,7 @@
 </template>
 <script>
 import Wrong from '../components/Wrong.vue'
-import { mapState, mapActions } from "vuex";
+import { mapState } from "vuex";
 import axios from "axios";
 export default {
   components: {
@@ -28,7 +28,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["changeLoadedImg"]),
+  
     closeAlert() {
       this.wrong = false;
       this.message = "";
@@ -55,7 +55,7 @@ export default {
     ...mapState(["baseUrl", "isLogged"]),
   },
   mounted() {
-    this.changeLoadedImg(true);
+  
   },
 };
 </script>

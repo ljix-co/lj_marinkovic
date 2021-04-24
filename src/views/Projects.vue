@@ -1,9 +1,6 @@
 <template>
   <div class="projects">
     <div class="pg-col" v-if="showGallery === false">
-      <div class="up-sqr">
-        <h1>PROJECTS</h1>
-      </div>
       <div class="preview">
         <div
           class="prev-div"
@@ -11,19 +8,17 @@
           :key="index"
           @click="showProj(project)"
         >
-          <img class="prev-img" :src="project.coverphoto_path" alt="" @load="imgLoaded()"/>
-          <h3>{{ project.proj_title.toUpperCase() }}</h3>
+          <img class="prev-img" :src="project.coverphoto_path" alt="" />
+          <h3>{{ project.title.toUpperCase() }}</h3>
         </div>
       </div>
     </div>
     <Gallery
+    :key="'g' + componentKey"
       v-if="showGallery"
       :images="images"
-      :description="description"
-      :title="title"
-      :date="date"
+      :chosenProj="chosenProj"
       @go-back="goBack()"
-       
     ></Gallery>
   </div>
 </template>
@@ -31,6 +26,7 @@
 import Gallery from "../components/Gallery.vue";
 import axios from "axios";
 import { mapState, mapActions } from "vuex";
+import { checkLanguage } from "../mixins/checkLanguage.js";
 export default {
   components: {
     Gallery,
@@ -39,57 +35,56 @@ export default {
     return {
       projects: [],
       images: [],
-      description: "",
-      title: "",
       showGallery: false,
-      date: "",
+      chosenProj: null,
+      componentKey: 0
     };
   },
+  mixins: [checkLanguage],
   methods: {
-    ...mapActions(["changeLoader", "changeLoadedImg"]),
+    ...mapActions(["changeLoader"]),
+    forceRerender() {
+      this.componentKey += 1;
+    },
     getProjects() {
       axios.get(this.baseUrl + "projects").then((res) => {
-        console.log(res)
-        this.projects.push(res.data.data[0]);
-        for (let i = 0; i < res.data.data.length; i++) {
-          if (res.data.data[i].proj_id != this.projects[0].proj_id) {
-            this.projects.push(res.data.data[i]);
-          }
-        }
+        console.log(res);
+        this.projects = res.data.data;
+        this.changeToLanguage();
+     
         this.changeLoader(false);
       });
     },
     goBack() {
       this.showGallery = false;
     },
-    imgLoaded() {
-      this.changeLoadedImg(true);
-    },
+
     showProj(project) {
       let proj_id = project.proj_id;
-      this.changeLoader(true);
+      // this.changeLoader(true);
       axios
         .get(this.baseUrl + "project_images", { params: { proj_id: proj_id } })
         .then((res) => {
           this.images = res.data.data;
-          this.description = project.proj_desc;
-          this.title = project.proj_title;
+          this.chosenProj = project;
           this.showGallery = true;
-          if (project.proj_year_finish != null) {
-            this.date =
-              project.proj_year_start + " - " + project.proj_year_finish;
-          } else if (project.proj_year_finish == null) {
-            this.date = project.proj_year_start + " - ongoing";
-          }
+      
         });
     },
   },
   computed: {
-    ...mapState(["baseUrl"]),
+    ...mapState(["baseUrl", "curLanguage"]),
   },
   mounted() {
     this.getProjects();
-    this.changeLoadedImg(false);
+  },
+  watch: {
+    curLanguage: {
+      handler() {
+        this.changeToLanguage();
+        this.forceRerender();
+      },
+    },
   },
 };
 </script>
@@ -157,15 +152,15 @@ export default {
     gap: 1rem;
     width: 100vw;
   }
-  .prev-div{
+  .prev-div {
     width: 80vw;
     margin-left: 1.5rem;
   }
   .prev-img {
-  width: 80vw;
-  /* height: 50vh; */
-  object-fit: cover;
-}
+    width: 80vw;
+    /* height: 50vh; */
+    object-fit: cover;
+  }
   .up-sqr {
     width: 80vw;
     margin-left: -1.2rem;

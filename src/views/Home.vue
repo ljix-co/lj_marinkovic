@@ -177,12 +177,12 @@ p{
   width: 55vw;
   display: flex;
 
-  align-items: center;
+  align-items: flex-start;
   justify-content: flex-start;
 
   min-height: 50vh;
   position: fixed;
-  top: 30vh;
+  top: 40vh;
   left: 25vw;
 }
 .cat-desc {
@@ -247,7 +247,7 @@ p{
 }
 .img {
   width: 30vw;
-  margin-top: 2rem;
+  
   height: 35vh;
   cursor: pointer;
   object-fit: cover;

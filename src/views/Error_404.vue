@@ -14,13 +14,13 @@
 import { mapActions } from "vuex";
 export default {
   methods: {
-    ...mapActions(["changeLoader", "changeLoadedImg"]),
+    ...mapActions(["changeLoader"]),
     goHome() {
       this.$router.push({ name: "Home" });
     },
     loaded() {
       this.changeLoader(false);
-      this.changeLoadedImg(true);
+      
     },
   },
   mounted() {

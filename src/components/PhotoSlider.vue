@@ -16,7 +16,7 @@
         class="artwork_img"
         :src="image"
         alt=""
-        v-hammer:swipe.left.right="swipeFunction"
+        
       />
     </div>
     <div>
@@ -27,6 +27,7 @@
   </div>
 </template>
 <script>
+// v-hammer:swipe.left.right="swipeFunction"
 export default {
   props: {
     images: Array,

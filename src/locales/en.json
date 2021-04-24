@@ -2,6 +2,9 @@
   "artworks": {
     "nav": "HOW TO BUY"
   },
+  "buttons": {
+    "buy": "BUY"
+  },
   "home": {
     "categories": [
       {

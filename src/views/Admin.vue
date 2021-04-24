@@ -11,7 +11,7 @@
           class="img-prof"
           :class="{ fade: editImg }"
           :src="info.profimg_path"
-          @load="imgLoaded()"
+         
           @click="changeImg()"
         />
         <div v-if="editImg" class="edit-img">
@@ -61,7 +61,7 @@
             <img
               class="img-art"
               :src="project.coverphoto_path"
-              @load="imgLoaded()"
+            
             />
 
             <div class="bottom-line">
@@ -92,7 +92,7 @@
             <img
               class="img-art"
               :src="exh.coverphoto_path"
-              @load="imgLoaded()"
+            
             />
             <div class="bottom-line">
               <h3 class="bottom-title">{{ exh.exh_title.toUpperCase() }}</h3>
@@ -215,7 +215,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["changeLoadedImg", "changeLoader"]),
+    ...mapActions([ "changeLoader"]),
     addArtwork() {
       this.add_artwork = true;
     },
@@ -599,9 +599,7 @@ export default {
     goBack() {
       this.$router.go();
     },
-    imgLoaded() {
-      this.changeLoadedImg(true);
-    },
+   
     updateArtwork(updatedArtwork) {
       this.message = "Are you sure you want to submit these changes?";
       this.warning = true;
@@ -739,7 +737,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(["baseUrl", "loadedImg"]),
+    ...mapState(["baseUrl"]),
   },
   mounted() {
     this.getAutInfo();

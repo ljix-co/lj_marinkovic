@@ -3,7 +3,6 @@
     <div class="pg-col" v-if="showGallery === false">
       <div class="preview">
         <div
-         
           class="prev-div tooltip"
           v-for="(exh, index) in exhibitions"
           :key="'e' + index"
@@ -13,25 +12,26 @@
 
           <span class="tooltiptxt">{{ $t("tooltips.nav") }}</span>
           <div class="prev-dsc">
-            <p class="exh-title">{{ exh.exh_title.toUpperCase() }}</p>
-            <!-- <div class="date">
-              <p>{{ exh - exh_date_start }}</p>
+            <p class="exh-title">{{ exh.title.toUpperCase() }}</p>
+            <div class="date">
+              <p>{{ exh.exh_date_start }}</p>
               <p>-</p>
               <p>{{ exh.exh_date_finish }}</p>
-            </div> -->
-            <p>{{ date }}</p>
-            <p>{{ exh.exh_place }}</p>
+            </div>
+
+            <p>{{ exh.place }}</p>
+          </div>
+          <div class="short-desc" v-html="exh.short_desc">
+          
           </div>
         </div>
       </div>
     </div>
     <Gallery
       v-if="showGallery"
+      :key="'g' + componentKey"
       :images="images"
-      :description="description"
-      :title="title"
-      :date="date"
-      :review="review"
+      :chosenExh="chosenExh"
       @go-back="goBack()"
     ></Gallery>
   </div>
@@ -40,6 +40,7 @@
 import axios from "axios";
 import { mapState, mapActions } from "vuex";
 import Gallery from "../components/Gallery.vue";
+import { checkLanguage } from "../mixins/checkLanguage.js";
 export default {
   components: {
     Gallery,
@@ -48,34 +49,30 @@ export default {
     return {
       exhibitions: [],
       images: [],
-      description: "",
-      title: "",
       showGallery: false,
-      date: "",
-      review: "",
+      componentKey: 0,
+      chosenExh: null,
     };
   },
+  mixins: [checkLanguage],
   methods: {
-    ...mapActions(["changeLoader", "changeLoadedImg"]),
+    ...mapActions(["changeLoader"]),
+    forceRerender() {
+      this.componentKey += 1;
+    },
     getExhbtns() {
-   
       axios.get(this.baseUrl + "exhibitions").then((res) => {
         console.log(res);
-        this.exhibitions.push(res.data.data[0]);
-        for (let i = 0; i < res.data.data.length; i++) {
-          if (res.data.data[i].exh_id != this.exhibitions[0].exh_id) {
-            this.exhibitions.push(res.data.data[i]);
-          }
-        }
+
+        this.exhibitions = res.data.data;
+        this.changeToLanguage();
         this.changeLoader(false);
       });
     },
     goBack() {
       this.showGallery = false;
     },
-    imgLoaded() {
-      this.changeLoadedImg(true);
-    },
+
     showExh(exh) {
       let exh_id = exh.exh_id;
       axios
@@ -83,21 +80,24 @@ export default {
         .then((res) => {
           console.log(res);
           this.images = res.data.data;
-          this.description = exh.exh_desc;
-          this.title = exh.exh_title;
           this.showGallery = true;
-          this.date = exh.exh_date_start + " - " + exh.exh_date_finish;
-          this.review = exh.exh_rec;
+          this.chosenExh = exh;
         });
     },
   },
   computed: {
-    ...mapState(["baseUrl"]),
+    ...mapState(["baseUrl", "curLanguage"]),
   },
   mounted() {
     this.getExhbtns();
-    this.changeLoadedImg(false);
-    this.imgLoaded();
+  },
+  watch: {
+    curLanguage: {
+      handler() {
+        this.changeToLanguage();
+        this.forceRerender();
+      },
+    },
   },
 };
 </script>
@@ -111,7 +111,7 @@ export default {
   }
 }
 p {
-  text-align: center;
+  
   font-size: 1.5rem;
 }
 .date {
@@ -162,6 +162,21 @@ p {
   margin-bottom: 2rem;
 
   cursor: pointer;
+}
+.short-desc  {
+  font-size: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  height: 30vh;
+  width: 20vw;/*
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;*/
+}
+.short-desc p{
+text-align: start;
 }
 .tooltip .tooltiptxt {
   position: absolute;
