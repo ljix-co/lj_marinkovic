@@ -9,17 +9,17 @@
       <div class="triangle-left" @click="prevImg()"></div>
     </div>
     <div>
-      <div class="border-top"></div>
-      <div class="border-left"></div>
+      <div class="border-top" :class="{'border-top-artworkpg': artworks_page}"></div>
+      <div class="border-left" :class="{'border-left-artworkpg': artworks_page}"></div>
       <div class="delete-img-div" v-if="admin_route">
         <i class="far fa-trash-alt delete" @click="deleteImg()"></i>
       </div>
       <div class="exit-div" :class="{ 'show-exit': show_slider }">
         <i class="fas fa-times exit" @click="exitSlider"></i>
       </div>
-      <img class="artwork_img" :src="image" alt="" />
-      <div class="border-right"></div>
-      <div class="border-bottom"></div>
+      <img :class="{artwork_img: artworks_page, img: artworks_page === false && admin_route === false}" :src="image" alt="" />
+      <div class="border-right" :class="{'border-right-artworkpg': artworks_page}"></div>
+      <div class="border-bottom" :class="{'border-bottom-artworkpg': artworks_page}"></div>
     </div>
     <div class="right-side">
       <div class="triangle-right" @click="nextImg()"></div>
@@ -163,6 +163,10 @@ export default {
   height: 5px;
   background-color: #27f2cb;
 }
+.border-top-artworkpg{
+  left: 22vw;
+  top: 12vh;
+}
 .border-left {
   position: absolute;
   top: 10vh;
@@ -170,6 +174,10 @@ export default {
   width: 5px;
   height: 25vh;
   background-color: #27f2cb;
+}
+.border-left-artworkpg{
+  left: 22vw;
+  top: 12vh;
 }
 .border-bottom {
   position: absolute;
@@ -179,6 +187,9 @@ export default {
   height: 5px;
   background-color: #27f2cb;
 }
+.border-bottom-artworkpg{
+  left: 53.2vw;
+}
 .border-right {
   position: absolute;
   top: 71.5vh;
@@ -186,6 +197,9 @@ export default {
   width: 5px;
   height: 25vh;
   background-color: #27f2cb;
+}
+.border-right-artworkpg{
+  left: 78vw;
 }
 .delete {
   cursor: pointer;
@@ -209,11 +223,12 @@ export default {
 .exit-div {
   visibility: hidden;
 }
-.home_img {
+.img {
   width: 70vw;
   height: 85vh;
-  object-fit: cover;
+  object-fit: contain;
 }
+
 .left-side {
   width: 15vw;
   height: 75vh;

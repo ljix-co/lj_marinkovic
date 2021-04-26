@@ -198,6 +198,7 @@ align-self: center;
   height: fit-content;
   align-items: center;
   justify-content: center;
+ 
 }
 .prev-img {
   width: 20vw;
@@ -236,6 +237,7 @@ margin-left: 1rem;
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
+  gap: 1rem;
 }
 .up-sqr {
   height: 15vh;
