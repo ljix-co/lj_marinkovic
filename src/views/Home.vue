@@ -156,11 +156,12 @@ p{
   font-size: 1.2rem;
 }
 .arrow {
-  width: 1rem;
-  height: 1rem;
-  border-bottom: 4px solid #27f2cb;
-  border-left: 4px solid #27f2cb;
-  transform: rotate(-45deg);
+  width: 0;
+  height: 0;
+  border-top: 20px solid #27f2cb;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;/*
+  transform: rotate(-45deg);*/
 }
 .arrow-line {
   display: flex;
@@ -193,7 +194,7 @@ p{
 .cat-line {
   width: 2px;
   background-color: #27f2cb;
-  height: 30vh;
+  height: 35vh;
   margin-right: 1rem;
 }
 .category-txt {
@@ -212,12 +213,14 @@ p{
   font-size: 2rem;
   transform: rotate(270deg);
   width: 5vw;
-  margin-top: 20vh;
+  margin-top: 25vh;
 }
 .detail-img {
-  width: 20vw;
+  width: 15vw;
+  margin-top: 15vh;
   filter: grayscale(50%);
   opacity: 0.7;
+  
 }
 .f-letter {
   color: #27f2cb;
@@ -333,8 +336,9 @@ border-radius: 2rem;*/
   top: 60vh;
 }
 .scroll-bottom {
-  transform: rotate(180deg);
-  margin-left: -1rem;
+  /*transform: rotate(180deg);
+  margin-left: -1rem;*/
+  visibility: hidden;
 }
 .start-img {
   position: fixed;
@@ -345,8 +349,8 @@ border-radius: 2rem;*/
 .tooltip .tooltiptxt {
   position: absolute;
   margin-left: -30vw;
-  margin-top: 1rem;
-  background-color: #27f2c93b;
+ 
+  background-color: #63f8daab;
   width: 30vw;
   transition-delay: 0.2s;
   visibility: hidden;

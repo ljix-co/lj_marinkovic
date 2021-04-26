@@ -7,30 +7,33 @@
       @click="goBack()"
     ></i>
     <i
-      :class="{ 'far fa-times-circle exit': enlarged }"
+      :class="{ 'far fa-times-circle go-back': enlarged }"
       @click="exitLargeGallery()"
     ></i>
     <div class="content" v-if="enlarged === false">
       <div>
-        <div class="txt" v-if="review">
-          <div class="description" v-html="review"></div>
-        </div>
         <div class="txt">
-          <h2 class="title">{{ title.toUpperCase() }}</h2>
-          <div>
-            <p>{{ date }}</p>
+          <div class="title-date">
+            <h2 class="title">{{ title.toUpperCase() }}</h2>
+            <div>
+              <p class="date">{{ date }}</p>
+            </div>
           </div>
           <div class="description" v-html="description"></div>
+          <div class="description" v-if="review" v-html="review"></div>
         </div>
       </div>
       <div class="images">
-        <div v-lazyload v-for="(image, index) in images" :key="index">
-          <img
-            :data-url="image.img_path"
-            alt=""
-            @click="showLarge(image, index)"
-            src="../../public/images/placeholder_photo_l.gif"
-          />
+        <div v-for="(image, index) in images" :key="index">
+          <div  v-lazyload class="tooltip">
+            <img
+              :data-url="image.img_path"
+              alt=""
+              @click="showLarge(image, index)"
+              src="../../public/images/placeholder_photo_l.gif"
+            />
+            <span class="tooltiptxt">{{ $t("tooltips.nav-gallery") }}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -38,7 +41,8 @@
       v-if="enlarged"
       :class="{ 'enlarged-gallery': enlarged, 'no-show': enlarged === false }"
     >
-      <div class="left-side-bar">
+    <photo-slider :key="'p' + componentKey" :images="photoslider_imgs" :chosen_image="chosen_image"></photo-slider>
+      <!-- <div class="left-side-bar">
         <i
           class="far fa-arrow-alt-circle-left link-btn"
           @click="prevImg(curIndex)"
@@ -50,13 +54,15 @@
           class="far fa-arrow-alt-circle-right link-btn"
           @click="nextImg(curIndex)"
         ></i>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
 <script>
 import { mapActions } from "vuex";
+import PhotoSlider from './PhotoSlider.vue';
 export default {
+  components: { PhotoSlider },
   props: {
     images: Array,
     // description: String,
@@ -75,6 +81,9 @@ export default {
       title: "",
       date: "",
       review: "",
+      photoslider_imgs: [],
+      chosen_image: new Object(),
+      componentKey: 0
     };
   },
   methods: {
@@ -121,7 +130,13 @@ export default {
     showLarge(image, index) {
       this.enlarged = true;
       this.curIndex = index;
-      this.enlarged_img = image.img_path;
+      for(let i = 0; i < this.images.length; i++) {
+        this.photoslider_imgs.push({path: this.images[i].img_path, id: this.images[i].img_id})
+      }
+      this.chosen_image = image;
+      console.log(this.chosen_image)
+      this.componentKey +=1;
+      // this.enlarged_img = image.img_path;
     },
   },
 
@@ -153,9 +168,17 @@ img {
 .content {
   display: flex;
   gap: 1rem;
-  margin-left: 2rem;
+
+  margin-top: 10vh;
   align-items: flex-start;
   justify-content: flex-start;
+  width: 80vw;
+}
+.date {
+  text-align: center;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
 }
 .description {
   text-align: justify;
@@ -168,22 +191,11 @@ img {
   height: 100vh;
   display: flex;
   align-items: center;
-  justify-content: center;
-  background-color: #c8c8ca;
-  z-index: -1;
+  justify-content: center;/*
+  background-color: #c8c8ca;*/
+
 }
-.enlarged-img {
-  min-width: 60vw;
-  max-width: fit-content;
-  height: 94vh;
-  object-fit: contain;
-  margin-top: 6vh;
-  margin-left: 0;
-  margin-bottom: 0;
-  position: relative;
-  animation: in 2s 1;
-  box-shadow: 0px 5px 15px 2px rgba(0, 0, 0, 0.48);
-}
+
 .exit {
   font-size: 2rem;
   position: fixed;
@@ -195,6 +207,9 @@ img {
 .gallery {
   position: relative;
   animation: in 2s 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .go-back {
   font-size: 2rem;
@@ -206,12 +221,14 @@ img {
   color: #27f2cb;
 }
 .images {
-  /* display: flex;
-  flex-wrap: wrap; */
-  column-count: 3;
-  column-gap: 1rem;
-  width: 70vw;
+  display: flex;
+  flex-wrap: wrap;
+
+  width: 50vw;
   margin-top: 10vh;
+ 
+  min-height: 90vh;
+  gap: 1rem;
 }
 .link-btn {
   font-size: 3rem;
@@ -233,10 +250,27 @@ img {
   width: 100vw;
 }
 .title {
-  margin-top: 2rem;
+  font-size: 2rem;
+  width: 25vw;
+}
+.title-date {
+  border-bottom: 2px solid #27f2cb;
+}
+.tooltip .tooltiptxt {
+  position: absolute;
+  margin-left: -20vw;
+  background-color: #63f8daab;
+  width: 20vw;
+  transition-delay: 0.2s;
+  visibility: hidden;
+  border-bottom-left-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+}
+.tooltip:hover .tooltiptxt {
+  visibility: visible;
 }
 .txt {
-  box-shadow: 0px 5px 10px 1px rgba(0, 0, 0, 0.23);
+  border-right: 5px solid #27f2cb;
   width: 30vw;
   height: fit-content;
   display: flex;
@@ -244,6 +278,7 @@ img {
   align-items: center;
   justify-content: flex-start;
   margin-top: 10vh;
+ 
 }
 @media only screen and (max-width: 768px) {
   .content {

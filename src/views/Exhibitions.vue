@@ -3,27 +3,28 @@
     <div class="pg-col" v-if="showGallery === false">
       <div class="preview">
         <div
-          class="prev-div tooltip"
+          class="prev-div"
           v-for="(exh, index) in exhibitions"
           :key="'e' + index"
           @click="showExh(exh)"
         >
-          <img class="prev-img" :src="exh.coverphoto_path" alt="" />
-
-          <span class="tooltiptxt">{{ $t("tooltips.nav") }}</span>
-          <div class="prev-dsc">
-            <p class="exh-title">{{ exh.title.toUpperCase() }}</p>
-            <div class="date">
-              <p>{{ exh.exh_date_start }}</p>
-              <p>-</p>
-              <p>{{ exh.exh_date_finish }}</p>
+          <div class="date">
+            <p class="date-string">{{ exh.exh_date_start }}</p>
+            <p class="date-string">-</p>
+            <p class="date-string">{{ exh.exh_date_finish }}</p>
+          </div>
+          <div class="line"></div>
+          <div class="img-title">
+            <div class="tooltip">
+              <img class="prev-img" :src="exh.coverphoto_path" alt="" />
+              <span class="tooltiptxt">{{ $t("tooltips.nav") }}</span>
             </div>
-
-            <p>{{ exh.place }}</p>
+            <div class="prev-dsc">
+              <p class="exh-title">{{ exh.title.toUpperCase() }}</p>
+              <p class="place">{{ exh.place }}</p>
+            </div>
           </div>
-          <div class="short-desc" v-html="exh.short_desc">
-          
-          </div>
+          <div class="short-desc" v-html="exh.short_desc"></div>
         </div>
       </div>
     </div>
@@ -111,17 +112,35 @@ export default {
   }
 }
 p {
-  
   font-size: 1.5rem;
 }
 .date {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 0.5rem;
+  transform: rotate(270deg);
+  margin-top: 20vh;
+  width: 10vw;
+}
+.date-string {
+  color: #545454;
+  font-weight: 800;
+  font-size: 3rem;
 }
 .exh-title {
   font-size: 2rem;
   color: #545454;
+  text-align: center;
+  font-weight: 800;
+}
+.img-title{
+  width: 50vw;
+}
+.line{
+  height: 70vh;
+  width: 5px;
+  background-color: #27f2cb;
 }
 .pg-col {
   display: flex;
@@ -137,12 +156,18 @@ p {
   position: relative;
   top: 6vh;
 }
+.place {
+  color: #27f2cb;
+  text-align: center;
+  font-size: 1.7rem;
+}
 .preview {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   margin-bottom: 20vh;
+  margin-top: 10vh;
   flex-wrap: wrap;
   width: 100vw;
 }
@@ -152,32 +177,29 @@ p {
 }
 .prev-img {
   width: 40vw;
+  filter: grayscale(.3);
   /* height: 30vh;
   object-fit: cover;
   border-radius: 2rem;*/
 }
 .prev-div {
-  width: 40vw;
-
-  margin-bottom: 2rem;
-
+  width: 80vw;
+  height: 70vh;
+  margin-bottom: 10vh;
   cursor: pointer;
-}
-.short-desc  {
-  font-size: 1.2rem;
   display: flex;
-  flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  height: 30vh;
-  width: 20vw;/*
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;*/
+  
 }
-.short-desc p{
-text-align: start;
+.short-desc {
+  font-size: 1.2rem;
+  margin-left: 2rem;
+  height: 70vh;
+  width: 20vw;
+  border-bottom: 5px solid #27f2cb;
 }
+
 .tooltip .tooltiptxt {
   position: absolute;
   margin-left: -35vw;

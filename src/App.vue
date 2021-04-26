@@ -138,6 +138,7 @@ input:focus {
 p,
 li {
   color: gray;
+  text-align: justify;
 }
 select {
   border: none;
@@ -176,11 +177,13 @@ select:focus {
   color: #545454;
   text-decoration: none;
   font-size: 1.5rem;
+
 }
 
 #nav a.router-link-exact-active {
   color: #27f2cb;
   border-bottom: 1px solid #545454;
+  font-weight: 800;
 }
 .nav {
   width: 70%;

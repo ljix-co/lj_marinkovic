@@ -1,28 +1,28 @@
 <template>
-  <div class="photo-slider">
-    <div>
-      <div class="circle-left">
-        <i class="fas fa-chevron-left ctrl" @click="prevImg()"></i>
-      </div>
+  <div
+    :class="{
+      'photo-slider': artworks_page,
+      'photo-slider-enlarged': artworks_page === false && admin_route === false,
+    }"
+  >
+    <div class="left-side">
+      <div class="triangle-left" @click="prevImg()"></div>
     </div>
     <div>
+      <div class="border-top"></div>
+      <div class="border-left"></div>
       <div class="delete-img-div" v-if="admin_route">
         <i class="far fa-trash-alt delete" @click="deleteImg()"></i>
       </div>
       <div class="exit-div" :class="{ 'show-exit': show_slider }">
         <i class="fas fa-times exit" @click="exitSlider"></i>
       </div>
-      <img
-        class="artwork_img"
-        :src="image"
-        alt=""
-        
-      />
+      <img class="artwork_img" :src="image" alt="" />
+      <div class="border-right"></div>
+      <div class="border-bottom"></div>
     </div>
-    <div>
-      <div class="circle-right">
-        <i class="fas fa-chevron-right ctrl" @click="nextImg()"></i>
-      </div>
+    <div class="right-side">
+      <div class="triangle-right" @click="nextImg()"></div>
     </div>
   </div>
 </template>
@@ -41,6 +41,7 @@ export default {
       index: 0,
       admin_route: false,
       show_slider: false,
+      artworks_page: false,
     };
   },
   methods: {
@@ -56,13 +57,20 @@ export default {
       if (this.$route.name === "Admin") {
         this.admin_route = true;
       }
+      if (this.$route.name === "Artworks") {
+        this.artworks_page = true;
+      }
     },
     exitSlider() {
       this.show_slider = false;
       this.$emit("exit-mob-slider");
     },
     firstImage() {
-      this.image = this.images[0].path;
+      if (!this.chosen_image) {
+        this.image = this.images[0].path;
+      } else if (this.chosen_image) {
+        this.showChosenImg();
+      }
     },
     forceRerender() {
       this.elementKey++;
@@ -75,6 +83,7 @@ export default {
       }
 
       this.image = this.images[this.index].path;
+      console.log(this.image);
     },
     prevImg() {
       if (this.index != 0) {
@@ -86,7 +95,7 @@ export default {
     },
     showChosenImg() {
       for (let i = 0; i < this.images.length; i++) {
-        if (this.chosen_image.cover_path === this.images[i].path) {
+        if (this.chosen_image.img_path === this.images[i].path) {
           this.image = this.images[i].path;
           this.index = i;
         }
@@ -139,12 +148,44 @@ export default {
   object-fit: contain;
 }
 .artwork_img {
-  width: 70vw;
-  height: 85vh;
+  width: 50vw;
+  height: 75vh;
   object-fit: contain;
-  /*  background-color: #474646;*/
-  margin-top: 10vh;
+  margin-top: 15vh;
   margin-bottom: 5vh;
+  background-color: #FFFFFF;
+}
+.border-top {
+  position: absolute;
+  top: 10vh;
+  left: 10vw;
+  width: 25vw;
+  height: 5px;
+  background-color: #27f2cb;
+}
+.border-left {
+  position: absolute;
+  top: 10vh;
+  left: 10vw;
+  width: 5px;
+  height: 25vh;
+  background-color: #27f2cb;
+}
+.border-bottom {
+  position: absolute;
+  top: 96vh;
+  left: 65.2vw;
+  width: 25vw;
+  height: 5px;
+  background-color: #27f2cb;
+}
+.border-right {
+  position: absolute;
+  top: 71.5vh;
+  left: 90vw;
+  width: 5px;
+  height: 25vh;
+  background-color: #27f2cb;
 }
 .delete {
   cursor: pointer;
@@ -173,24 +214,18 @@ export default {
   height: 85vh;
   object-fit: cover;
 }
-.circle-left {
-  position: absolute;
-  margin-left: 2rem;
-  width: 4rem;
-  height: 4rem;
-  border-radius: 50%;
-  background-color: #27f2cb;
+.left-side {
+  width: 15vw;
+  height: 75vh;
+  margin-top: 15vh;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.circle-right {
-  position: absolute;
-  margin-left: -4vw;
-  width: 4rem;
-  height: 4rem;
-  border-radius: 50%;
-  background-color: #27f2cb;
+.right-side {
+  width: 15vw;
+  height: 75vh;
+  margin-top: 15vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -201,7 +236,30 @@ export default {
   width: 70vw;
   margin-left: 15vw;
 }
-
+.photo-slider-enlarged {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+}
+.triangle-left {
+  position: absolute;
+  cursor: pointer;
+  width: 0;
+  height: 0;
+  border-right: 80px solid #27f2cb;
+  border-top: 40px solid transparent;
+  border-bottom: 40px solid transparent;
+}
+.triangle-right {
+  position: absolute;
+  cursor: pointer;
+  width: 0;
+  height: 0;
+  border-left: 80px solid #27f2cb;
+  border-top: 40px solid transparent;
+  border-bottom: 40px solid transparent;
+}
 @media only screen and (min-width: 992px) and (max-width: 1280px) {
   .home_img {
     width: 90vw;

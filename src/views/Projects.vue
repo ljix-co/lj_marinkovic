@@ -8,13 +8,25 @@
           :key="index"
           @click="showProj(project)"
         >
-          <img class="prev-img" :src="project.coverphoto_path" alt="" />
-          <h3>{{ project.title.toUpperCase() }}</h3>
+        <div class="year">
+        <div class="triangle-right"></div>
+        <p class="year-string">{{project.proj_year}}</p>
+        </div>
+        <div class="line"></div>
+          <div class="img-title">
+            <div class="tooltip">
+              <img class="prev-img" :src="project.coverphoto_path" alt="" />
+              <span class="tooltiptxt">{{ $t("tooltips.nav") }}</span>
+            </div>
+            <h3 class="proj-title">{{ project.title.toUpperCase() }}</h3>
+            <a :href="project.proj_link" target="blank" class="link">{{project.proj_link}}</a>
+          </div>
+          <div class="short-desc" v-html="project.short_desc"></div>
         </div>
       </div>
     </div>
     <Gallery
-    :key="'g' + componentKey"
+      :key="'g' + componentKey"
       v-if="showGallery"
       :images="images"
       :chosenProj="chosenProj"
@@ -37,7 +49,7 @@ export default {
       images: [],
       showGallery: false,
       chosenProj: null,
-      componentKey: 0
+      componentKey: 0,
     };
   },
   mixins: [checkLanguage],
@@ -51,7 +63,7 @@ export default {
         console.log(res);
         this.projects = res.data.data;
         this.changeToLanguage();
-     
+
         this.changeLoader(false);
       });
     },
@@ -68,7 +80,6 @@ export default {
           this.images = res.data.data;
           this.chosenProj = project;
           this.showGallery = true;
-      
         });
     },
   },
@@ -97,6 +108,22 @@ export default {
     top: 6vh;
   }
 }
+.img-title{
+  width: 45vw;
+  
+}
+.line{
+  height: 60vh;
+  width: 5px;
+  background-color: #27f2cb;
+}
+.link{
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #27f2cb;
+  text-decoration: none;
+}
 .pg-col {
   display: flex;
   flex-direction: column;
@@ -119,28 +146,64 @@ export default {
   width: 100vw;
 }
 .prev-img {
-  width: 30vw;
-  height: 30vh;
-  object-fit: cover;
+  width: 40vw;
 }
 .prev-div {
-  width: 30vw;
-  margin-left: 2rem;
-  box-shadow: 0px 5px 15px 2px rgba(0, 0, 0, 0.48);
+  width: 70vw;
+  height: 60vh;
+  margin-top: 10vh;
   cursor: pointer;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
 }
-
-.up-sqr {
-  height: 15vh;
-  margin-bottom: 30vh;
-  border-top: none;
+.proj-title {
+  font-size: 2rem;
+  color: #545454;
+  text-align: center;
+  font-weight: 800;
+  margin-top: 2rem;
+}
+.short-desc {
+  font-size: 1.2rem;
+  margin-left: 2rem;
+  height: 60vh;
+  width: 20vw;
+  border-bottom: 5px solid #27f2cb;
+}
+.tooltip .tooltiptxt {
+  position: absolute;
+  margin-left: -35vw;
+  background-color: #63f8daab;
   width: 30vw;
+  transition-delay: 0.2s;
+  visibility: hidden;
+  border-bottom-left-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+}
+.tooltip:hover .tooltiptxt {
+  visibility: visible;
+}
+.triangle-right {
+      width: 0;
+      height: 0;
+      border-right: 25px solid transparent;
+      border-left: 25px solid transparent;
+      border-top: 50px solid #27f2cb;
+    }
+.year {
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0px 5px 15px 2px rgba(0, 0, 0, 0.48);
-  border: 10px solid #adadb0;
-  border-top: none;
+  gap: 0.5rem;
+  transform: rotate(270deg);
+  margin-top: 3rem;
+  width: 5vw;
+}
+.year-string {
+  color: #545454;
+ 
+  font-size: 4rem;
 }
 @media only screen and (max-width: 768px) {
   .pg-col {

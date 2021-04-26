@@ -162,6 +162,7 @@ align-self: center;
   position: fixed;
   top: 15vh;
   left: -2rem;
+  z-index: 2;
 }
 .hide {
   visibility: hidden;
@@ -169,7 +170,7 @@ align-self: center;
 }
 .nav,
 .exit {
-  width: 10vw;
+  width: 15vw;
   border-bottom: 5px solid #27f2cb;
   display: flex;
   align-items: flex-end;

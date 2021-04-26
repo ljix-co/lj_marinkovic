@@ -56,6 +56,7 @@
   ],
   "tooltips": {
     "gallery": "CLICK TO SEE ALL IMAGES",
-    "nav": "CLICK TO SEE MORE"
+    "nav": "CLICK TO SEE MORE",
+    "nav-gallery": "CLICK FOR ENLARGED VIEW"
   }
 }
