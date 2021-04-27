@@ -3,7 +3,7 @@
     <div id="nav">
       <img
         class="logo"
-        src="../public/images/logo.png"
+        src="../public/images/logo_stable_trnspr.png"
         alt=""
         @click="$router.push({ name: 'Home' })"
       />
@@ -206,9 +206,9 @@ select:focus {
 
 .logo {
   position: absolute;
-  top: 1.2rem;
+  top: 1rem;
   left: 5vw;
-  width: 10vw;
+  width: 7vw;
   cursor: pointer;
 }
 .logged-icons {

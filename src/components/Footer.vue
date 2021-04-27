@@ -3,7 +3,7 @@
     <div class="footer-content">
     <div class="footer-txt">
       <p>Designed and coded by</p>
-      <img src="../../public/images/logo_transp.png" alt="" />
+      <img class="lj_logo" src="../../public/images/logo_stable_trnspr.png" alt="" />
       <p>
         Supported and hosted by
         <a href="https://www.mars-server.net/"
@@ -25,7 +25,7 @@ img {
 }
 .footer {
   width: 100vw;
-  height: 5vh;
+  height: 10vh;
   margin-top: 2rem;
 }
 .footer-content {
@@ -40,6 +40,10 @@ display: flex;
 align-items: center;
 justify-content: center;
 gap: 0.5rem;
+}
+.lj_logo{
+width: 80px;
+margin-left: 0;
 }
 @media only screen and (max-width: 768px) {
   .footer-content {

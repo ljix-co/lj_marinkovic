@@ -16,20 +16,48 @@
       <p class="order-nav" @click="showOrder" v-if="show_order === false">
         {{ $t("artworks.nav.order") }}
       </p>
-      <i class="fas fa-times exit-order" @click="hideOrder" v-if="show_order"></i>
-      <div class="order-form" v-if="show_order" >
-      <h3 class="check-order-btn">{{$t('artworks.nav.order_list')}}</h3>
-      <div class="inpts">
-      <label for="">FULL NAME</label>
-      <input type="text">
-      <label for="">E-MAIL</label>
-      <input type="text">
-      <label for="">ADDRESS</label>
-      <input type="text">
-      <label for="">COUNTRY</label>
-      <input type="text">
-      <button>CONFIRM</button>
-      </div>
+      <i
+        class="fas fa-times exit-order"
+        @click="hideOrder"
+        v-if="show_order"
+      ></i>
+      <div class="order-form" v-if="show_order">
+        <div class="tooltip">
+          <span class="tooltip-txt" v-if="order_list.length === 0"
+            >{{$t('tooltips.nt_show')}}</span
+          >
+          <h3 class="check-order-btn" @click="showOrderList">
+            {{ $t("artworks.nav.order_list") }}
+          </h3>
+        </div>
+        <div class="inpts" v-if="order_list.length > 0">
+          <label for="">{{ $t("artworks.inpt_lbl.fullname") }}</label>
+          <input type="text" v-model="fullname" />
+          <label for="">{{ $t("artworks.inpt_lbl.email") }}</label>
+          <input type="text" v-model="email" />
+          <label for="">{{ $t("artworks.inpt_lbl.address") }}</label>
+          <input type="text" v-model="address" />
+          <label for="">{{ $t("artworks.inpt_lbl.country") }}</label>
+          <input type="text" v-model="country" />
+          <button>{{ $t("buttons.confirm") }}</button>
+        </div>
+        <div
+          class="order-list-div"
+          v-if="show_order_list && order_list.length > 0"
+        >
+          <div
+            class="order-list"
+            v-for="(order, index) in order_list"
+            :key="'o' + index"
+          >
+            <i class="fas fa-times exit"></i>
+            <img :src="order.artwork_imgpath" alt="" />
+            <p class="artw-title">{{ order.title.toUpperCase() }}</p>
+            <p class="prev-desc-txt">
+              Price: <b>{{ order.artwork_price }}</b> €
+            </p>
+          </div>
+        </div>
       </div>
     </div>
     <div class="dtls-nav-div">
@@ -97,7 +125,7 @@
               <p class="prev-desc-txt">
                 Price: <b>{{ art.artwork_price }}</b> €
               </p>
-              <button class="btn-buy" @click="buyArtwork(art)">
+              <button class="btn-buy" :clase="{fade: art.sold}" @click="buyArtwork(art)">
                 {{ $t("buttons.buy") }}
               </button>
             </div>
@@ -124,6 +152,11 @@ export default {
       chosen_artwork: null,
       order_list: [],
       show_order: false,
+      fullname: "",
+      email: "",
+      address: "",
+      country: "",
+      show_order_list: false,
     };
   },
   mixins: [checkLanguage, scrollToElement],
@@ -131,6 +164,11 @@ export default {
     ...mapActions(["changeLoader"]),
     buyArtwork(art) {
       this.order_list.push(art);
+      for(let i = 0; i < this.artworks.length; i++) {
+        if(art === this.artworks[i]){
+          this.artworks[i].sold = true;
+        }
+      }
     },
     forceRerender() {
       this.componentKey += 1;
@@ -203,6 +241,9 @@ export default {
     hideOrder() {
       this.show_order = false;
     },
+    hideOrderList() {
+      this.show_order_list = false;
+    },
     showArtwDetails() {
       this.scrollToElement("chosen-artwk");
     },
@@ -211,6 +252,9 @@ export default {
     },
     showOrder() {
       this.show_order = true;
+    },
+    showOrderList() {
+      this.show_order_list = true;
     },
   },
   computed: {
@@ -245,8 +289,8 @@ button {
   color: #27f2cb;
   background-color: #545454;
 }
-input{
-width: 10vw;
+input {
+  width: 10vw;
 }
 p {
   color: #545454;
@@ -261,6 +305,9 @@ p {
 }
 .btn-buy {
   align-self: center;
+}
+.btn-buy:disabled{
+opacity: .2;
 }
 .buy-nav-div {
   position: fixed;
@@ -278,11 +325,11 @@ p {
   justify-content: flex-end;
   cursor: pointer;
 }
-.check-order-btn{
-border: 3px dotted #27f2cb;
-cursor: pointer;
-width: 10vw;
-margin-left: 2rem;
+.check-order-btn {
+  border: 3px dotted #27f2cb;
+  cursor: pointer;
+  width: 10vw;
+  margin-left: 2rem;
 }
 .chosen-artwk {
   border: 10px solid #545454;
@@ -301,7 +348,7 @@ margin-left: 2rem;
   left: 85vw;
   z-index: 2;
 }
-.exit-order{
+.exit-order {
   width: 15vw;
   border-bottom: 5px solid #27f2cb;
   display: flex;
@@ -309,17 +356,27 @@ margin-left: 2rem;
   justify-content: flex-start;
   cursor: pointer;
 }
+.fade{
+opacity: .3;
+}
 .hide {
   visibility: hidden;
   height: 0;
 }
-.inpts{
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
-gap: .5rem;
-margin-top: 3vh;
+.inpts {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 3vh;
+}
+.order-list-div{
+position: fixed;
+width: 70vw;
+height: 80vh;
+top: 10vh;
+left: 15vw;
 }
 .order-nav,
 .dtls-nav {
@@ -336,12 +393,12 @@ margin-top: 3vh;
   left: 85vw;
   z-index: 2;
 }
-.order-form{
-position: fixed;
-left: 85vw;
-top: 20vh;
-background-color: white;
-width: 15vw;
+.order-form {
+  position: fixed;
+  left: 85vw;
+  top: 20vh;
+  background-color: white;
+  width: 15vw;
 }
 .pg-col {
   display: flex;
@@ -437,6 +494,20 @@ width: 15vw;
   top: 20vh;
   left: 1rem;
   z-index: 2;
+}
+.tooltip .tooltip-txt {
+  visibility: hidden;
+  background-color: #545454af;
+  color: #545454;
+   position: absolute;
+  margin-left: -5.5vw;
+  margin-top: -1rem;
+  background-color: #63f8daab;
+  width: 10vw;
+  transition-delay: 0.2s;
+}
+.tooltip:hover .tooltip-txt{
+visibility: visible;
 }
 @media only screen and (max-width: 768px) {
   .pg-col {

@@ -5,10 +5,17 @@
         "order": "YOUR ORDER",
         "artw_dtls": "GO TO ATWORK'S DETAILS",
         "order_list" : "CHECK ORDER LIST"
+    },
+    "inpt_lbl": {
+      "fullname": "FULL NAME",
+      "email": "E-MAIL",
+      "address": "ADDRESS",
+      "country": "COUNTRY"
     }
   },
   "buttons": {
-    "buy": "BUY"
+    "buy": "BUY",
+    "confirm": "CONFIRM"
   },
   "home": {
     "categories": [
@@ -62,6 +69,7 @@
   "tooltips": {
     "gallery": "CLICK TO SEE ALL IMAGES",
     "nav": "CLICK TO SEE MORE",
-    "nav-gallery": "CLICK FOR ENLARGED VIEW"
+    "nav-gallery": "CLICK FOR ENLARGED VIEW",
+    "nt_show": "NOTHING TO SHOW"
   }
 }

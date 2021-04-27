@@ -5,10 +5,17 @@
       "order": "VAŠA PORUDŽBINA",
       "artw_dtls": "IDITE DO DETALJA RADA",
       "order_list" : "PROVERITE LISTU PORUDŽBINE"
+  },
+  "inpt_lbl": {
+    "fullname": "PUNO IME",
+    "email": "E-MAIL",
+    "address": "ADRESA",
+    "country": "ZEMLJA"
   }
   },
   "buttons": {
-    "buy": "KUPI"
+    "buy": "KUPI",
+    "confirm": "POTVRDI"
   },
   "home": {
     "categories": [
@@ -62,6 +69,7 @@
   "tooltips": {
     "gallery": "KLIKNITE DA VIDITE SVE SLIKE",
     "nav": "KLIKNITE DA VIDITE VIŠE",
-    "nav-gallery": "KLIKNITE ZA UVEĆAN PRIKAZ"
+    "nav-gallery": "KLIKNITE ZA UVEĆAN PRIKAZ",
+    "nt_show": "NEMA NIČEG ZA PRIKAZ"
   }
 }

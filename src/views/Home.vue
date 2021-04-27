@@ -32,7 +32,7 @@
           </div>
           <div class="f-name">
             <p class="f-letter">M</p>
-            <p class="name">ARINKOVIC</p>
+            <p class="name">ARINKOVIĆ</p>
           </div>
         </div>
         <p class="occup">{{ $t("home.subtitle") }}</p>
@@ -140,6 +140,7 @@ export default {
 </script>
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Megrim&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
 @keyframes down_in {
   from {
     top: -100px;
@@ -225,7 +226,7 @@ p{
 .f-letter {
   color: #27f2cb;
   font-size: 4.5rem;
-  font-family: "Megrim", "Open Sans", cursive;
+  font-family:  'HortaRegular', cursive;
 }
 .f-name {
   display: flex;
@@ -280,7 +281,7 @@ border-radius: 2rem;*/
 }
 .name {
   font-size: 4.5rem;
-  font-family: "Megrim", cursive;
+  font-family:  'HortaRegular', cursive;
   color: #323131;
 }
 .name-div {
