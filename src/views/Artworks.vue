@@ -1,11 +1,41 @@
 <template>
   <div class="artworks">
-    <photo-slider v-if="images.length > 0" :images="images"></photo-slider>
-    <div class="buy-nav">
-      <p class="nav" @click="showInstr" v-if="how_to_buy === false">
-        {{ $t("artworks.nav") }}
+    <photo-slider
+      class="photo-slider"
+      :key="'p' + componentKey"
+      v-if="images.length > 0"
+      :images="images"
+    ></photo-slider>
+    <div class="buy-nav-div">
+      <p class="buy-nav" @click="showInstr" v-if="how_to_buy === false">
+        {{ $t("artworks.nav.how_to_buy") }}
       </p>
       <i class="fas fa-times exit" @click="hideInstr" v-if="how_to_buy"></i>
+    </div>
+    <div class="order-nav-div">
+      <p class="order-nav" @click="showOrder" v-if="show_order === false">
+        {{ $t("artworks.nav.order") }}
+      </p>
+      <i class="fas fa-times exit-order" @click="hideOrder" v-if="show_order"></i>
+      <div class="order-form" v-if="show_order" >
+      <h3 class="check-order-btn">{{$t('artworks.nav.order_list')}}</h3>
+      <div class="inpts">
+      <label for="">FULL NAME</label>
+      <input type="text">
+      <label for="">E-MAIL</label>
+      <input type="text">
+      <label for="">ADDRESS</label>
+      <input type="text">
+      <label for="">COUNTRY</label>
+      <input type="text">
+      <button>CONFIRM</button>
+      </div>
+      </div>
+    </div>
+    <div class="dtls-nav-div">
+      <p class="dtls-nav" @click="showArtwDetails">
+        {{ $t("artworks.nav.artw_dtls") }}
+      </p>
     </div>
     <div
       :class="{
@@ -13,7 +43,9 @@
         hide: how_to_buy === false,
       }"
     >
-      <div :class="{'shop-instruction': how_to_buy, hide: how_to_buy === false}">
+      <div
+        :class="{ 'shop-instruction': how_to_buy, hide: how_to_buy === false }"
+      >
         <h2>How to buy</h2>
         <p>
           If you are interested in buying artworks, please contact the author
@@ -37,19 +69,23 @@
         <div class="prev-gallery">
           <div
             v-lazyload
-            class="prev-div"
             v-for="(art, index) in artworks"
             :key="index"
+            :class="{
+              'chosen-artwk': art.chosen,
+              'prev-div': art.chosen === false || !art.chosen,
+            }"
           >
             <img
               class="prev-img"
               :data-url="art.artwork_imgpath"
               alt=""
               src="../../public/images/placeholder_photo_l.gif"
+              @click="getImages(art)"
             />
             <div class="prev-desc">
               <p class="artw-title">{{ art.title.toUpperCase() }}</p>
-               <p class="prev-desc-txt">
+              <p class="prev-desc-txt">
                 Artform: <b>{{ art.artform }}</b>
               </p>
               <p class="prev-desc-txt">
@@ -59,9 +95,11 @@
                 Materials: <b>{{ art.material }}</b>
               </p>
               <p class="prev-desc-txt">
-                Price: <b>{{ art.artwork_price }}</b> $
+                Price: <b>{{ art.artwork_price }}</b> €
               </p>
-              <button class="btn-buy">{{$t('buttons.buy')}}</button>
+              <button class="btn-buy" @click="buyArtwork(art)">
+                {{ $t("buttons.buy") }}
+              </button>
             </div>
           </div>
         </div>
@@ -74,6 +112,7 @@ import { mapState, mapActions } from "vuex";
 import axios from "axios";
 import PhotoSlider from "../components/PhotoSlider.vue";
 import { checkLanguage } from "../mixins/checkLanguage.js";
+import { scrollToElement } from "../mixins/scrollToElement.js";
 export default {
   components: { PhotoSlider },
   data() {
@@ -81,35 +120,97 @@ export default {
       artworks: [],
       how_to_buy: false,
       images: [],
+      componentKey: 0,
+      chosen_artwork: null,
+      order_list: [],
+      show_order: false,
     };
   },
-  mixins: [checkLanguage],
+  mixins: [checkLanguage, scrollToElement],
   methods: {
     ...mapActions(["changeLoader"]),
+    buyArtwork(art) {
+      this.order_list.push(art);
+    },
+    forceRerender() {
+      this.componentKey += 1;
+    },
     getArtworks() {
       // this.changeLoader(true);
       axios.get(this.baseUrl + "artworks").then((res) => {
         console.log(res);
         this.artworks = res.data.data;
+        this.artworks[0].chosen = true;
         // this.changeLoader(false);
         this.changeToLanguage();
         this.getImages();
       });
     },
-    getImages() {
-      for (let i = 0; i < this.artworks.length; i++) {
+    getImages(art) {
+      if (!art) {
         this.images.push({
-          path: this.artworks[i].artwork_imgpath,
-          id: this.artworks[i].artwork_id,
+          path: this.artworks[0].artwork_imgpath,
+          id: this.artworks[0].artwork_id,
         });
+
+        axios
+          .get(this.baseUrl + "images", {
+            params: { artwork_id: this.artworks[0].artwork_id },
+          })
+          .then((res) => {
+            console.log(res);
+            for (let i = 0; i < res.data.data.length; i++) {
+              this.images.push({
+                path: res.data.data[i].img_path,
+                id: res.data.data[i].img_id,
+              });
+            }
+          });
+      } else if (art) {
+        this.images = [];
+        for (let i = 0; i < this.artworks.length; i++) {
+          if (this.artworks[i].chosen === true) {
+            this.artworks[i].chosen = false;
+          }
+          if (art === this.artworks[i]) {
+            this.artworks[i].chosen = true;
+          }
+        }
+        this.images.push({
+          path: art.artwork_imgpath,
+          id: art.artwork_id,
+        });
+        axios
+          .get(this.baseUrl + "images", {
+            params: { artwork_id: art.artwork_id },
+          })
+          .then((res) => {
+            console.log(res);
+            for (let i = 0; i < res.data.data.length; i++) {
+              this.images.push({
+                path: res.data.data[i].img_path,
+                id: res.data.data[i].img_id,
+              });
+            }
+          });
+        this.forceRerender();
+        this.scrollToElement("photo-slider");
       }
     },
     hideInstr() {
       this.how_to_buy = false;
     },
-
+    hideOrder() {
+      this.show_order = false;
+    },
+    showArtwDetails() {
+      this.scrollToElement("chosen-artwk");
+    },
     showInstr() {
       this.how_to_buy = true;
+    },
+    showOrder() {
+      this.show_order = true;
     },
   },
   computed: {
@@ -136,13 +237,16 @@ export default {
     top: 6vh;
   }
 }
-button{
-width: 5vw;
-height: 2.5vw;
-font-size: 1.2rem;
-font-weight: 800;
-color: #27f2cb;
-background-color: #545454;
+button {
+  width: 5vw;
+  height: 2.5vw;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #27f2cb;
+  background-color: #545454;
+}
+input{
+width: 10vw;
 }
 p {
   color: #545454;
@@ -151,24 +255,21 @@ p {
 .artw-title {
   font-size: 1.2rem;
   font-weight: 800;
-  text-align: start;/*
+  text-align: start; /*
   width: 20vw;*/
   align-self: center;
 }
-.btn-buy{
-align-self: center;
+.btn-buy {
+  align-self: center;
 }
-.buy-nav {
+.buy-nav-div {
   position: fixed;
   top: 15vh;
   left: -2rem;
   z-index: 2;
 }
-.hide {
-  visibility: hidden;
-  height: 0;
-}
-.nav,
+
+.buy-nav,
 .exit {
   width: 15vw;
   border-bottom: 5px solid #27f2cb;
@@ -176,6 +277,71 @@ align-self: center;
   align-items: flex-end;
   justify-content: flex-end;
   cursor: pointer;
+}
+.check-order-btn{
+border: 3px dotted #27f2cb;
+cursor: pointer;
+width: 10vw;
+margin-left: 2rem;
+}
+.chosen-artwk {
+  border: 10px solid #545454;
+  width: 20vw;
+  margin-bottom: 2rem;
+  background-color: #ced0d1;
+  height: 65vh;
+}
+.chosen-artwk .prev-img {
+  width: 18vw;
+}
+
+.dtls-nav-div {
+  position: fixed;
+  top: 80vh;
+  left: 85vw;
+  z-index: 2;
+}
+.exit-order{
+  width: 15vw;
+  border-bottom: 5px solid #27f2cb;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  cursor: pointer;
+}
+.hide {
+  visibility: hidden;
+  height: 0;
+}
+.inpts{
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+gap: .5rem;
+margin-top: 3vh;
+}
+.order-nav,
+.dtls-nav {
+  width: 15vw;
+  border-bottom: 5px solid #27f2cb;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  cursor: pointer;
+}
+.order-nav-div {
+  position: fixed;
+  top: 15vh;
+  left: 85vw;
+  z-index: 2;
+}
+.order-form{
+position: fixed;
+left: 85vw;
+top: 20vh;
+background-color: white;
+width: 15vw;
 }
 .pg-col {
   display: flex;
@@ -198,18 +364,16 @@ align-self: center;
   height: fit-content;
   align-items: center;
   justify-content: center;
- 
 }
 .prev-img {
   width: 20vw;
   height: 30vh;
   object-fit: cover;
-  background-color: #d4d4d4; /*
-  border-top-left-radius: 2rem;
-  border-top-right-radius: 2rem;*/
+  background-color: #d4d4d4;
+  cursor: pointer;
 }
 .prev-div {
-  width: 20vw;/*
+  width: 20vw; /*
   margin-left: 2rem;*/
   margin-bottom: 2rem;
   background-color: #ced0d1;
@@ -222,14 +386,14 @@ align-self: center;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  gap: 0.5rem;/*
+  gap: 0.5rem; /*
   margin-left: 1rem;*/
   margin-top: 1rem;
   width: 20vw;
   height: 30vh;
 }
-.prev-desc-txt{
-margin-left: 1rem;
+.prev-desc-txt {
+  margin-left: 1rem;
 }
 .prev-gallery {
   width: 70vw;

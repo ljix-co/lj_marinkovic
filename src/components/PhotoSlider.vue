@@ -5,24 +5,39 @@
       'photo-slider-enlarged': artworks_page === false && admin_route === false,
     }"
   >
-    <div class="left-side">
-      <div class="triangle-left" @click="prevImg()"></div>
+    <div class="left-side" :class="{ 'left-side-artwork': artworks_page }">
+      <img
+        class="triangle-img triangle-right"
+        src="../../public/images/triangle button gray2.png"
+        alt=""
+        @click="prevImg()"
+      />
     </div>
-    <div>
-      <div class="border-top" :class="{'border-top-artworkpg': artworks_page}"></div>
-      <div class="border-left" :class="{'border-left-artworkpg': artworks_page}"></div>
+    <div class="center" :class="{ 'center-artwork': artworks_page }">
+    
       <div class="delete-img-div" v-if="admin_route">
         <i class="far fa-trash-alt delete" @click="deleteImg()"></i>
       </div>
       <div class="exit-div" :class="{ 'show-exit': show_slider }">
         <i class="fas fa-times exit" @click="exitSlider"></i>
       </div>
-      <img :class="{artwork_img: artworks_page, img: artworks_page === false && admin_route === false}" :src="image" alt="" />
-      <div class="border-right" :class="{'border-right-artworkpg': artworks_page}"></div>
-      <div class="border-bottom" :class="{'border-bottom-artworkpg': artworks_page}"></div>
+      <img
+        :class="{
+          artwork_img: artworks_page,
+          img: artworks_page === false && admin_route === false,
+        }"
+        :src="image"
+        alt=""
+      />
+    
     </div>
-    <div class="right-side">
-      <div class="triangle-right" @click="nextImg()"></div>
+    <div class="right-side" :class="{ 'right-side-artwork': artworks_page }">
+      <img
+        class="triangle-img"
+        src="../../public/images/triangle button gray2.png"
+        alt=""
+        @click="nextImg()"
+      />
     </div>
   </div>
 </template>
@@ -83,7 +98,7 @@ export default {
       }
 
       this.image = this.images[this.index].path;
-      console.log(this.image);
+     
     },
     prevImg() {
       if (this.index != 0) {
@@ -151,55 +166,28 @@ export default {
   width: 50vw;
   height: 75vh;
   object-fit: contain;
-  margin-top: 15vh;
-  margin-bottom: 5vh;
-  background-color: #FFFFFF;
+  background-color: #ebefef;
+  align-self: center;
+  border-bottom: 5px solid #27f2cb;
+ 
 }
-.border-top {
-  position: absolute;
-  top: 10vh;
-  left: 10vw;
-  width: 25vw;
-  height: 5px;
-  background-color: #27f2cb;
+.center {
+  width: 70vw;
+  height: 85vh;
+  margin-top:5vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.border-top-artworkpg{
-  left: 22vw;
-  top: 12vh;
+.center-artwork {
+  height: 75vh;
+  margin-top: 13vh;
 }
-.border-left {
-  position: absolute;
-  top: 10vh;
-  left: 10vw;
-  width: 5px;
-  height: 25vh;
-  background-color: #27f2cb;
-}
-.border-left-artworkpg{
-  left: 22vw;
-  top: 12vh;
-}
-.border-bottom {
-  position: absolute;
-  top: 96vh;
-  left: 65.2vw;
-  width: 25vw;
-  height: 5px;
-  background-color: #27f2cb;
-}
-.border-bottom-artworkpg{
-  left: 53.2vw;
-}
-.border-right {
-  position: absolute;
-  top: 71.5vh;
-  left: 90vw;
-  width: 5px;
-  height: 25vh;
-  background-color: #27f2cb;
-}
-.border-right-artworkpg{
-  left: 78vw;
+.ctrl {
+  font-size: 2rem;
+  z-index: 1;
+  color: #545454;
+  cursor: pointer;
 }
 .delete {
   cursor: pointer;
@@ -212,43 +200,41 @@ export default {
   text-align: end;
   margin-top: 2rem;
 }
-
-.ctrl {
-  font-size: 2rem;
-  z-index: 1;
-  color: #545454;
-  cursor: pointer;
-}
-
 .exit-div {
   visibility: hidden;
+}
+.hide{
+visibility: hidden;
 }
 .img {
   width: 70vw;
   height: 85vh;
   object-fit: contain;
+  background-color: #ebefef;
+  align-self: flex-start;
+  border-bottom: 5px solid #27f2cb;
 }
 
-.left-side {
-  width: 15vw;
-  height: 75vh;
-  margin-top: 15vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+.left-side,
 .right-side {
   width: 15vw;
-  height: 75vh;
-  margin-top: 15vh;
+  height: 85vh;
+  margin-top: 0;
   display: flex;
   align-items: center;
   justify-content: center;
 }
+.left-side-artwork,
+.right-side-artwork {
+  height: 75vh;
+  margin-top: 13vh;
+}
+
 .photo-slider {
   display: flex;
   align-items: center;
   width: 70vw;
+margin-bottom: 10vh;
   margin-left: 15vw;
 }
 .photo-slider-enlarged {
@@ -257,23 +243,15 @@ export default {
   justify-content: center;
   width: 100vw;
 }
-.triangle-left {
-  position: absolute;
-  cursor: pointer;
-  width: 0;
-  height: 0;
-  border-right: 80px solid #27f2cb;
-  border-top: 40px solid transparent;
-  border-bottom: 40px solid transparent;
-}
+
 .triangle-right {
+  transform: rotate(180deg);
+}
+.triangle-img {
   position: absolute;
   cursor: pointer;
-  width: 0;
-  height: 0;
-  border-left: 80px solid #27f2cb;
-  border-top: 40px solid transparent;
-  border-bottom: 40px solid transparent;
+  width: 40px; /*
+  filter: grayscale(1);*/
 }
 @media only screen and (min-width: 992px) and (max-width: 1280px) {
   .home_img {

@@ -108,6 +108,7 @@ export default {
   padding: 0;
   box-sizing: border-box;
 }
+
 button {
   width: 10vw;
   height: 7vh;
@@ -213,7 +214,7 @@ select:focus {
 .logged-icons {
   position: absolute;
   top: 3vh;
-  left: 85vw;
+  left: 90vw;
 }
 .logout {
   cursor: pointer;

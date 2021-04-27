@@ -1,6 +1,11 @@
 {
   "artworks": {
-    "nav": "UPUTSVO ZA KUPOVINU"
+    "nav": {
+      "how_to_buy": "KAKO DO KUPOVINE",
+      "order": "VAŠA PORUDŽBINA",
+      "artw_dtls": "IDITE DO DETALJA RADA",
+      "order_list" : "PROVERITE LISTU PORUDŽBINE"
+  }
   },
   "buttons": {
     "buy": "KUPI"
