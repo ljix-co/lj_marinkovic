@@ -10,8 +10,11 @@
       "fullname": "FULL NAME",
       "email": "E-MAIL",
       "address": "ADDRESS",
-      "country": "COUNTRY"
-    }
+      "country": "COUNTRY",
+      "city": "CITY"
+    },
+    "order_list": "ORDER LIST",
+    "total_price": "Total price:"
   },
   "buttons": {
     "buy": "BUY",

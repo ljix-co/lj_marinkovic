@@ -23,9 +23,9 @@
       ></i>
       <div class="order-form" v-if="show_order">
         <div class="tooltip">
-          <span class="tooltip-txt" v-if="order_list.length === 0"
-            >{{$t('tooltips.nt_show')}}</span
-          >
+          <span class="tooltip-txt" v-if="order_list.length === 0">{{
+            $t("tooltips.nt_show")
+          }}</span>
           <h3 class="check-order-btn" @click="showOrderList">
             {{ $t("artworks.nav.order_list") }}
           </h3>
@@ -37,25 +37,39 @@
           <input type="text" v-model="email" />
           <label for="">{{ $t("artworks.inpt_lbl.address") }}</label>
           <input type="text" v-model="address" />
+          <label for="">{{ $t("artworks.inpt_lbl.city") }}</label>
+          <input type="text" v-model="city" />
           <label for="">{{ $t("artworks.inpt_lbl.country") }}</label>
           <input type="text" v-model="country" />
-          <button>{{ $t("buttons.confirm") }}</button>
+          <button @click="confirmOrder()">{{ $t("buttons.confirm") }}</button>
         </div>
         <div
           class="order-list-div"
           v-if="show_order_list && order_list.length > 0"
         >
-          <div
-            class="order-list"
-            v-for="(order, index) in order_list"
-            :key="'o' + index"
-          >
-            <i class="fas fa-times exit"></i>
-            <img :src="order.artwork_imgpath" alt="" />
-            <p class="artw-title">{{ order.title.toUpperCase() }}</p>
-            <p class="prev-desc-txt">
-              Price: <b>{{ order.artwork_price }}</b> €
-            </p>
+          <div class="order-top-line">
+            <h2 class="order-total-price">
+              {{ $t("artworks.total_price") }} <b>{{ total_price }}</b>
+            </h2>
+            <h1 class="order-list-title">{{ $t("artworks.order_list") }}</h1>
+            <i class="fas fa-times order-exit" @click="closeOrderList"></i>
+          </div>
+          <div class="order-list">
+            <div
+              class="order"
+              v-for="(order, index) in order_list"
+              :key="'o' + index"
+            >
+              <i
+                class="fas fa-times order-delete"
+                @click="removeFromOrder(order)"
+              ></i>
+              <img class="order-img" :src="order.artwork_imgpath" alt="" />
+              <p class="order-title">{{ order.title.toUpperCase() }}</p>
+              <p class="order-price">
+                Price: <b>{{ order.artwork_price }}</b> €
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -125,7 +139,12 @@
               <p class="prev-desc-txt">
                 Price: <b>{{ art.artwork_price }}</b> €
               </p>
-              <button class="btn-buy" :clase="{fade: art.sold}" @click="buyArtwork(art)">
+              <button
+                :key="'b' + buttonKey"
+                class="btn-buy"
+                :disabled="art.sold || art.artwork_sold === 1"
+                @click="buyArtwork(art)"
+              >
                 {{ $t("buttons.buy") }}
               </button>
             </div>
@@ -155,8 +174,11 @@ export default {
       fullname: "",
       email: "",
       address: "",
+      city: "",
       country: "",
       show_order_list: false,
+      buttonKey: 0,
+      total_price: 0,
     };
   },
   mixins: [checkLanguage, scrollToElement],
@@ -164,11 +186,46 @@ export default {
     ...mapActions(["changeLoader"]),
     buyArtwork(art) {
       this.order_list.push(art);
-      for(let i = 0; i < this.artworks.length; i++) {
-        if(art === this.artworks[i]){
+      for (let i = 0; i < this.artworks.length; i++) {
+        if (art === this.artworks[i]) {
           this.artworks[i].sold = true;
+          this.buttonKey += 1;
+          this.total_price += art.artwork_price;
         }
       }
+    },
+    confirmOrder() {
+      let formData = new FormData();
+      formData.append("cust_fullname", this.fullname);
+      formData.append("cust_email", this.email);
+      formData.append("cust_address", this.address);
+      formData.append("cust_city", this.city);
+      formData.append("cust_country", this.country);
+      axios.post(this.baseUrl + "customers", formData).then((res) => {
+        console.log(res);
+        let cust_id = res.data.cust_id;
+        for (let i = 0; i < this.order_list.length; i++) {
+          let artwk_id = this.order_list[i].artwork_id;
+          let orderFormData = new FormData();
+          orderFormData.append("cust_id", cust_id);
+          orderFormData.append("artwork_id", artwk_id);
+          axios.post(this.baseUrl + "orders", orderFormData).then((res) => {
+            console.log(res);
+            let order_id = res.data.order_id;
+            axios
+              .get(this.baseUrl + "send_email", {
+                params: { order_id: order_id },
+              })
+              .then((res) => {
+                console.log(res);
+                //ovde ubaciti modal kojim se potvrđuje porudžbina
+              });
+          });
+        }
+      });
+    },
+    closeOrderList() {
+      this.show_order_list = false;
     },
     forceRerender() {
       this.componentKey += 1;
@@ -244,6 +301,19 @@ export default {
     hideOrderList() {
       this.show_order_list = false;
     },
+    removeFromOrder(order) {
+      for (let i = 0; i < this.order_list.length; i++) {
+        if (order === this.order_list[i]) {
+          this.order_list.splice(i, 1);
+          this.total_price -= order.artwork_price;
+        }
+      }
+      for (let i = 0; i < this.artworks.length; i++) {
+        if (order === this.artworks[i]) {
+          this.artworks[i].sold = false;
+        }
+      }
+    },
     showArtwDetails() {
       this.scrollToElement("chosen-artwk");
     },
@@ -306,8 +376,8 @@ p {
 .btn-buy {
   align-self: center;
 }
-.btn-buy:disabled{
-opacity: .2;
+.btn-buy:disabled {
+  opacity: 0.2;
 }
 .buy-nav-div {
   position: fixed;
@@ -332,7 +402,7 @@ opacity: .2;
   margin-left: 2rem;
 }
 .chosen-artwk {
-  border: 10px solid #545454;
+  border: 5px solid #545454;
   width: 20vw;
   margin-bottom: 2rem;
   background-color: #ced0d1;
@@ -344,7 +414,7 @@ opacity: .2;
 
 .dtls-nav-div {
   position: fixed;
-  top: 80vh;
+  top: 85vh;
   left: 85vw;
   z-index: 2;
 }
@@ -356,9 +426,7 @@ opacity: .2;
   justify-content: flex-start;
   cursor: pointer;
 }
-.fade{
-opacity: .3;
-}
+
 .hide {
   visibility: hidden;
   height: 0;
@@ -371,12 +439,59 @@ opacity: .3;
   gap: 0.5rem;
   margin-top: 3vh;
 }
-.order-list-div{
-position: fixed;
-width: 70vw;
-height: 80vh;
-top: 10vh;
-left: 15vw;
+.order {
+  width: 15vw;
+  height: 30vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #ced0d1;
+  border-bottom: 3px solid #27f2cb;
+}
+.order-delete {
+  width: 13vw;
+  text-align: end;
+  cursor: pointer;
+}
+.order-exit {
+  position: absolute;
+  top: 1rem;
+  left: 65vw;
+  font-size: 3rem;
+  cursor: pointer;
+}
+.order-img {
+  width: 15vw;
+  height: 20vh;
+  object-fit: contain;
+  background-color: #d4d4d4;
+}
+.order-list {
+  width: 67vw;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 1rem;
+  margin-top: 10vh;
+  margin-left: 1rem;
+}
+.order-list-div {
+  position: fixed;
+  width: 70vw;
+  min-height: 80vh;
+  top: 10vh;
+  left: 15vw;
+  background-color: white;
+
+  overflow-y: scroll;
+  border: 4px solid #545454;
+}
+.order-list-title {
+  margin-top: 1rem;
+  font-size: 3rem;
+  width: 65vw;
 }
 .order-nav,
 .dtls-nav {
@@ -389,16 +504,27 @@ left: 15vw;
 }
 .order-nav-div {
   position: fixed;
-  top: 15vh;
+  top: 10vh;
   left: 85vw;
   z-index: 2;
 }
 .order-form {
   position: fixed;
   left: 85vw;
-  top: 20vh;
+  top: 15vh;
   background-color: white;
   width: 15vw;
+}
+.order-top-line {
+  width: 60vw;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.order-total-price {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
 }
 .pg-col {
   display: flex;
@@ -425,7 +551,7 @@ left: 15vw;
 .prev-img {
   width: 20vw;
   height: 30vh;
-  object-fit: cover;
+  object-fit: contain;
   background-color: #d4d4d4;
   cursor: pointer;
 }
@@ -499,15 +625,15 @@ left: 15vw;
   visibility: hidden;
   background-color: #545454af;
   color: #545454;
-   position: absolute;
+  position: absolute;
   margin-left: -5.5vw;
   margin-top: -1rem;
   background-color: #63f8daab;
   width: 10vw;
   transition-delay: 0.2s;
 }
-.tooltip:hover .tooltip-txt{
-visibility: visible;
+.tooltip:hover .tooltip-txt {
+  visibility: visible;
 }
 @media only screen and (max-width: 768px) {
   .pg-col {

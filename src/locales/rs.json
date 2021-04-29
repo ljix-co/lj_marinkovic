@@ -10,8 +10,11 @@
     "fullname": "PUNO IME",
     "email": "E-MAIL",
     "address": "ADRESA",
-    "country": "ZEMLJA"
-  }
+    "country": "ZEMLJA",
+    "city": "GRAD"
+  },
+  "order_list": "LISTA PORUDŽBINE",
+  "total_price": "Ukupna cena:"
   },
   "buttons": {
     "buy": "KUPI",

@@ -107,8 +107,10 @@ export default {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
-
+}/*
+h1{
+  font-family: 'HortaRegular';
+}*/
 button {
   width: 10vw;
   height: 7vh;
@@ -138,7 +140,7 @@ input:focus {
 }
 p,
 li {
-  color: gray;
+  color: #545454;
   text-align: justify;
 }
 select {
