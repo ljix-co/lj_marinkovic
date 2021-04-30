@@ -117,15 +117,15 @@ p {
 .date {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   gap: 0.5rem;
   transform: rotate(270deg);
-  margin-top: 20vh;
-  width: 10vw;
+  margin-top: .5rem;
+  width: 5vw;
 }
 .date-string {
   color: #545454;
-  font-weight: 800;
+  
   font-size: 3rem;
 }
 .exh-title {
@@ -139,7 +139,7 @@ p {
 }
 .line{
   height: 70vh;
-  width: 5px;
+  width: 2px;
   background-color: #27f2cb;
 }
 .pg-col {

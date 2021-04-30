@@ -114,7 +114,7 @@ export default {
 }
 .line{
   height: 60vh;
-  width: 5px;
+  width: 3px;
   background-color: #27f2cb;
 }
 .link{
@@ -183,21 +183,21 @@ export default {
 }
 .tooltip:hover .tooltiptxt {
   visibility: visible;
-}
+}/*
 .triangle-right {
       width: 0;
       height: 0;
       border-right: 25px solid transparent;
       border-left: 25px solid transparent;
       border-top: 50px solid #27f2cb;
-    }
+    }*/
 .year {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
   transform: rotate(270deg);
-  margin-top: 3rem;
+  margin-top: 1rem;
   width: 5vw;
 }
 .year-string {

@@ -18,7 +18,8 @@
   },
   "buttons": {
     "buy": "BUY",
-    "confirm": "CONFIRM"
+    "confirm": "CONFIRM",
+    "send": "SEND"
   },
   "home": {
     "categories": [
@@ -38,7 +39,7 @@
         "txt": "ORDER WEBSITE"
       },
       {
-        "txt": "SCROLL FOR MORE"
+        "txt": "SCROLL"
       },
       {
         "txt": "SCROLL BACK"
@@ -46,8 +47,34 @@
     ],
     "subtitle": "Visual artist and Web developer",
     "art_desc": "The surrounding of the 21st century is global and sustainable by everpresent technology. The boundaries of space and time are crossed each day, physically and through the online network. The contemporary artist is a part of that society. One media could not satisfy the artist or his audience. Creative curiosity forces us to experiment and by it to move boundaries. For the creation of the artworks, the process is no longer important, but the base in the idea and the outcome. Variations on the subject could be observed in the final results, and my subject is the social status of an ordinary, contemporary human.",
-    "web_desc": "The simplicity of usage and content maintenance, as well as the clarity of the web page, represent the base of web development. Design should be adjusted to the needs of the client and the user so that it could represent the client and its business in the best possible way, thereby functionalities and access to the information should remain intuitive for the user. "
-  
+    "web_desc": "The simplicity of usage and content maintenance, as well as the clarity of the web page, represent the base of web development. Design should be adjusted to the needs of the client and the user so that it could represent the client and its business in the best possible way, thereby functionalities and access to the information should remain intuitive for the user. ",
+    "order_title": "ORDER WEBSITE",
+    "order_instr": "If you are intrested in ordering a website, please fill in the form and click the button 'SEND', and you will be contacted soon. The price of the website and the time required for its development depends on different factors, like the type of the website (personal page, corporate presentation, portfolio, web app...), domain and web hosting, photo editing, etc. Therefore, by filling in the form, you will get the answer about the price and the time needed for its completion. ",
+    "inpt_lbl": {
+      "website_type": "WEBSITE TYPE",
+      "photo-editing": "PHOTO EDITING",
+      "domain": "DESIRED DOMAIN",
+      "fullname": "FULL NAME",
+      "email": "E-MAIL"
+    },
+    "website_types": [
+      {
+      "type": "PERSONAL PAGE"
+      },
+      {
+      "type": "CORPORATE PRESENTATION"
+      },
+      {
+      "type": "PORTFOLIO"
+      },
+      {
+      "type": "WEB APP"
+      },
+      {
+      "type": "BLOG"
+      }
+    ],
+    "send_email": "Or you could send a message with precise demands:"
   },
   "links": [
     {
@@ -69,6 +96,10 @@
       "title": "CONTACT"
     }
   ],
+  "select": {
+    "yes": "YES",
+    "no": "NO"
+  },
   "tooltips": {
     "gallery": "CLICK TO SEE ALL IMAGES",
     "nav": "CLICK TO SEE MORE",

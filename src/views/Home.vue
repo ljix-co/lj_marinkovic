@@ -4,8 +4,8 @@
       <div class="nav">
         <p @click="goToArtworks">{{ $t("home.nav[0].txt") }}</p>
       </div>
-      <div class="nav">
-        <p>{{ $t("home.nav[1].txt") }}</p>
+      <div class="nav" v-if="order_web_form === false">
+        <p @click="orderWeb">{{ $t("home.nav[1].txt") }}</p>
       </div>
     </div>
     <div class="start-img" v-if="scrollIndex === 0">
@@ -16,14 +16,14 @@
       <img class="logo-img" src="../../public/images/vue_logo.png" alt="" />
       <img class="logo-img" src="../../public/images/js_logo.png" alt="" />
     </div>
-    <div class="art-img" v-if="scrollIndex === 2">
+    <div class="art-img" v-if="scrollIndex === 2 && order_web_form === false">
       <img
         class="detail-img"
         src="../../public/images/art_detail_2.png"
         alt=""
       />
     </div>
-    <div class="pg">
+    <div class="pg" v-if="order_web_form === false">
       <div class="web-title">
         <div class="name-div">
           <div class="f-name">
@@ -67,7 +67,7 @@
               class="img"
               src="../../public/images/art.png"
               alt=""
-              @click=" goToExhibitions"
+              @click="goToExhibitions"
             />
             <span class="tooltiptxt">{{ $t("tooltips.nav") }}</span>
           </div>
@@ -95,6 +95,46 @@
         </div>
       </div>
     </div>
+    <div class="order-form" v-if="order_web_form">
+      <h1 class="order-title">{{ $t("home.order_title") }}</h1>
+      <i class="fas fa-times order-exit" @click="exitOrderWeb"></i>
+      <div class="instr">
+        <p>{{ $t("home.order_instr") }}</p>
+      </div>
+      <div class="inpts">
+        <div class="inpt-lbl">
+          <label for="">{{ $t("home.inpt_lbl.website_type") }}</label>
+          <select name="" id="">
+          <option v-for="(i, index) in web_types_index_arr" :key="'w' + index" :value="i">{{$t(`home.website_types[${i}].type`)}}</option>
+          </select>
+
+          <label for="">{{ $t("home.inpt_lbl.photo-editing") }}</label>
+          <select name="" id="">
+          <option value="1">{{$t('select.yes')}}</option>
+           <option value="0">{{$t('select.no')}}</option>
+          </select>
+        </div>
+        <div class="inpt-lbl">
+          <label for="">{{ $t("home.inpt_lbl.domain") }}</label>
+          <input type="text" v-model="domain"/>
+          <!-- </div>
+        <div class="inpt-lbl"> -->
+          <label for="">{{ $t("home.inpt_lbl.fullname") }}</label>
+          <input type="text"  v-model="fullname"/>
+          <!-- </div>
+        <div class="inpt-lbl"> -->
+          <label for="">{{ $t("home.inpt_lbl.email") }}</label>
+          <input type="text"  v-model="email_address"/>
+        </div>
+      </div>
+      <div class="instr">
+        <p>{{ $t("home.send_email") }}</p>
+      </div>
+      <div class="editor">
+        <vue-editor v-model="message"></vue-editor>
+      </div>
+      <button>{{ $t("buttons.send") }}</button>
+    </div>
   </div>
 </template>
 
@@ -108,9 +148,20 @@ export default {
     return {
       scrollIndex: 0,
       lastScrollPosition: 0,
+      order_web_form: false,
+      web_types_index_arr: [0, 1, 2, 3, 4],
+      domain: "",
+      fullname: "",
+      email_address: "",
+      message: ""
     };
   },
+
   methods: {
+    exitOrderWeb() {
+      this.order_web_form = false;
+      // window.scrollTo(this.lastScrollPosition)
+    },
     goToArtworks() {
       this.$router.push({ name: "Artworks" });
     },
@@ -120,15 +171,22 @@ export default {
     goToProjects() {
       this.$router.push({ name: "Projects" });
     },
+    orderWeb() {
+      this.order_web_form = true;
+      window.scrollTo(0, 0);
+    },
     scrollEvent() {
       if (window.scrollY < 150) {
         this.scrollIndex = 0;
+        // this.lastScrollPosition = window.scrollY;
       }
       if (window.scrollY > 200 && window.scrollY < 490) {
         this.scrollIndex = 1;
+        // this.lastScrollPosition = window.scrollY;
       }
       if (window.scrollY > 500) {
         this.scrollIndex = 2;
+        // this.lastScrollPosition = window.scrollY + ',' + window.scrollX;
       }
     },
   },
@@ -140,7 +198,7 @@ export default {
 </script>
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Megrim&display=swap");
-@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap");
 @keyframes down_in {
   from {
     top: -100px;
@@ -153,22 +211,33 @@ export default {
 h3 {
   margin-top: 1vh;
 }
-p{
+p {
   font-size: 1.2rem;
 }
+label {
+  font-size: 1.5rem;
+}
+select{
+width: 15vw;
+height: 5vh;
+border-radius: 10px;
+
+}
 .arrow {
+  /*
   width: 0;
   height: 0;
   border-top: 20px solid #27f2cb;
   border-left: 10px solid transparent;
-  border-right: 10px solid transparent;/*
+  border-right: 10px solid transparent;
   transform: rotate(-45deg);*/
 }
 .arrow-line {
+  /*
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: center;*/
 }
 .art-img {
   position: fixed;
@@ -221,12 +290,11 @@ p{
   margin-top: 15vh;
   filter: grayscale(50%);
   opacity: 0.7;
-  
 }
 .f-letter {
   color: #27f2cb;
   font-size: 4.5rem;
-  font-family:  'HortaRegular', cursive;
+  font-family: "HortaRegular", cursive;
 }
 .f-name {
   display: flex;
@@ -235,7 +303,6 @@ p{
 }
 .home {
   height: 1500px;
- 
 }
 .home-nav {
   position: fixed;
@@ -251,7 +318,7 @@ p{
 }
 .img {
   width: 30vw;
-  
+
   height: 35vh;
   cursor: pointer;
   object-fit: cover;
@@ -262,6 +329,28 @@ border-radius: 2rem;*/
 .img-prof {
   width: 25vw;
 }
+.inpts {
+  width: 50vw;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 5vw;
+}
+.inpt-lbl {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 15vw;
+  gap: 1rem;
+}
+.instr {
+  width: 50vw;
+  text-align: justify;
+  margin-top: 5vh;
+  margin-bottom: 5vh;
+}
 .intro-txt {
   text-align: justify;
   width: 30vw;
@@ -270,9 +359,10 @@ border-radius: 2rem;*/
   margin-top: 2rem;
 }
 .line {
+  /*
   width: 2px;
   height: 10vh;
-  background-color: #27f2cb;
+  background-color: #27f2cb;*/
 }
 .logo-img {
   width: 10vw;
@@ -281,7 +371,7 @@ border-radius: 2rem;*/
 }
 .name {
   font-size: 4.5rem;
-  font-family:  'HortaRegular', cursive;
+  font-family: "HortaRegular", cursive;
   color: #323131;
 }
 .name-div {
@@ -299,21 +389,43 @@ border-radius: 2rem;*/
   cursor: pointer;
 }
 .nav-scroll {
-  transform: rotate(90deg);
+  /*
+  transform: rotate(90deg);*/
   margin-left: -2rem;
-  font-size: 0.7rem;
+  font-size: 1.5rem;
   color: #323131;
+  border-bottom: 3px solid #27f2cb;
+  font-family: "HortaRegular", cursive;
 }
 .nav-scroll-back {
   transform: rotate(90deg);
   margin-left: -1rem;
-  font-size: 0.7rem;
+  font-size: 1.5rem;
   color: #323131;
 }
 .occup {
   font-size: 2rem;
 }
+.order-exit {
+  position: absolute;
+  top: 0;
+  left: 80vw;
+  font-size: 3rem;
+  cursor: pointer;
+}
+.order-form {
+  width: 100vw;
 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 15vh;
+  position: absolute;
+
+  background-color: white;
+  border-bottom: 5px solid #27f2cb;
+}
 .pg {
   display: flex;
   flex-direction: column;
@@ -332,10 +444,10 @@ border-radius: 2rem;*/
   gap: 0;
   position: fixed;
   top: 80vh;
-}
+} /*
 .scroll-top {
   top: 60vh;
-}
+}*/
 .scroll-bottom {
   /*transform: rotate(180deg);
   margin-left: -1rem;*/
@@ -350,7 +462,7 @@ border-radius: 2rem;*/
 .tooltip .tooltiptxt {
   position: absolute;
   margin-left: -30vw;
- 
+
   background-color: #63f8daab;
   width: 30vw;
   transition-delay: 0.2s;

@@ -4,21 +4,22 @@
       "how_to_buy": "KAKO DO KUPOVINE",
       "order": "VAŠA PORUDŽBINA",
       "artw_dtls": "IDITE DO DETALJA RADA",
-      "order_list" : "PROVERITE LISTU PORUDŽBINE"
-  },
-  "inpt_lbl": {
-    "fullname": "PUNO IME",
-    "email": "E-MAIL",
-    "address": "ADRESA",
-    "country": "ZEMLJA",
-    "city": "GRAD"
-  },
-  "order_list": "LISTA PORUDŽBINE",
-  "total_price": "Ukupna cena:"
+      "order_list": "PROVERITE LISTU PORUDŽBINE"
+    },
+    "inpt_lbl": {
+      "fullname": "PUNO IME",
+      "email": "E-MAIL",
+      "address": "ADRESA",
+      "country": "ZEMLJA",
+      "city": "GRAD"
+    },
+    "order_list": "LISTA PORUDŽBINE",
+    "total_price": "Ukupna cena:"
   },
   "buttons": {
     "buy": "KUPI",
-    "confirm": "POTVRDI"
+    "confirm": "POTVRDI",
+    "send": "POŠALJI"
   },
   "home": {
     "categories": [
@@ -38,7 +39,7 @@
         "txt": "NARUČI VEBSAJT"
       },
       {
-        "txt": "SKROL ZA JOŠ"
+        "txt": "SKROL"
       },
       {
         "txt": "SKROL ZA NAZAD"
@@ -46,8 +47,34 @@
     ],
     "subtitle": "Vizuelni umetnik i Veb developer",
     "art_desc": "Okruženje 21-og veka je globalno i kao takvo održivo uz pomoć sveprosutne tehnologije. Granice prostora i vremena se svakodnevno prevazilaze, fizički i kroz on-line mrežu. Savremeni umetnik je deo takvog društva. Jedan medij više ne može da zadovolji sve potrebe umetnika ni njegove publike. Kreativna radoznalost tera nas na ekperiment i pomeranje granica. Za nastanak dela više nije važan proces, već osnova u ideji i konačan rezultat. Varijacije na temu ogledaju se u samom rezultatu, a moja tema je socijalni status običnog, savremenog čoveka.",
-    "web_desc": "Jednostavnost korišćenja i održavanja sadržaja sajta, kao i preglednost veb stranice predstavljaju osnovu pri razvoju veb sajta. Dizajn treba biti prilagođen potrebama klijenta i korisnika, tako da na najbolji mogući način vizuelno opiše klijenta i njegovu delatnost, a da pritom funkcionalnosti ostanu intuitivne za korisnika tako da može dobiti sve potrebne informacije."
-   
+    "web_desc": "Jednostavnost korišćenja i održavanja sadržaja sajta, kao i preglednost veb stranice predstavljaju osnovu pri razvoju veb sajta. Dizajn treba biti prilagođen potrebama klijenta i korisnika, tako da na najbolji mogući način vizuelno opiše klijenta i njegovu delatnost, a da pritom funkcionalnosti ostanu intuitivne za korisnika tako da može dobiti sve potrebne informacije.",
+    "order_title": "NARUČITE VEB SAJT",
+    "order_instr": "Ukoliko ste zainteresovani za izradu veb sajta, molim Vas popunite formu i kliknite dugme 'POŠALJI' i bićete kontaktirani uskoro. Cena veb sajta i vreme potrebno za njegovu izradu zavisi od različitih faktora, kao što su tip veb sajta (lična stranica, prezentacija firme, portfolio, veb aplikacija...), domen i veb hosting, uređivanje fotografija, itd. Popunjavanjem forme dobićete odgovor o ceni i vremenu potrebnom za izradu Vašeg veb sajta ",
+    "inpt_lbl": {
+      "website_type": "TIP VEB SAJTA",
+      "photo-editing": "UREĐIVANJE FOTOGRAFIJA",
+      "domain": "ŽELJENI DOMEN",
+      "fullname": "PUNO IME",
+      "email": "E-MAIL"
+    },
+    "website_types": [
+      {
+        "type": "LIČNA STRANICA"
+      },
+      {
+        "type": "PREZENTACIJA FIRME"
+      },
+      {
+        "type": "PORTFOLIO"
+      },
+      {
+        "type": "VEB APLIKACIJA"
+      },
+      {
+        "type": "BLOG"
+      }
+    ],
+    "send_email": "Ili možete poslati poruku sa detaljnim zahtevima:"
   },
   "links": [
     {
@@ -69,6 +96,10 @@
       "title": "KONTAKT"
     }
   ],
+  "select": {
+    "yes": "DA",
+    "no": "NE"
+  },
   "tooltips": {
     "gallery": "KLIKNITE DA VIDITE SVE SLIKE",
     "nav": "KLIKNITE DA VIDITE VIŠE",
