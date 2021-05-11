@@ -147,6 +147,7 @@
               >
                 {{ $t("buttons.buy") }}
               </button>
+              <pay-pal-button :totalPrice="total_price"></pay-pal-button>
             </div>
           </div>
         </div>
@@ -160,8 +161,9 @@ import axios from "axios";
 import PhotoSlider from "../components/PhotoSlider.vue";
 import { checkLanguage } from "../mixins/checkLanguage.js";
 import { scrollToElement } from "../mixins/scrollToElement.js";
+import PayPalButton from '../components/PayPalButton.vue';
 export default {
-  components: { PhotoSlider },
+  components: { PhotoSlider, PayPalButton },
   data() {
     return {
       artworks: [],

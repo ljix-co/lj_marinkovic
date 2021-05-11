@@ -100,10 +100,17 @@
     "yes": "YES",
     "no": "NO"
   },
+  "success": {
+    "web_ord": "You have successfully ordered a web site. You will be contacted soon via email."
+  },
   "tooltips": {
     "gallery": "CLICK TO SEE ALL IMAGES",
     "nav": "CLICK TO SEE MORE",
     "nav-gallery": "CLICK FOR ENLARGED VIEW",
     "nt_show": "NOTHING TO SHOW"
+  },
+  "wrong": {
+    "empty_fields": "Some fields are left empty.",
+    "invld_email": "Invalid email address."
   }
 }

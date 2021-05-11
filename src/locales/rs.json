@@ -100,10 +100,17 @@
     "yes": "DA",
     "no": "NE"
   },
+  "success": {
+    "web_ord": "Uspešno ste poručili veb sajt. Bićete kontaktirani uskoro putem email-a."
+  },
   "tooltips": {
     "gallery": "KLIKNITE DA VIDITE SVE SLIKE",
     "nav": "KLIKNITE DA VIDITE VIŠE",
     "nav-gallery": "KLIKNITE ZA UVEĆAN PRIKAZ",
     "nt_show": "NEMA NIČEG ZA PRIKAZ"
+  },
+  "wrong": {
+    "empty_fields": "Neka polja su ostala prazna.",
+    "invld_email": "Neispravna email adresa."
   }
 }

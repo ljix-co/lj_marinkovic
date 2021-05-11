@@ -20,7 +20,7 @@ export default {
 </script>
 <style scoped>
 h1{
-    color: rgb(190, 3, 3);
+    color: #26905f;
     width: 20vw;
 }
 button {
@@ -48,7 +48,7 @@ button {
   align-items: center;
   justify-content: center;
   box-shadow: 0px 5px 15px 2px rgba(0, 0, 0, 0.48);
-  border: 3px solid rgb(190, 3, 3);
+  border: 3px solid #26905f;
   background-color: white;
 }
 .wrong {

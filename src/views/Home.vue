@@ -74,22 +74,11 @@
           <p class="cat-desc">{{ $t("home.art_desc") }}</p>
         </div>
 
-        <div
-          class="scroll"
-          :class="{
-            'scroll-top': scrollIndex === 0,
-            'scroll-med': scrollIndex === 1,
-            'scroll-bottom': scrollIndex === 2,
-          }"
-        >
-          <div class="arrow-line">
-            <div class="line"></div>
-            <div class="arrow"></div>
-          </div>
+        <div class="scroll">
           <p class="nav-scroll" v-if="scrollIndex !== 2">
             {{ $t("home.nav[2].txt") }}
           </p>
-          <p class="nav-scroll-back" v-if="scrollIndex === 2">
+          <p class="nav-scroll" v-if="scrollIndex === 2">
             {{ $t("home.nav[3].txt") }}
           </p>
         </div>
@@ -104,44 +93,59 @@
       <div class="inpts">
         <div class="inpt-lbl">
           <label for="">{{ $t("home.inpt_lbl.website_type") }}</label>
-          <select name="" id="">
-          <option v-for="(i, index) in web_types_index_arr" :key="'w' + index" :value="i">{{$t(`home.website_types[${i}].type`)}}</option>
+          <select name="" id="opt-web-type" ref="optWebType">
+            <option
+              class="opt-web-type"
+              v-for="(i, index) in web_types_index_arr"
+              :key="'w' + index"
+              :value="$t(`home.website_types[${i}].type`)"
+            >
+              {{ $t(`home.website_types[${i}].type`) }}
+            </option>
           </select>
 
           <label for="">{{ $t("home.inpt_lbl.photo-editing") }}</label>
-          <select name="" id="">
-          <option value="1">{{$t('select.yes')}}</option>
-           <option value="0">{{$t('select.no')}}</option>
+          <select name="" id="" ref="optPhotoEdit">
+            <option value="1">{{ $t("select.yes") }}</option>
+            <option value="0">{{ $t("select.no") }}</option>
           </select>
         </div>
         <div class="inpt-lbl">
           <label for="">{{ $t("home.inpt_lbl.domain") }}</label>
-          <input type="text" v-model="domain"/>
+          <input type="text" v-model="domain" />
           <!-- </div>
         <div class="inpt-lbl"> -->
           <label for="">{{ $t("home.inpt_lbl.fullname") }}</label>
-          <input type="text"  v-model="fullname"/>
+          <input type="text" v-model="fullname" />
           <!-- </div>
         <div class="inpt-lbl"> -->
           <label for="">{{ $t("home.inpt_lbl.email") }}</label>
-          <input type="text"  v-model="email_address"/>
+          <input type="text" v-model="email_address" />
         </div>
       </div>
       <div class="instr">
         <p>{{ $t("home.send_email") }}</p>
       </div>
       <div class="editor">
-        <vue-editor v-model="message"></vue-editor>
+        <vue-editor v-model="cust_message"></vue-editor>
       </div>
-      <button>{{ $t("buttons.send") }}</button>
+      <button class="btn-send" @click="sendOrder">
+        {{ $t("buttons.send") }}
+      </button>
     </div>
+    <wrong v-if="wrong" :message="message" @confirm="exitWrongMssg"></wrong>
+    <confirmation v-if="orderSuccess" :message="message" @confirm="exitConfrmMssg"></confirmation>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-
+import { mapState } from "vuex";
+import axios from "axios";
+import Wrong from "../components/Wrong.vue";
+import Confirmation from '../components/Confirmation.vue';
 export default {
+  components: { Wrong, Confirmation },
   name: "Home",
 
   data() {
@@ -153,14 +157,27 @@ export default {
       domain: "",
       fullname: "",
       email_address: "",
-      message: ""
+      message: "",
+      cust_message: "",
+      wrong: false,
+      emailReg: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+      orderSuccess: false
     };
   },
 
   methods: {
+    exitConfrmMssg() {
+      this.orderSuccess = false;
+      this.message = '';
+      this.order_web_form = false;
+    },
     exitOrderWeb() {
       this.order_web_form = false;
       // window.scrollTo(this.lastScrollPosition)
+    },
+    exitWrongMssg() {
+      this.wrong = false;
+      this.message = "";
     },
     goToArtworks() {
       this.$router.push({ name: "Artworks" });
@@ -189,8 +206,49 @@ export default {
         // this.lastScrollPosition = window.scrollY + ',' + window.scrollX;
       }
     },
+    sendOrder() {
+      if (
+        this.fullname === "" ||
+        this.email_address === "" ||
+        this.domain === ""
+      ) {
+        this.message = this.$t("wrong.empty_fields");
+        this.wrong = true;
+      } else {
+       
+        if (this.emailReg.test(this.email_address)) {
+          let custFormData = new FormData();
+          custFormData.append("cust_fullname", this.fullname);
+          custFormData.append("cust_email", this.email_address);
+          axios.post(this.baseUrl + "customers", custFormData).then((res) => {
+            console.log(res);
+            let cust_id = res.data.cust_id;
+
+            let elWebType = this.$refs.optWebType;
+            let elPhotoEdit = this.$refs.optPhotoEdit;
+
+            let formData = new FormData();
+            formData.append("cust_id", cust_id);
+            formData.append("webord_domain", this.domain);
+            formData.append("webord_type", elWebType.value);
+            formData.append("webord_photoediting", elPhotoEdit.value);
+            formData.append("webord_dtldemands", this.cust_message);
+            axios.post(this.baseUrl + "web_orders", formData).then((res) => {
+              console.log(res);
+              this.message = this.$t('success.web_ord');
+              this.orderSuccess = true;
+            });
+          });
+        } else {
+          this.message = this.$t("wrong.invld_email");
+          this.wrong = true;
+        }
+      }
+    },
   },
-  computed: {},
+  computed: {
+    ...mapState(["baseUrl"]),
+  },
   mounted() {
     // window.addEventListener('scroll', this.scrollEvent())
   },
@@ -217,32 +275,19 @@ p {
 label {
   font-size: 1.5rem;
 }
-select{
-width: 15vw;
-height: 5vh;
-border-radius: 10px;
+select {
+  width: 15vw;
+  height: 5vh;
+  border-radius: 10px;
+}
 
-}
-.arrow {
-  /*
-  width: 0;
-  height: 0;
-  border-top: 20px solid #27f2cb;
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-  transform: rotate(-45deg);*/
-}
-.arrow-line {
-  /*
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;*/
-}
 .art-img {
   position: fixed;
   left: 0;
   top: 20vh;
+}
+.btn-send {
+  margin-bottom: 5vh;
 }
 .category {
   width: 55vw;
@@ -309,12 +354,12 @@ border-radius: 10px;
   width: 15vw;
   height: 60vh;
   left: 85vw;
-  top: 20vh;
+  top: 15vh;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  gap: 40vh;
+  gap: 70vh;
 }
 .img {
   width: 30vw;
@@ -358,12 +403,7 @@ border-radius: 2rem;*/
 
   margin-top: 2rem;
 }
-.line {
-  /*
-  width: 2px;
-  height: 10vh;
-  background-color: #27f2cb;*/
-}
+
 .logo-img {
   width: 10vw;
   filter: grayscale(30%);
@@ -392,17 +432,12 @@ border-radius: 2rem;*/
   /*
   transform: rotate(90deg);*/
   margin-left: -2rem;
-  font-size: 1.5rem;
+  font-size: 1.7rem;
   color: #323131;
   border-bottom: 3px solid #27f2cb;
   font-family: "HortaRegular", cursive;
 }
-.nav-scroll-back {
-  transform: rotate(90deg);
-  margin-left: -1rem;
-  font-size: 1.5rem;
-  color: #323131;
-}
+
 .occup {
   font-size: 2rem;
 }
@@ -443,15 +478,7 @@ border-radius: 2rem;*/
   justify-content: center;
   gap: 0;
   position: fixed;
-  top: 80vh;
-} /*
-.scroll-top {
-  top: 60vh;
-}*/
-.scroll-bottom {
-  /*transform: rotate(180deg);
-  margin-left: -1rem;*/
-  visibility: hidden;
+  top: 90vh;
 }
 .start-img {
   position: fixed;
