@@ -21,7 +21,7 @@
         @click="hideOrder"
         v-if="show_order"
       ></i>
-      <div class="order-form" v-if="show_order">
+      <div class="order-form" v-show="show_order">
         <div class="tooltip">
           <span class="tooltip-txt" v-if="order_list.length === 0">{{
             $t("tooltips.nt_show")
@@ -30,7 +30,7 @@
             {{ $t("artworks.nav.order_list") }}
           </h3>
         </div>
-        <div class="inpts" v-if="order_list.length > 0">
+        <div  class="inpts" v-if="order_list.length > 0 && pay_option === false">
           <label for="">{{ $t("artworks.inpt_lbl.fullname") }}</label>
           <input type="text" v-model="fullname" />
           <label for="">{{ $t("artworks.inpt_lbl.email") }}</label>
@@ -42,7 +42,12 @@
           <label for="">{{ $t("artworks.inpt_lbl.country") }}</label>
           <input type="text" v-model="country" />
           <button @click="confirmOrder()">{{ $t("buttons.confirm") }}</button>
+          
         </div>
+        <div id="smart-button-container" v-show="pay_option">
+          
+            <pay-pal-button :key="'PPb' + componentKey" :totalPrice="total_price"></pay-pal-button>
+          </div>
         <div
           class="order-list-div"
           v-if="show_order_list && order_list.length > 0"
@@ -147,7 +152,8 @@
               >
                 {{ $t("buttons.buy") }}
               </button>
-              <pay-pal-button :totalPrice="total_price"></pay-pal-button>
+              <!-- <pay-pal-button :totalPrice="total_price"></pay-pal-button> -->
+              <!-- <div ref="payment"></div>-->
             </div>
           </div>
         </div>
@@ -155,6 +161,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import { mapState, mapActions } from "vuex";
 import axios from "axios";
@@ -162,6 +169,7 @@ import PhotoSlider from "../components/PhotoSlider.vue";
 import { checkLanguage } from "../mixins/checkLanguage.js";
 import { scrollToElement } from "../mixins/scrollToElement.js";
 import PayPalButton from '../components/PayPalButton.vue';
+// import PayPalButton from '../components/PayPalButton.vue';
 export default {
   components: { PhotoSlider, PayPalButton },
   data() {
@@ -181,6 +189,7 @@ export default {
       show_order_list: false,
       buttonKey: 0,
       total_price: 0,
+      pay_option: false
     };
   },
   mixins: [checkLanguage, scrollToElement],
@@ -196,6 +205,7 @@ export default {
         }
       }
     },
+  
     confirmOrder() {
       let formData = new FormData();
       formData.append("cust_fullname", this.fullname);
@@ -214,12 +224,14 @@ export default {
           axios.post(this.baseUrl + "orders", orderFormData).then((res) => {
             console.log(res);
             let order_id = res.data.order_id;
+            this.pay_option = true;
             axios
               .get(this.baseUrl + "send_email", {
                 params: { order_id: order_id },
               })
               .then((res) => {
                 console.log(res);
+                
                 //ovde ubaciti modal kojim se potvrđuje porudžbina
               });
           });
@@ -303,6 +315,7 @@ export default {
     hideOrderList() {
       this.show_order_list = false;
     },
+
     removeFromOrder(order) {
       for (let i = 0; i < this.order_list.length; i++) {
         if (order === this.order_list[i]) {
@@ -316,6 +329,7 @@ export default {
         }
       }
     },
+
     showArtwDetails() {
       this.scrollToElement("chosen-artwk");
     },
@@ -334,6 +348,7 @@ export default {
   },
   mounted() {
     this.getArtworks();
+
   },
   watch: {
     curLanguage: {
@@ -341,6 +356,11 @@ export default {
         this.changeToLanguage();
       },
     },
+    total_price: {
+      handler() {
+        this.componentKey += 1;
+      }
+    }
   },
 };
 </script>

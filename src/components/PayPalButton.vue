@@ -1,37 +1,56 @@
 <template>
   <div class="paypal-btn">
-    <paypal-buttons
-      [props]="{
-          createOrder: createOrder,
-          onApprove: onApprove
-      }"
-    ></paypal-buttons>
+    <div style="text-align: center">
+      <div id="paypal-button-container" ref="paypal"></div>
+    </div>
   </div>
 </template>
 <script>
-const PayPalButton = this.paypal.Buttons.driver("vue", window.Vue);
 export default {
-    props: {
-        totalPrice: Number
-    },
-  components: {
-    "paypal-buttons": PayPalButton,
+  props: {
+    totalPrice: Number,
   },
-  computed: {
-    createOrder: function (data, actions) {
-      return actions.order.create({
-        purchase_units: [
-          {
-            amount: {
-              value: this.totalPrice,
-            },
+  data() {
+    return {};
+  },
+  methods: {
+    initPayPalButton() {
+      console.log(this.totalPrice)
+      let price = this.totalPrice
+      window.paypal
+        .Buttons({
+          style: {
+            shape: "rect",
+            color: "gold",
+            layout: "vertical",
+            label: "paypal",
           },
-        ],
-      });
+
+          createOrder: function (data, actions) {
+            return actions.order.create({
+              purchase_units: [{ amount: { currency_code: "EUR", value: price } }],
+            });
+          },
+
+          onApprove: function (data, actions) {
+            return actions.order.capture().then(function (details) {
+              alert(
+                "Transaction completed by " +
+                  details.payer.name.given_name +
+                  "!"
+              );
+            });
+          },
+
+          onError: function (err) {
+            console.log(err);
+          },
+        })
+        .render(this.$refs.paypal);
     },
-    onAuthorize: function (data, actions) {
-      return actions.order.capture();
-    },
+  },
+  mounted() {
+    this.initPayPalButton();
   },
 };
 </script>
