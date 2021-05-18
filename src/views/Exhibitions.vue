@@ -157,7 +157,7 @@ p {
   top: 6vh;
 }
 .place {
-  color: #27f2cb;
+  color: gray;
   text-align: center;
   font-size: 1.7rem;
 }
@@ -186,7 +186,7 @@ p {
   width: 80vw;
   height: 70vh;
   margin-bottom: 10vh;
-  cursor: pointer;
+
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;

@@ -6,12 +6,11 @@
     }"
   >
     <div class="left-side" :class="{ 'left-side-artwork': artworks_page }">
-      <img
-        class="triangle-img triangle-right"
-        src="../../public/images/triangle button gray2.png"
-        alt=""
-        @click="prevImg()"
-      />
+   
+      <div class="lines" @click="prevImg()">
+      <div class="trq-left-line"></div>
+      <div class="gry-left-line"></div>
+      </div>
     </div>
     <div class="center" :class="{ 'center-artwork': artworks_page }">
     
@@ -32,12 +31,10 @@
     
     </div>
     <div class="right-side" :class="{ 'right-side-artwork': artworks_page }">
-      <img
-        class="triangle-img"
-        src="../../public/images/triangle button gray2.png"
-        alt=""
-        @click="nextImg()"
-      />
+      <div class="lines" @click="nextImg()">
+      <div class="trq-right-line"></div>
+      <div class="gry-right-line"></div>
+      </div>
     </div>
   </div>
 </template>
@@ -187,11 +184,9 @@ export default {
   font-size: 2rem;
   z-index: 1;
   color: #545454;
-  cursor: pointer;
+
 }
-.delete {
-  cursor: pointer;
-}
+
 .delete-img-div {
   font-size: 2rem;
   color: #27f2cb;
@@ -202,6 +197,17 @@ export default {
 }
 .exit-div {
   visibility: hidden;
+}
+.gry-left-line{
+width: 3vw;
+height: 5px;
+background-color: #545454;
+}
+.gry-right-line{
+width: 3vw;
+height: 5px;
+background-color: #545454;
+margin-left: 3vw;
 }
 .hide{
 visibility: hidden;
@@ -243,16 +249,21 @@ margin-bottom: 10vh;
   justify-content: center;
   width: 100vw;
 }
+.trq-left-line{
+width: 5vw;
+height: 5px;
+margin-left: 1vw;
+margin-bottom: .7rem;
+background-color: #27f2cb;
+}
+.trq-right-line{
+width: 5vw;
+height: 5px;
 
-.triangle-right {
-  transform: rotate(180deg);
+margin-bottom: .7rem;
+background-color: #27f2cb;
 }
-.triangle-img {
-  position: absolute;
-  cursor: pointer;
-  width: 40px; /*
-  filter: grayscale(1);*/
-}
+
 @media only screen and (min-width: 992px) and (max-width: 1280px) {
   .home_img {
     width: 90vw;

@@ -30,7 +30,7 @@
             {{ $t("artworks.nav.order_list") }}
           </h3>
         </div>
-        <div  class="inpts" v-if="order_list.length > 0 && pay_option === false">
+        <div class="inpts" v-if="order_list.length > 0">
           <label for="">{{ $t("artworks.inpt_lbl.fullname") }}</label>
           <input type="text" v-model="fullname" />
           <label for="">{{ $t("artworks.inpt_lbl.email") }}</label>
@@ -41,13 +41,18 @@
           <input type="text" v-model="city" />
           <label for="">{{ $t("artworks.inpt_lbl.country") }}</label>
           <input type="text" v-model="country" />
-          <button @click="confirmOrder()">{{ $t("buttons.confirm") }}</button>
-          
+          <button @click="confirmOrder()">
+            {{ $t("buttons.confirm") }}
+          </button>
         </div>
-        <div id="smart-button-container" v-show="pay_option">
-          
-            <pay-pal-button :key="'PPb' + componentKey" :totalPrice="total_price"></pay-pal-button>
-          </div>
+        <!--   <div id="smart-button-container" v-if="pay_option">
+          <pay-pal-button
+            :key="'PPb' + componentKey"
+            :totalPrice="total_price"
+            :order_list="order_list"
+            @confirm-order="confirmOrder"
+          ></pay-pal-button>
+        </div>-->
         <div
           class="order-list-div"
           v-if="show_order_list && order_list.length > 0"
@@ -94,21 +99,7 @@
         :class="{ 'shop-instruction': how_to_buy, hide: how_to_buy === false }"
       >
         <h2>How to buy</h2>
-        <p>
-          If you are interested in buying artworks, please contact the author
-          via email and specify which artwork would you like to buy.
-        </p>
-        <p>
-          If the artwork is not already sold, the next step would be signing the
-          contract that guarantees that there will be no copies of a sold art
-          piece, but also obliges the buyer to borrow purchased artwork to be
-          exposed on significant exhibitions.
-        </p>
-        <p>
-          After signing the document, money should be transferred directly to
-          the author's bank account. The instructions will be sent via email.
-        </p>
-        <p>All the taxes are included in the price.</p>
+        <p></p>
       </div>
     </div>
     <div class="pg-col">
@@ -168,10 +159,10 @@ import axios from "axios";
 import PhotoSlider from "../components/PhotoSlider.vue";
 import { checkLanguage } from "../mixins/checkLanguage.js";
 import { scrollToElement } from "../mixins/scrollToElement.js";
-import PayPalButton from '../components/PayPalButton.vue';
+// import PayPalButton from "../components/PayPalButton.vue";
 // import PayPalButton from '../components/PayPalButton.vue';
 export default {
-  components: { PhotoSlider, PayPalButton },
+  components: { PhotoSlider },
   data() {
     return {
       artworks: [],
@@ -189,7 +180,7 @@ export default {
       show_order_list: false,
       buttonKey: 0,
       total_price: 0,
-      pay_option: false
+      // pay_option: false,
     };
   },
   mixins: [checkLanguage, scrollToElement],
@@ -205,7 +196,7 @@ export default {
         }
       }
     },
-  
+
     confirmOrder() {
       let formData = new FormData();
       formData.append("cust_fullname", this.fullname);
@@ -224,20 +215,23 @@ export default {
           axios.post(this.baseUrl + "orders", orderFormData).then((res) => {
             console.log(res);
             let order_id = res.data.order_id;
-            this.pay_option = true;
+
             axios
               .get(this.baseUrl + "send_email", {
                 params: { order_id: order_id },
               })
               .then((res) => {
                 console.log(res);
-                
+
                 //ovde ubaciti modal kojim se potvrđuje porudžbina
               });
           });
         }
       });
     },
+    // confirmCustomerInfo() {
+    //   this.pay_option = true;
+    // },
     closeOrderList() {
       this.show_order_list = false;
     },
@@ -348,7 +342,6 @@ export default {
   },
   mounted() {
     this.getArtworks();
-
   },
   watch: {
     curLanguage: {
@@ -359,8 +352,8 @@ export default {
     total_price: {
       handler() {
         this.componentKey += 1;
-      }
-    }
+      },
+    },
   },
 };
 </script>
@@ -403,7 +396,7 @@ p {
 }
 .buy-nav-div {
   position: fixed;
-  top: 15vh;
+  top: 10vh;
   left: -2rem;
   z-index: 2;
 }
@@ -411,15 +404,13 @@ p {
 .buy-nav,
 .exit {
   width: 15vw;
-  border-bottom: 5px solid #27f2cb;
+  border-bottom: 3px solid #27f2cb;
   display: flex;
   align-items: flex-end;
   justify-content: flex-end;
-  cursor: pointer;
 }
 .check-order-btn {
   border: 3px dotted #27f2cb;
-  cursor: pointer;
   width: 10vw;
   margin-left: 2rem;
 }
@@ -446,7 +437,6 @@ p {
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
-  cursor: pointer;
 }
 
 .hide {
@@ -474,14 +464,12 @@ p {
 .order-delete {
   width: 13vw;
   text-align: end;
-  cursor: pointer;
 }
 .order-exit {
   position: absolute;
   top: 1rem;
   left: 65vw;
   font-size: 3rem;
-  cursor: pointer;
 }
 .order-img {
   width: 15vw;
@@ -518,11 +506,10 @@ p {
 .order-nav,
 .dtls-nav {
   width: 15vw;
-  border-bottom: 5px solid #27f2cb;
+  border-bottom: 3px solid #27f2cb;
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
-  cursor: pointer;
 }
 .order-nav-div {
   position: fixed;
@@ -534,7 +521,7 @@ p {
   position: fixed;
   left: 85vw;
   top: 15vh;
-  background-color: white;
+
   width: 15vw;
 }
 .order-top-line {
@@ -575,7 +562,6 @@ p {
   height: 30vh;
   object-fit: contain;
   background-color: #d4d4d4;
-  cursor: pointer;
 }
 .prev-div {
   width: 20vw; /*

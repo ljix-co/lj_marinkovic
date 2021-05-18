@@ -43,11 +43,20 @@
         </div>
       </div>
     </div>
+    <transition name="fade" mode="out-in">
     <router-view :class="{ 'no-show': loader }" />
+    </transition>
     <!-- <Loader v-if="loader"></Loader> -->
     <footer>
       <Footer></Footer>
     </footer>
+     <custom-cursor
+      :targets="[ 'a', 'button', 'i', 'nav-left', 'nav-scroll', 'order-nav', 'dtls-nav', 'order-exit', 'exit-order', 'order-delete', 'exit-order', 'check-order-btn',
+      'buy-nav', 'exit', 'prev-img', 'lines', 'delete', 'ctrl', 'img-gallery', 'logo', 'image-home']"
+      :circleColor="'#27f2cb'"
+      :circleColorHover="'#C3EAE3'"
+      :hoverSize="1.8"
+    ></custom-cursor>
   </div>
 </template>
 <script>
@@ -55,8 +64,9 @@ import { mapState, mapActions } from "vuex";
 import Footer from "./components/Footer.vue";
 // import Loader from "./components/Loader.vue";
 import LocalSwitcher from "./components/LocalSwitcher.vue";
+import CustomCursor from './components/CustomCursor'
 export default {
-  components: { Footer, LocalSwitcher },
+  components: { Footer, LocalSwitcher, CustomCursor },
   // Loader,
   data() {
     return {
@@ -107,6 +117,8 @@ export default {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  cursor: none;
+  
 }/*
 h1{
   font-family: 'HortaRegular';
@@ -118,7 +130,6 @@ button {
   border: none;
   background-color: #27f2cb;
   color: #545454;
-  cursor: pointer;
   margin-top: 2rem;
   margin-bottom: 1rem;
   font-size: 2rem;
@@ -161,13 +172,14 @@ select:focus {
   text-align: center;
   color: #545454;
   overflow-x: hidden;
+  background-color: #FFF7F9;
 }
 
 #nav {
   padding: 10px;
   height: 8vh;
   width: 100%;
-  background-color: white;
+  background-color: #FFF7F9;
   position: fixed;
   z-index: 2;
   position: fixed;
@@ -188,10 +200,16 @@ select:focus {
   border-bottom: 1px solid #545454;
   font-weight: 800;
 }
+.fade-enter-active, .fade-leave-active{
+  transition: opacity .3s ease;
+}
+.fade-enter, .fade-leave-to{
+  opacity: 0;
+}
 .nav {
   width: 70%;
   margin-left: 15%;
-  background-color: white;
+  background-color: #FFF7F9;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -211,7 +229,7 @@ select:focus {
   top: 1rem;
   left: 5vw;
   width: 7vw;
-  cursor: pointer;
+  
 }
 .logged-icons {
   position: absolute;

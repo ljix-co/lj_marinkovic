@@ -121,7 +121,7 @@ export default {
   text-align: center;
   font-size: 1.2rem;
   font-weight: 800;
-  color: #27f2cb;
+  color: gray;
   text-decoration: none;
 }
 .pg-col {
@@ -152,7 +152,7 @@ export default {
   width: 70vw;
   height: 60vh;
   margin-top: 10vh;
-  cursor: pointer;
+  
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;

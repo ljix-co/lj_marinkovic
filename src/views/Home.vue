@@ -2,24 +2,31 @@
   <div class="home" v-scroll="scrollEvent">
     <div class="home-nav">
       <div class="nav">
-        <p @click="goToArtworks">{{ $t("home.nav[0].txt") }}</p>
+        <p @click="goToArtworks" class="nav-left">
+          {{ $t("home.nav[0].txt") }}
+        </p>
+      </div>
+      <div class="dec-div">
+        <div class="dec-line"></div>
+        <div class="dec-line"></div>
+        <div class="dec-line"></div>
+        <div class="dec-line"></div>
+        <div class="dec-line"></div>
       </div>
       <div class="nav" v-if="order_web_form === false">
-        <p @click="orderWeb">{{ $t("home.nav[1].txt") }}</p>
+        <p @click="orderWeb" class="nav-left">{{ $t("home.nav[1].txt") }}</p>
       </div>
     </div>
     <div class="start-img" v-if="scrollIndex === 0">
       <img class="img-prof" src="../../public/images/portret.png" alt="" />
     </div>
     <div class="web-img" v-if="scrollIndex === 1">
-      <img class="logo-img" src="../../public/images/mars.svg" alt="" />
-      <img class="logo-img" src="../../public/images/vue_logo.png" alt="" />
-      <img class="logo-img" src="../../public/images/js_logo.png" alt="" />
+      <img class="logo-img" src="../../public/images/webdvlp_home.png" alt="" />
     </div>
     <div class="art-img" v-if="scrollIndex === 2 && order_web_form === false">
       <img
         class="detail-img"
-        src="../../public/images/art_detail_2.png"
+        src="../../public/images/artdtl_home.png"
         alt=""
       />
     </div>
@@ -38,47 +45,68 @@
         <p class="occup">{{ $t("home.subtitle") }}</p>
       </div>
       <div class="content">
-        <div class="category-txt" v-if="scrollIndex === 0">
-          <p class="intro-txt">
-            {{ $t("home.description") }}
-          </p>
-        </div>
-        <div class="category" v-if="scrollIndex === 1">
-          <p class="cat-title">
-            {{ $t("home.categories[1].title") }}
-          </p>
-          <div class="cat-line"></div>
-          <div class="tooltip">
-            <img
-              class="img"
-              src="../../public/images/nat.png"
-              alt=""
-              @click="goToProjects"
-            />
-            <span class="tooltiptxt">{{ $t("tooltips.nav") }}</span>
+        <transition
+          name="up-down"
+          enter-active-class="down-in"
+          leave-active-class="up-leave"
+        >
+          <div class="category-txt" v-if="scrollIndex === 0">
+            <p class="intro-txt">
+              {{ $t("home.description") }}
+            </p>
           </div>
-          <p class="cat-desc">{{ $t("home.web_desc") }}</p>
-        </div>
-        <div class="category" v-if="scrollIndex === 2">
-          <p class="cat-title">{{ $t("home.categories[0].title") }}</p>
-          <div class="cat-line"></div>
-          <div class="tooltip">
-            <img
-              class="img"
-              src="../../public/images/art.png"
-              alt=""
-              @click="goToExhibitions"
-            />
-            <span class="tooltiptxt">{{ $t("tooltips.nav") }}</span>
-          </div>
-          <p class="cat-desc">{{ $t("home.art_desc") }}</p>
-        </div>
+        </transition>
+        <transition
+          name="up-down"
+          :enter-active-class="scrollDirectionIn"
+          :leave-active-class="scrollDirectionLeave"
+        >
+          <div class="category" v-if="scrollIndex === 1">
+            <p class="cat-title">
+              {{ $t("home.categories[1].title") }}
+            </p>
+            <div class="cat-content">
+              <p class="cat-desc">{{ $t("home.web_desc") }}</p>
 
+              <div class="tooltip">
+                <img
+                  class="image-home"
+                  src="../../public/images/nat.png"
+                  alt=""
+                  @click="goToProjects"
+                />
+                <span class="tooltiptxt">{{ $t("tooltips.nav") }}</span>
+              </div>
+            </div>
+          </div>
+        </transition>
+        <transition
+          name="up-down"
+          enter-active-class="up-in"
+          leave-active-class="down-leave"
+        >
+          <div class="category" v-if="scrollIndex === 2">
+            <p class="cat-title">{{ $t("home.categories[0].title") }}</p>
+            <div class="cat-content">
+              <p class="cat-desc">{{ $t("home.art_desc") }}</p>
+
+              <div class="tooltip">
+                <img
+                  class="image-home"
+                  src="../../public/images/art.png"
+                  alt=""
+                  @click="goToExhibitions"
+                />
+                <span class="tooltiptxt">{{ $t("tooltips.nav") }}</span>
+              </div>
+            </div>
+          </div>
+        </transition>
         <div class="scroll">
-          <p class="nav-scroll" v-if="scrollIndex !== 2">
+          <p class="nav-scroll" v-if="scrollIndex !== 2" @click="scroll">
             {{ $t("home.nav[2].txt") }}
           </p>
-          <p class="nav-scroll" v-if="scrollIndex === 2">
+          <p class="nav-scroll" v-if="scrollIndex === 2" @click="scrollBack">
             {{ $t("home.nav[3].txt") }}
           </p>
         </div>
@@ -113,12 +141,10 @@
         <div class="inpt-lbl">
           <label for="">{{ $t("home.inpt_lbl.domain") }}</label>
           <input type="text" v-model="domain" />
-          <!-- </div>
-        <div class="inpt-lbl"> -->
+
           <label for="">{{ $t("home.inpt_lbl.fullname") }}</label>
           <input type="text" v-model="fullname" />
-          <!-- </div>
-        <div class="inpt-lbl"> -->
+
           <label for="">{{ $t("home.inpt_lbl.email") }}</label>
           <input type="text" v-model="email_address" />
         </div>
@@ -134,7 +160,11 @@
       </button>
     </div>
     <wrong v-if="wrong" :message="message" @confirm="exitWrongMssg"></wrong>
-    <confirmation v-if="orderSuccess" :message="message" @confirm="exitConfrmMssg"></confirmation>
+    <confirmation
+      v-if="orderSuccess"
+      :message="message"
+      @confirm="exitConfrmMssg"
+    ></confirmation>
   </div>
 </template>
 
@@ -143,7 +173,8 @@
 import { mapState } from "vuex";
 import axios from "axios";
 import Wrong from "../components/Wrong.vue";
-import Confirmation from '../components/Confirmation.vue';
+import Confirmation from "../components/Confirmation.vue";
+
 export default {
   components: { Wrong, Confirmation },
   name: "Home",
@@ -161,14 +192,17 @@ export default {
       cust_message: "",
       wrong: false,
       emailReg: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-      orderSuccess: false
+      orderSuccess: false,
+      scrollDirectionLeave: "up-leave",
+      scrollDirectionIn: "up-in",
+      componentKey: 0,
     };
   },
 
   methods: {
     exitConfrmMssg() {
       this.orderSuccess = false;
-      this.message = '';
+      this.message = "";
       this.order_web_form = false;
     },
     exitOrderWeb() {
@@ -192,18 +226,47 @@ export default {
       this.order_web_form = true;
       window.scrollTo(0, 0);
     },
+    scroll() {
+      if (this.scrollIndex === 0) {
+        this.scrollIndex = 1;
+        this.scrollDirectionLeave = "up-leave";
+        window.scrollTo(0, 500);
+      } else if (this.scrollIndex === 1) {
+        console.log(this.scrollIndex);
+        this.scrollIndex = 2;
+        console.log(this.scrollIndex);
+        this.scrollDirectionIn = "down-in";
+        window.scrollTo(0, 700);
+      }
+    },
+    scrollBack() {
+      this.scrollIndex = 0;
+      this.scrollDirectionIn = "up-in";
+      // this.lastScrollPosition = 0;
+      window.scrollTo(0, 0);
+    },
     scrollEvent() {
       if (window.scrollY < 150) {
         this.scrollIndex = 0;
-        // this.lastScrollPosition = window.scrollY;
+        this.lastScrollPosition = window.scrollY;
+        // console.log(this.lastScrollPosition);
+        this.scrollDirectionIn = "up-in";
       }
-      if (window.scrollY > 200 && window.scrollY < 490) {
+      if (window.scrollY > 200 && window.scrollY <= 590) {
         this.scrollIndex = 1;
         // this.lastScrollPosition = window.scrollY;
+        if (window.scrollY > this.lastScrollPosition) {
+          this.scrollDirectionLeave = "up-leave";
+        } else {
+          this.scrollDirectionLeave = "down-leave";
+        }
+        this.lastScrollPosition = window.scrollY;
       }
-      if (window.scrollY > 500) {
+
+      if (window.scrollY >= 600) {
         this.scrollIndex = 2;
-        // this.lastScrollPosition = window.scrollY + ',' + window.scrollX;
+        this.lastScrollPosition = window.scrollY;
+        this.scrollDirectionIn = "down-in";
       }
     },
     sendOrder() {
@@ -215,7 +278,6 @@ export default {
         this.message = this.$t("wrong.empty_fields");
         this.wrong = true;
       } else {
-       
         if (this.emailReg.test(this.email_address)) {
           let custFormData = new FormData();
           custFormData.append("cust_fullname", this.fullname);
@@ -235,7 +297,7 @@ export default {
             formData.append("webord_dtldemands", this.cust_message);
             axios.post(this.baseUrl + "web_orders", formData).then((res) => {
               console.log(res);
-              this.message = this.$t('success.web_ord');
+              this.message = this.$t("success.web_ord");
               this.orderSuccess = true;
             });
           });
@@ -259,13 +321,57 @@ export default {
 @import url("https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap");
 @keyframes down_in {
   from {
-    top: -100px;
+    top: -500px;
   }
   to {
     top: 0px;
   }
 }
-
+@keyframes up_in {
+  from {
+    top: 50vh;
+    opacity: 0.1;
+  }
+  to {
+    top: 0;
+  }
+}
+@keyframes up_leave {
+  from {
+    top: 37vh;
+  }
+  to {
+    top: -50vh;
+    opacity: 0.1;
+  }
+}
+@keyframes left_in {
+  from {
+    left: -15vh;
+  }
+  to {
+    left: 0px;
+  }
+}
+@keyframes down_leave {
+  from {
+    top: 37vh;
+  }
+  to {
+    top: 100vh;
+    opacity: 0.1;
+  }
+}
+@keyframes down_in_category {
+  from {
+    top: -50vh;
+    opacity: 0.1;
+  }
+  to {
+    top: 35vh;
+    opacity: 1;
+  }
+}
 h3 {
   margin-top: 1vh;
 }
@@ -283,35 +389,38 @@ select {
 
 .art-img {
   position: fixed;
-  left: 0;
-  top: 20vh;
+  left: -4rem;
+  top: 15vh;
 }
 .btn-send {
   margin-bottom: 5vh;
 }
 .category {
-  width: 55vw;
+  width: 45vw;
   display: flex;
-
+  flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-
+  gap: 1.5rem;
   min-height: 50vh;
   position: fixed;
-  top: 40vh;
-  left: 25vw;
+  top: 35vh;
+  left: 27vw;
+  margin-top: 2vh;
+}
+.cat-content {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 1.5rem;
+  animation: up_in 2s 1;
+  position: relative;
 }
 .cat-desc {
-  width: 25vw;
+  width: 15vw;
   text-align: justify;
-  margin-left: 1rem;
 }
-.cat-line {
-  width: 2px;
-  background-color: #27f2cb;
-  height: 35vh;
-  margin-right: 1rem;
-}
+
 .category-txt {
   width: 40vw;
   display: flex;
@@ -325,21 +434,43 @@ select {
   left: 30vw;
 }
 .cat-title {
-  font-size: 2rem;
+  font-size: 2rem; /*
   transform: rotate(270deg);
   width: 5vw;
-  margin-top: 25vh;
+  margin-top: 25vh;*/
+  font-family: "HortaRegular", cursive;
+  animation: left_in 2s 1;
+  position: relative;
+}
+.dec-div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-left: 2rem;
+}
+.dec-line {
+  height: 50vh;
+  width: 3vw;
+  border-left: 5px dotted #c3eae3;
 }
 .detail-img {
-  width: 15vw;
-  margin-top: 15vh;
-  filter: grayscale(50%);
+  width: 25vw;
   opacity: 0.7;
 }
+.down-in {
+  animation: down_in_category 2s 1;
+}
+.down-leave {
+  animation: down_leave 1s 1;
+}
+
 .f-letter {
   color: #27f2cb;
   font-size: 4.5rem;
   font-family: "HortaRegular", cursive;
+  animation: down_in 1s 1;
+  position: relative;
 }
 .f-name {
   display: flex;
@@ -359,17 +490,17 @@ select {
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  gap: 70vh;
+  gap: 10vh;
 }
-.img {
+.image-home {
   width: 30vw;
+  /*
+  height: 35vh;*/
 
-  height: 35vh;
-  cursor: pointer;
   object-fit: cover;
   /*
 border-radius: 2rem;*/
-  border-bottom: 7px solid #27f2cb;
+  border-bottom: 5px solid #27f2cb;
 }
 .img-prof {
   width: 25vw;
@@ -405,8 +536,8 @@ border-radius: 2rem;*/
 }
 
 .logo-img {
-  width: 10vw;
-  filter: grayscale(30%);
+  width: 25vw;
+
   opacity: 0.8;
 }
 .name {
@@ -426,11 +557,8 @@ border-radius: 2rem;*/
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
-  cursor: pointer;
 }
 .nav-scroll {
-  /*
-  transform: rotate(90deg);*/
   margin-left: -2rem;
   font-size: 1.7rem;
   color: #323131;
@@ -457,8 +585,7 @@ border-radius: 2rem;*/
   justify-content: center;
   margin-top: 15vh;
   position: absolute;
-
-  background-color: white;
+  background-color: #fff7f9;
   border-bottom: 5px solid #27f2cb;
 }
 .pg {
@@ -479,10 +606,13 @@ border-radius: 2rem;*/
   gap: 0;
   position: fixed;
   top: 90vh;
-}
+} /*
+.slide-fade-leave-active {
+  transition: all .1s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}*/
 .start-img {
   position: fixed;
-  left: -4rem;
+  left: -6rem;
   top: 20vh;
 }
 
@@ -497,16 +627,17 @@ border-radius: 2rem;*/
 }
 .tooltip:hover .tooltiptxt {
   visibility: visible;
+} /*
+.up-in{
+ animation: up_in 2s  1;
+}*/
+.up-leave {
+  animation: up_leave 1s 1;
 }
 .web-img {
   position: fixed;
-  top: 30vh;
-  left: 5rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
+  top: 15vh;
+  left: -4rem;
 }
 .web-title {
   text-align: center;
@@ -515,7 +646,7 @@ border-radius: 2rem;*/
   align-items: center;
   justify-content: center;
   border-bottom: 2px solid #27f2cb;
-  width: 35vw;
+  width: 50vw;
 
   position: fixed;
   top: 20vh;

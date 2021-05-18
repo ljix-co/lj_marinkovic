@@ -27,6 +27,7 @@
         <div v-for="(image, index) in images" :key="index">
           <div  v-lazyload class="tooltip">
             <img
+            class="img-gallery"
               :data-url="image.img_path"
               alt=""
               @click="showLarge(image, index)"
@@ -161,7 +162,7 @@ img {
   /* object-fit: contain; */
   margin-left: 1rem;
   margin-bottom: 0.7rem;
-  cursor: pointer;
+ 
   /* align-self: space; */
   min-height: 200px;
 }
@@ -216,7 +217,7 @@ img {
   position: fixed;
   left: 2vw;
   top: 1.2rem;
-  cursor: pointer;
+
   z-index: 2;
   color: #27f2cb;
 }
