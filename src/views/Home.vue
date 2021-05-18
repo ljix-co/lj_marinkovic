@@ -1,164 +1,179 @@
 <template>
   <div class="home" v-scroll="scrollEvent">
-    <div class="home-nav">
-      <div class="nav">
-        <p @click="goToArtworks" class="nav-left">
-          {{ $t("home.nav[0].txt") }}
-        </p>
-      </div>
-      <div class="dec-div">
-        <div class="dec-line"></div>
-        <div class="dec-line"></div>
-        <div class="dec-line"></div>
-        <div class="dec-line"></div>
-        <div class="dec-line"></div>
-      </div>
-      <div class="nav" v-if="order_web_form === false">
-        <p @click="orderWeb" class="nav-left">{{ $t("home.nav[1].txt") }}</p>
-      </div>
-    </div>
-    <div class="start-img" v-if="scrollIndex === 0">
-      <img class="img-prof" src="../../public/images/portret.png" alt="" />
-    </div>
-    <div class="web-img" v-if="scrollIndex === 1">
-      <img class="logo-img" src="../../public/images/webdvlp_home.png" alt="" />
-    </div>
-    <div class="art-img" v-if="scrollIndex === 2 && order_web_form === false">
-      <img
-        class="detail-img"
-        src="../../public/images/artdtl_home.png"
-        alt=""
-      />
-    </div>
-    <div class="pg" v-if="order_web_form === false">
-      <div class="web-title">
-        <div class="name-div">
-          <div class="f-name">
-            <p class="f-letter">LJ</p>
-            <p class="name">ILJANA</p>
-          </div>
-          <div class="f-name">
-            <p class="f-letter">M</p>
-            <p class="name">ARINKOVIĆ</p>
-          </div>
-        </div>
-        <p class="occup">{{ $t("home.subtitle") }}</p>
-      </div>
-      <div class="content">
-        <transition
-          name="up-down"
-          enter-active-class="down-in"
-          leave-active-class="up-leave"
-        >
-          <div class="category-txt" v-if="scrollIndex === 0">
-            <p class="intro-txt">
-              {{ $t("home.description") }}
+    <transition name="fade">
+      <div class="pg" v-if="order_web_form === false">
+        <div class="home-nav">
+          <div class="nav">
+            <p @click="goToArtworks" class="nav-left">
+              {{ $t("home.nav[0].txt") }}
             </p>
           </div>
-        </transition>
-        <transition
-          name="up-down"
-          :enter-active-class="scrollDirectionIn"
-          :leave-active-class="scrollDirectionLeave"
-        >
-          <div class="category" v-if="scrollIndex === 1">
-            <p class="cat-title">
-              {{ $t("home.categories[1].title") }}
+          <div class="dec-div">
+            <div class="dec-line"></div>
+            <div class="dec-line"></div>
+            <div class="dec-line"></div>
+            <div class="dec-line"></div>
+            <div class="dec-line"></div>
+          </div>
+          <div class="nav" v-if="order_web_form === false">
+            <p @click="orderWeb" class="nav-left">
+              {{ $t("home.nav[1].txt") }}
             </p>
-            <div class="cat-content">
-              <p class="cat-desc">{{ $t("home.web_desc") }}</p>
-
-              <div class="tooltip">
-                <img
-                  class="image-home"
-                  src="../../public/images/nat.png"
-                  alt=""
-                  @click="goToProjects"
-                />
-                <span class="tooltiptxt">{{ $t("tooltips.nav") }}</span>
-              </div>
-            </div>
           </div>
-        </transition>
-        <transition
-          name="up-down"
-          enter-active-class="up-in"
-          leave-active-class="down-leave"
+        </div>
+
+        <div class="start-img" v-if="scrollIndex === 0">
+          <img class="img-prof" src="../../public/images/portret.png" alt="" />
+        </div>
+        <div class="web-img" v-if="scrollIndex === 1">
+          <img
+            class="logo-img"
+            src="../../public/images/webdvlp_home.png"
+            alt=""
+          />
+        </div>
+        <div
+          class="art-img"
+          v-if="scrollIndex === 2 && order_web_form === false"
         >
-          <div class="category" v-if="scrollIndex === 2">
-            <p class="cat-title">{{ $t("home.categories[0].title") }}</p>
-            <div class="cat-content">
-              <p class="cat-desc">{{ $t("home.art_desc") }}</p>
+          <img
+            class="detail-img"
+            src="../../public/images/artdtl_home.png"
+            alt=""
+          />
+        </div>
 
-              <div class="tooltip">
-                <img
-                  class="image-home"
-                  src="../../public/images/art.png"
-                  alt=""
-                  @click="goToExhibitions"
-                />
-                <span class="tooltiptxt">{{ $t("tooltips.nav") }}</span>
-              </div>
+        <div class="web-title">
+          <div class="name-div">
+            <div class="f-name">
+              <p class="f-letter">LJ</p>
+              <p class="name">ILJANA</p>
+            </div>
+            <div class="f-name">
+              <p class="f-letter">M</p>
+              <p class="name">ARINKOVIĆ</p>
             </div>
           </div>
-        </transition>
-        <div class="scroll">
-          <p class="nav-scroll" v-if="scrollIndex !== 2" @click="scroll">
-            {{ $t("home.nav[2].txt") }}
-          </p>
-          <p class="nav-scroll" v-if="scrollIndex === 2" @click="scrollBack">
-            {{ $t("home.nav[3].txt") }}
-          </p>
+          <p class="occup">{{ $t("home.subtitle") }}</p>
+        </div>
+        <div class="content">
+          <transition
+            name="up-down"
+            enter-active-class="down-in"
+            leave-active-class="up-leave"
+          >
+            <div class="category-txt" v-if="scrollIndex === 0">
+              <p class="intro-txt">
+                {{ $t("home.description") }}
+              </p>
+            </div>
+          </transition>
+          <transition
+            name="up-down"
+            :enter-active-class="scrollDirectionIn"
+            :leave-active-class="scrollDirectionLeave"
+          >
+            <div class="category" v-if="scrollIndex === 1">
+              <p class="cat-title">
+                {{ $t("home.categories[1].title") }}
+              </p>
+              <div class="cat-content">
+                <p class="cat-desc">{{ $t("home.web_desc") }}</p>
+
+                <div class="tooltip">
+                  <img
+                    class="image-home"
+                    src="../../public/images/nat.png"
+                    alt=""
+                    @click="goToProjects"
+                  />
+                  <span class="tooltiptxt">{{ $t("tooltips.nav") }}</span>
+                </div>
+              </div>
+            </div>
+          </transition>
+          <transition
+            name="up-down"
+            enter-active-class="up-in"
+            leave-active-class="down-leave"
+          >
+            <div class="category" v-if="scrollIndex === 2">
+              <p class="cat-title">{{ $t("home.categories[0].title") }}</p>
+              <div class="cat-content">
+                <p class="cat-desc">{{ $t("home.art_desc") }}</p>
+
+                <div class="tooltip">
+                  <img
+                    class="image-home"
+                    src="../../public/images/art.png"
+                    alt=""
+                    @click="goToExhibitions"
+                  />
+                  <span class="tooltiptxt">{{ $t("tooltips.nav") }}</span>
+                </div>
+              </div>
+            </div>
+          </transition>
+          <div class="scroll">
+            <p class="nav-scroll" v-if="scrollIndex !== 2" @click="scroll">
+              {{ $t("home.nav[2].txt") }}
+            </p>
+            <p class="nav-scroll" v-if="scrollIndex === 2" @click="scrollBack">
+              {{ $t("home.nav[3].txt") }}
+            </p>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="order-form" v-if="order_web_form">
-      <h1 class="order-title">{{ $t("home.order_title") }}</h1>
-      <i class="fas fa-times order-exit" @click="exitOrderWeb"></i>
-      <div class="instr">
-        <p>{{ $t("home.order_instr") }}</p>
-      </div>
-      <div class="inpts">
-        <div class="inpt-lbl">
-          <label for="">{{ $t("home.inpt_lbl.website_type") }}</label>
-          <select name="" id="opt-web-type" ref="optWebType">
-            <option
-              class="opt-web-type"
-              v-for="(i, index) in web_types_index_arr"
-              :key="'w' + index"
-              :value="$t(`home.website_types[${i}].type`)"
-            >
-              {{ $t(`home.website_types[${i}].type`) }}
-            </option>
-          </select>
-
-          <label for="">{{ $t("home.inpt_lbl.photo-editing") }}</label>
-          <select name="" id="" ref="optPhotoEdit">
-            <option value="1">{{ $t("select.yes") }}</option>
-            <option value="0">{{ $t("select.no") }}</option>
-          </select>
+    </transition>
+    <transition name="fade" enter-active-class="down-in-order">
+      <div class="order-form" v-if="order_web_form">
+        <h1 class="order-title">{{ $t("home.order_title") }}</h1>
+        <i class="fas fa-times order-exit" @click="exitOrderWeb"></i>
+        <div class="instr">
+          <p>{{ $t("home.order_instr") }}</p>
         </div>
-        <div class="inpt-lbl">
-          <label for="">{{ $t("home.inpt_lbl.domain") }}</label>
-          <input type="text" v-model="domain" />
+        <div class="inpts">
+          <div class="inpt-lbl">
+            <label for="">{{ $t("home.inpt_lbl.website_type") }}</label>
+            <select name="" id="opt-web-type" ref="optWebType">
+              <option
+                class="opt-web-type"
+                v-for="(i, index) in web_types_index_arr"
+                :key="'w' + index"
+                :value="$t(`home.website_types[${i}].type`)"
+              >
+                {{ $t(`home.website_types[${i}].type`) }}
+              </option>
+            </select>
 
-          <label for="">{{ $t("home.inpt_lbl.fullname") }}</label>
-          <input type="text" v-model="fullname" />
+            <label for="">{{ $t("home.inpt_lbl.photo-editing") }}</label>
+            <select name="" id="" ref="optPhotoEdit">
+              <option value="1">{{ $t("select.yes") }}</option>
+              <option value="0">{{ $t("select.no") }}</option>
+            </select>
+          </div>
+          <div class="inpt-lbl">
+            <label for="">{{ $t("home.inpt_lbl.domain") }}</label>
+            <input type="text" v-model="domain" />
 
-          <label for="">{{ $t("home.inpt_lbl.email") }}</label>
-          <input type="text" v-model="email_address" />
+            <label for="">{{ $t("home.inpt_lbl.fullname") }}</label>
+            <input type="text" v-model="fullname" />
+
+            <label for="">{{ $t("home.inpt_lbl.email") }}</label>
+            <input type="text" v-model="email_address" />
+          </div>
         </div>
+        <div class="instr">
+          <p>{{ $t("home.send_email") }}</p>
+        </div>
+        <div class="editor">
+          <vue-editor v-model="cust_message"></vue-editor>
+        </div>
+        <button class="btn-send" @click="sendOrder">
+          {{ $t("buttons.send") }}
+        </button>
       </div>
-      <div class="instr">
-        <p>{{ $t("home.send_email") }}</p>
-      </div>
-      <div class="editor">
-        <vue-editor v-model="cust_message"></vue-editor>
-      </div>
-      <button class="btn-send" @click="sendOrder">
-        {{ $t("buttons.send") }}
-      </button>
-    </div>
+    </transition>
     <wrong v-if="wrong" :message="message" @confirm="exitWrongMssg"></wrong>
     <confirmation
       v-if="orderSuccess"
@@ -372,6 +387,16 @@ export default {
     opacity: 1;
   }
 }
+@keyframes down_in_order {
+  from {
+    top: -50vh;
+    opacity: 0.1;
+  }
+  to {
+    top: 0;
+    opacity: 1;
+  }
+}
 h3 {
   margin-top: 1vh;
 }
@@ -385,6 +410,7 @@ select {
   width: 15vw;
   height: 5vh;
   border-radius: 10px;
+  text-align: center;
 }
 
 .art-img {
@@ -461,6 +487,9 @@ select {
 .down-in {
   animation: down_in_category 2s 1;
 }
+.down-in-order {
+  animation: down_in_order 2s 1;
+}
 .down-leave {
   animation: down_leave 1s 1;
 }
@@ -478,7 +507,7 @@ select {
   justify-content: center;
 }
 .home {
-  height: 1500px;
+  height: 1300px;
 }
 .home-nav {
   position: fixed;
@@ -510,15 +539,15 @@ border-radius: 2rem;*/
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
-  justify-content: center;
-  gap: 5vw;
+  justify-content: flex-start;
+  gap: 10vw;
 }
 .inpt-lbl {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  width: 15vw;
+  width: 20vw;
   gap: 1rem;
 }
 .instr {
@@ -571,22 +600,27 @@ border-radius: 2rem;*/
 }
 .order-exit {
   position: absolute;
-  top: 0;
-  left: 80vw;
+  top: 1rem;
+  left: 55vw;
   font-size: 3rem;
-  cursor: pointer;
+  
 }
 .order-form {
-  width: 100vw;
-
+  width: 60vw;
+  left: 20vw;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   margin-top: 15vh;
   position: absolute;
-  background-color: #fff7f9;
-  border-bottom: 5px solid #27f2cb;
+  background-color: #F9FFF7;
+  border: 2px solid #27f2cb;
+}
+.order-title{
+  margin-top: 2rem;
+  font-family: "HortaRegular", cursive;
+  font-size: 3rem;
 }
 .pg {
   display: flex;

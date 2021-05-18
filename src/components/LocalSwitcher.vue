@@ -8,7 +8,7 @@
       
     >
     <div class="lang" v-if="currentLang !== lang.lang">
-      <img :src="lang.flag" alt="" />
+      <img class="flag" :src="lang.flag" alt="" />
      
       </div>
     </div>

@@ -52,7 +52,7 @@
     </footer>
      <custom-cursor
       :targets="[ 'a', 'button', 'i', 'nav-left', 'nav-scroll', 'order-nav', 'dtls-nav', 'order-exit', 'exit-order', 'order-delete', 'exit-order', 'check-order-btn',
-      'buy-nav', 'exit', 'prev-img', 'lines', 'delete', 'ctrl', 'img-gallery', 'logo', 'image-home']"
+      'buy-nav', 'exit', 'prev-img', 'lines', 'delete', 'ctrl', 'img-gallery', 'logo', 'image-home', 'flag']"
       :circleColor="'#27f2cb'"
       :circleColorHover="'#C3EAE3'"
       :hoverSize="1.8"
@@ -141,7 +141,7 @@ input {
   height: 5vh;
   border-radius: 10px;
   border: none;
-  background-color: #dee0e0;
+  background-color: #bebebe;
   font-size: 1.2rem;
   font-family: "Forum", cursive;
   text-align: center;
