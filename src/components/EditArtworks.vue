@@ -44,7 +44,7 @@
           <input v-model="artform_rs" type="text" placeholder="Artform(RS)" />
           <input v-model="price" type="number" placeholder="Price" />
           <input v-model="year" type="number" placeholder="Year" />
-         
+
           <div class="selects">
             <label for="for-sale">For sale?</label>
             <select v-model="forSale" id="for-sale" @change="updateForSale">
@@ -61,7 +61,7 @@
         <div class="imgs">
           <div class="cover">
             <h2>Cover</h2>
-            <label for="cover">
+            <label for="cover" v-if="coverUrl === ''">
               <i class="far fa-edit edit-icon"></i>
             </label>
             <input type="file" id="cover" @change="getCover" hidden />
@@ -72,7 +72,7 @@
               v-if="coverUrl === ''"
             />
             <div class="" v-if="coverUrl !== ''">
-              <i class="fas fa-trash-alt" @click="deleteNewCover()"></i>
+              <i class="fas fa-trash-alt delete-cover" @click="deleteNewCover()"></i>
             </div>
             <img
               class="cover-img"
@@ -81,11 +81,27 @@
               v-if="coverUrl !== ''"
             />
           </div>
-          <div class="dtls" >
-          <div class="dtl-images" v-for="(img, index) in dtl_images" :key="'img' + index">
-          <i class="fas fa-trash-alt" @click="deleteDtlImg(img)"></i>
-          <img class="cover-img" :src="img.img_image" alt="">
+          <div class="add-dtl-imgs-div">
+            <h2>Add images of details</h2>
+            <div class="add-dtl-imgs">
+              <label for="add-img" class="add-img">
+                <i class="fas fa-plus add-icon"></i>
+              </label>
+              <input id="add-img" type="file" hidden @change="addDtlImg" />
+            </div>
           </div>
+          <div class="dtls">
+            <div
+              class="dtl-images"
+              v-for="(img, index) in dtl_images"
+              :key="'img' + index"
+            >
+              <i
+                class="fas fa-trash-alt delete-img-dtl"
+                @click="deleteDtlImg(img)"
+              ></i>
+              <img class="cover-img" :src="img.img_image" alt="" />
+            </div>
           </div>
         </div>
         <button @click="submitChanges()">SUBMIT</button>
@@ -120,25 +136,53 @@ export default {
       cover: new Object(),
       newCover: "",
       coverUrl: "",
-      dtl_images: []
+      dtl_images: [],
     };
   },
   methods: {
+    addDtlImg(e) {
+      let image = e.target.files[0];
+      let formData = new FormData();
+      formData.append("sid", localStorage.getItem("sid"));
+      formData.append("artwork_id", this.id);
+      formData.append("img_image", image);
+      axios.post(this.baseUrl + "images", formData).then((res) => {
+        console.log(res);
+        this.dtl_images = [];
+        axios
+          .get(this.baseUrl + "images", {
+            params: { artwork_id: this.id },
+          })
+          .then((res) => {
+            console.log(res);
+            for (let i = 0; i < res.data.data.length; i++) {
+              this.dtl_images.push({
+                img_id: res.data.data[i].img_id,
+                img_image: res.data.data[i].img_path,
+              });
+            }
+          });
+      });
+    },
     deleteArtwork(art) {
       this.$emit("delete-artwork", art);
     },
     deleteDtlImg(img) {
-      axios.delete(this.baseUrl + 'images', {params: {
-        sid: localStorage.getItem('sid'),
-        img_id: img.img_id
-      }}).then(res => {
-        console.log(res)
-        for(let i = 0; i < this.dtl_images.length; i++) {
-          if(img === this.dtl_images[i]) {
-            this.dtl_images.splice(i ,1);
+      axios
+        .delete(this.baseUrl + "images", {
+          params: {
+            sid: localStorage.getItem("sid"),
+            img_id: img.img_id,
+          },
+        })
+        .then((res) => {
+          console.log(res);
+          for (let i = 0; i < this.dtl_images.length; i++) {
+            if (img === this.dtl_images[i]) {
+              this.dtl_images.splice(i, 1);
+            }
           }
-        }
-      })
+        });
     },
     deleteNewCover() {
       this.newCover = "";
@@ -160,7 +204,7 @@ export default {
       this.cover.path = art.artwork_imgpath;
       this.price = art.artwork_price;
       this.year = art.artwork_year;
-     
+
       this.forSale = art.artwork_forsale;
       this.sold = art.artwork_sold;
       if (this.forSale === null) {
@@ -192,10 +236,12 @@ export default {
       this.newCover = e.target.files[0];
       this.coverUrl = URL.createObjectURL(this.newCover);
     },
+
     goBack() {
       this.$emit("go-back");
     },
     submitChanges() {
+      // console.log(this.newCover)
       let updatedArtwork = {
         id: this.id,
         title: this.title,
@@ -208,7 +254,7 @@ export default {
         artform_rs: this.artform_rs,
         price: this.price,
         year: this.year,
-        
+        coverphoto: this.newCover,
         forSale: this.forSale,
         sold: this.sold,
       };
@@ -240,13 +286,41 @@ h1 {
   position: absolute;
   top: 5vh;
   font-size: 3rem;
+  font-family: "HortaRegular", cursive;
+}
+h2{
+font-family: "HortaRegular", cursive;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+.add-dtl-imgs {
+  width: 10vw;
+  height: 10vw;
+  border: 5px solid #27f2cb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.add-icon {
+  font-size: 3rem;
 }
 .cover-img {
-  width: 15vw;
+  width: 20vw;
+  height: 30vh;
+  object-fit: contain;
+  background-color: #7e7e7e;
+}
+.delete-cover{
+color: #f55977;
+font-size: 2rem;
+position: absolute;
+margin-left: 11vw;
+}
+.delete-img {
+  color: #f55977;
 }
 .delete-img-div {
   position: absolute;
-  background-color: white;
   width: 3rem;
   height: 2.5rem;
   font-size: 2rem;
@@ -259,25 +333,31 @@ h1 {
   cursor: pointer;
   z-index: 1;
 }
-.dtls{
-display: flex;
-flex-wrap: wrap;
-align-items: flex-start;
-justify-content: flex-start;
-width: 60vw;
-gap: 1rem;
+.delete-img-dtl {
+  position: absolute;
+  font-size: 1.8rem;
+  margin-left: 18vw;
+  margin-top: 1vh;
+  color: #f55977;
+}
+.dtls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  width: 60vw;
+  gap: 1rem;
 }
 .edit {
   top: 5vh;
-
-  box-shadow: 0px 5px 15px 2px rgba(0, 0, 0, 0.48);
+  border: 2px solid #27f2cb;
   width: 80vw;
-  height: 150vh;
+  height: fit-content;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: white;
+  background-color: #f9fff7;
   position: absolute;
 }
 
@@ -298,12 +378,17 @@ gap: 1rem;
   align-items: center;
   justify-content: center;
 }
+.edit-icon {
+  font-size: 2rem;
+  position: absolute;
+  margin-left: 21vw;
+  color: #27f2cb;
+}
 .exit {
   position: absolute;
-  top: 5vh;
+  top: 9vh;
   left: 70vw;
   font-size: 3rem;
-  cursor: pointer;
 }
 .fade {
   opacity: 0.1;
@@ -318,16 +403,17 @@ gap: 1rem;
 }
 .icon {
   font-size: 1.5rem;
-  cursor: pointer;
+  position: absolute;
+  margin-left: 22vw;
+  color: #545454;
 }
 .imgs {
-  width: 80vw;
-  height: 40vh;
+  width: 60vw;
   display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
   margin-top: 5vh;
-  margin-left: 15vw;
   gap: 10vw;
 }
 .inpts {
@@ -335,20 +421,23 @@ gap: 1rem;
   flex-wrap: wrap;
   align-items: flex-start;
   justify-content: flex-start;
-  margin-left: 15vw;
-  margin-top: 2rem;
+  margin-left: 20vw;
+  margin-top: 30vh;
   width: 80vw;
   gap: 1rem;
 }
 .prev-img {
   width: 25vw;
+  height: 30vh;
+  object-fit: contain;
+  background-color: #7e7e7e;
 }
 .prev-div {
   width: 25vw;
   margin-left: 2rem;
   margin-bottom: 2rem;
-  box-shadow: 0px 5px 15px 2px rgba(0, 0, 0, 0.48);
   height: fit-content;
+  background-color: #ced0d1;
 }
 .prev-desc {
   display: flex;

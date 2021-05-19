@@ -32,10 +32,9 @@ export default {
       this.y = $e.clientY;
       // cursor circle
       const circle = this.$refs.customCursorCircle;
-      
+
       this.circlePosX = this.x - circle.clientWidth / 2;
       this.circlePosY = this.y - circle.clientWidth / 2;
-      
 
       //change style when hovering on selected targets
       if (
@@ -46,9 +45,9 @@ export default {
         this.scale = this.hoverSize;
         this.circleStyle = {
           borderColor: this.circleColorHover,
-          borderStyle: 'solid',
-          borderWidth: "2px",
-          backgroundColor: 'transparent'
+          borderStyle: "solid",
+          borderWidth: "1px",
+          backgroundColor: "transparent",
         };
       } else {
         this.scale = 1;
@@ -57,6 +56,15 @@ export default {
       //move custom cursor
       circle.style.transform = `translate(${this.circlePosX}px,${this.circlePosY}px) scale(${this.scale})`;
       //   dot.style.transform = `translate(${this.dotPosX}px,${this.dotPosY}px)`;
+
+      document.addEventListener("mouseleave", () => {
+        const circle = this.$refs.customCursorCircle;
+        circle.style.visibility = "hidden";
+      });
+      document.addEventListener("mouseenter", () => {
+        const circle = this.$refs.customCursorCircle;
+        circle.style.visibility = "visible";
+      });
     },
   },
   mounted() {
@@ -76,8 +84,8 @@ $ease: cubic-bezier(0.23, 1, 0.32, 1);*/
   cursor: none;
   top: 0;
   left: 0;
-  width: 2rem;
-  height: 2rem;/*
+  width: 1rem;
+  height: 1rem; /*
   border: 7px solid #27f2cb;*/
   background-color: #27f2cb;
   border-radius: 50%;

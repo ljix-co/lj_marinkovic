@@ -7,7 +7,7 @@
   >
     <div class="left-side" :class="{ 'left-side-artwork': artworks_page }">
    
-      <div class="lines" @click="prevImg()">
+      <div class="lines" @click="prevImg()" :class="{'fade': images.length == 1}">
       <div class="trq-left-line"></div>
       <div class="gry-left-line"></div>
       </div>
@@ -31,7 +31,7 @@
     
     </div>
     <div class="right-side" :class="{ 'right-side-artwork': artworks_page }">
-      <div class="lines" @click="nextImg()">
+      <div class="lines" @click="nextImg()" :class="{'fade': images.length == 1}">
       <div class="trq-right-line"></div>
       <div class="gry-right-line"></div>
       </div>
@@ -163,7 +163,7 @@ export default {
   width: 50vw;
   height: 75vh;
   object-fit: contain;
-  background-color: #ebefef;
+  background-color: #A6A6A6;
   align-self: center;
   border-bottom: 5px solid #27f2cb;
  
@@ -197,6 +197,9 @@ export default {
 }
 .exit-div {
   visibility: hidden;
+}
+.fade{
+opacity: .1;
 }
 .gry-left-line{
 width: 3vw;

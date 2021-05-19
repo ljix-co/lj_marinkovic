@@ -556,6 +556,7 @@ export default {
       this.editObject.coverphoto_path = project.coverphoto_path;
       this.editObject.yearfinish = project.proj_year;
       this.editObject.coverphoto = project.proj_coverphoto;
+      this.editObject.proj_link = project.proj_link;
       this.editObject.type = "project";
 
       axios
@@ -614,11 +615,26 @@ export default {
             if (artwork.artwork_title !== updatedArtwork.title) {
               formData.append("artwork_title", updatedArtwork.title);
             }
+             if (artwork.artwork_title_rs !== updatedArtwork.title_rs) {
+              formData.append("artwork_title_rs", updatedArtwork.title_rs);
+            }
             if (artwork.artwork_material !== updatedArtwork.material) {
               formData.append("artwork_material", updatedArtwork.material);
             }
+              if (artwork.artwork_material_rs !== updatedArtwork.material_rs) {
+              formData.append("artwork_material_rs", updatedArtwork.material_rs);
+            }
             if (artwork.artwork_technique !== updatedArtwork.technique) {
               formData.append("artwork_technique", updatedArtwork.technique);
+            }
+            if (artwork.artwork_technique_rs !== updatedArtwork.technique_rs) {
+              formData.append("artwork_technique_rs", updatedArtwork.technique_rs);
+            }
+            if (artwork.artwork_artform !== updatedArtwork.artform) {
+              formData.append("artwork_artform", updatedArtwork.artform);
+            }
+            if (artwork.artwork_artform_rs !== updatedArtwork.artform_rs) {
+              formData.append("artwork_artform_rs", updatedArtwork.artform_rs);
             }
             if (artwork.artwork_price !== updatedArtwork.price) {
               formData.append("artwork_price", updatedArtwork.price);
@@ -631,6 +647,11 @@ export default {
             }
             if (artwork.artwork_forsale !== updatedArtwork.forSale) {
               formData.append("artwork_forsale", updatedArtwork.forSale);
+            }
+            // console.log(updatedArtwork.coverphoto)
+              if (artwork.artwork_coverphoto !== updatedArtwork.coverphoto) {
+              formData.append("artwork_coverphoto", updatedArtwork.coverphoto);
+              // console.log(updatedArtwork.coverphoto)
             }
             axios.patch(this.baseUrl + "artworks", formData).then((res) => {
               console.log(res);
@@ -653,32 +674,35 @@ export default {
     submitEdit(editedObject) {
       this.message = "Are you sure you want to submit these changes?";
       this.warning = true;
-      console.log(this.editObject.yearstart);
-      console.log(editedObject.yearStart);
+      // console.log(this.editObject.yearstart);
+      // console.log(editedObject.yearStart);
       if (this.editObject.type === "project") {
         this.confirmEditFunction = function () {
           let formData = new FormData();
           formData.append("sid", localStorage.getItem("sid"));
           formData.append("proj_id", this.editObject.id);
 
-          if (editedObject.title != this.editObject.title) {
+          if (editedObject.title !== this.editObject.title) {
             formData.append("proj_title", editedObject.title);
           }
-          if (editedObject.desc != this.editObject.description) {
+          if (editedObject.desc !== this.editObject.description) {
             formData.append("proj_desc", editedObject.desc);
           }
-          if (editedObject.title_rs != this.editObject.title_rs) {
+          if (editedObject.title_rs !== this.editObject.title_rs) {
             formData.append("proj_title_rs", editedObject.title_rs);
           }
-          if (editedObject.desc_rs != this.editObject.description_rs) {
+          if (editedObject.desc_rs !== this.editObject.description_rs) {
             formData.append("proj_desc_rs", editedObject.desc_rs);
           }
 
-          if (editedObject.yearFinish != this.editObject.yearfinish) {
+          if (editedObject.yearFinish !== this.editObject.yearfinish) {
             formData.append("proj_year", editedObject.yearFinish);
           }
-          if (editedObject.newCover != this.editObject.coverphoto) {
+          if (editedObject.newCover !== this.editObject.coverphoto) {
             formData.append("proj_coverphoto", editedObject.newCover);
+          }
+          if (editedObject.proj_link !== this.editObject.proj_link) {
+            formData.append("proj_link", editedObject.proj_link);
           }
           axios.patch(this.baseUrl + "projects", formData).then((res) => {
             console.log(res);
@@ -692,40 +716,40 @@ export default {
           formData.append("sid", localStorage.getItem("sid"));
           formData.append("exh_id", this.editObject.id);
 
-          if (editedObject.title != this.editObject.title) {
+          if (editedObject.title !== this.editObject.title) {
             formData.append("exh_title", editedObject.title);
           }
-          if (editedObject.desc != this.editObject.description) {
+          if (editedObject.desc !== this.editObject.description) {
             formData.append("exh_desc", editedObject.desc);
           }
-          if (editedObject.rev != this.editObject.review) {
+          if (editedObject.rev !== this.editObject.review) {
             formData.append("exh_rec", editedObject.rev);
           }
-          if (editedObject.place != this.editObject.place) {
+          if (editedObject.place !== this.editObject.place) {
             formData.append("exh_place", editedObject.place);
           }
-          if (editedObject.title_rs != this.editObject.title_rs) {
+          if (editedObject.title_rs !== this.editObject.title_rs) {
             formData.append("exh_title_rs", editedObject.title_rs);
           }
-          if (editedObject.desc_rs != this.editObject.description_rs) {
+          if (editedObject.desc_rs !== this.editObject.description_rs) {
             formData.append("exh_desc_rs", editedObject.desc_rs);
           }
-          if (editedObject.rev_rs != this.editObject.review_rs) {
+          if (editedObject.rev_rs !== this.editObject.review_rs) {
             formData.append("exh_rec_rs", editedObject.rev_rs);
           }
-          if (editedObject.place_rs != this.editObject.place_rs) {
+          if (editedObject.place_rs !== this.editObject.place_rs) {
             formData.append("exh_place_rs", editedObject.place_rs);
           }
-          if (editedObject.exhType != this.editObject.exhtype) {
+          if (editedObject.exhType !== this.editObject.exhtype) {
             formData.append("exh_type", editedObject.exhType);
           }
-          if (editedObject.yearStart != this.editObject.yearstart) {
+          if (editedObject.yearStart !== this.editObject.yearstart) {
             formData.append("exh_date_start", editedObject.yearStart);
           }
-          if (editedObject.yearFinish != this.editObject.yearfinish) {
+          if (editedObject.yearFinish !== this.editObject.yearfinish) {
             formData.append("exh_date_finish", editedObject.yearFinish);
           }
-          if (editedObject.newCover != this.editObject.coverphoto) {
+          if (editedObject.newCover !== this.editObject.coverphoto) {
             formData.append("exh_coverphoto", editedObject.newCover);
           }
           axios.patch(this.baseUrl + "exhibitions", formData).then((res) => {

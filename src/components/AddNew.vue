@@ -112,7 +112,7 @@
             class="gallery-img"
             :data-url="img.img_path"
             alt=""
-            src="../../public/images/placeholder_photo_l.gif"
+            src="../../public/images/placeholder.gif"
           />
         </div>
       </div>

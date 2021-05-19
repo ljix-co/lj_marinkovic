@@ -37,6 +37,10 @@
           <h1>Solo/group:</h1>
           <input class="e-title" v-model="exhType" />
         </div>
+         <div class="edit-content" v-if="editObject.type === 'project'">
+          <h1>Link:</h1>
+          <input class="e-title" v-model="proj_link" />
+        </div>
         <div class="cover-img-div">
           <!-- ADD NEW COVER -->
           <div class="add-cover" v-if="cover">
@@ -125,7 +129,7 @@
               class="gallery-img"
               :data-url="img.img_path"
               alt=""
-              src="../../public/images/placeholder_photo_l.gif"
+              src="../../public/images/placeholder.gif"
             />
           </div>
         </div>
@@ -154,7 +158,7 @@ export default {
       place: this.editObject.place,
       place_rs: this.editObject.place_rs,
       exhType: this.editObject.exhtype,
-      placeholderImg: "../../public/images/placeholder_photo.jpg",
+      placeholderImg: "../../public/images/placeholder.gif",
       url: "",
       newCover: this.editObject.coverphoto,
       newImgUrl: "",
@@ -163,6 +167,7 @@ export default {
       edit_desc_rs: "",
       edit_rev_en: "",
       edit_rev_rs: "",
+      proj_link: this.editObject.proj_link
     };
   },
   methods: {
@@ -230,6 +235,7 @@ export default {
         place: this.place,
         place_rs: this.place_rs,
         exhType: this.exhType,
+        proj_link: this.proj_link
       };
 
       // this.editObject.images = this.newImages;

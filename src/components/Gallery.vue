@@ -31,7 +31,7 @@
               :data-url="image.img_path"
               alt=""
               @click="showLarge(image, index)"
-              src="../../public/images/placeholder_photo_l.gif"
+              src="../../public/images/placeholder.gif"
             />
             <span class="tooltiptxt">{{ $t("tooltips.nav-gallery") }}</span>
           </div>

@@ -1,51 +1,68 @@
 <template>
   <div class="artworks">
     <photo-slider
+      :class="{ fade: show_order_list }"
       class="photo-slider"
       :key="'p' + componentKey"
       v-if="images.length > 0"
       :images="images"
     ></photo-slider>
     <div class="buy-nav-div">
-      <p class="buy-nav" @click="showInstr" v-if="how_to_buy === false">
-        {{ $t("artworks.nav.how_to_buy") }}
-      </p>
-      <i class="fas fa-times exit" @click="hideInstr" v-if="how_to_buy"></i>
+      <transition name="fade">
+        <p class="buy-nav" @click="showInstr" v-if="how_to_buy === false">
+          {{ $t("artworks.nav.how_to_buy") }}
+        </p>
+      </transition>
+      <transition name="fade">
+        <i class="fas fa-times exit" @click="hideInstr" v-if="how_to_buy"></i>
+      </transition>
     </div>
+
     <div class="order-nav-div">
-      <p class="order-nav" @click="showOrder" v-if="show_order === false">
-        {{ $t("artworks.nav.order") }}
-      </p>
-      <i
-        class="fas fa-times exit-order"
-        @click="hideOrder"
-        v-if="show_order"
-      ></i>
-      <div class="order-form" v-show="show_order">
-        <div class="tooltip">
-          <span class="tooltip-txt" v-if="order_list.length === 0">{{
-            $t("tooltips.nt_show")
-          }}</span>
-          <h3 class="check-order-btn" @click="showOrderList">
-            {{ $t("artworks.nav.order_list") }}
-          </h3>
-        </div>
-        <div class="inpts" v-if="order_list.length > 0">
-          <label for="">{{ $t("artworks.inpt_lbl.fullname") }}</label>
-          <input type="text" v-model="fullname" />
-          <label for="">{{ $t("artworks.inpt_lbl.email") }}</label>
-          <input type="text" v-model="email" />
-          <label for="">{{ $t("artworks.inpt_lbl.address") }}</label>
-          <input type="text" v-model="address" />
-          <label for="">{{ $t("artworks.inpt_lbl.city") }}</label>
-          <input type="text" v-model="city" />
-          <label for="">{{ $t("artworks.inpt_lbl.country") }}</label>
-          <input type="text" v-model="country" />
-          <button @click="confirmOrder()">
-            {{ $t("buttons.confirm") }}
-          </button>
-        </div>
-        <!--   <div id="smart-button-container" v-if="pay_option">
+      <transition name="fade" mode="out-in">
+        <p class="order-nav" @click="showOrder" v-if="show_order === false">
+          {{ $t("artworks.nav.order") }}
+        </p>
+      </transition>
+      <transition name="fade" mode="out-in">
+        <i
+          class="fas fa-times exit-order"
+          @click="hideOrder"
+          v-if="show_order"
+        ></i>
+      </transition>
+      <i class="fas fa-shopping-bag cart-icon"></i>
+      <p class="cart-amount" @click="showOrder">{{ num_cart }}</p>
+      <transition
+        name="fade-in-out"
+        enter-active-class="slide-in-left"
+        leave-active-class="slide-out-right"
+      >
+        <div class="order-form" v-if="show_order">
+          <div class="tooltip">
+            <span class="tooltip-txt" v-if="order_list.length === 0">{{
+              $t("tooltips.nt_show")
+            }}</span>
+            <h3 class="check-order-btn" @click="showOrderList">
+              {{ $t("artworks.nav.order_list") }}
+            </h3>
+          </div>
+          <div class="inpts" v-if="order_list.length > 0">
+            <label for="">{{ $t("artworks.inpt_lbl.fullname") }}</label>
+            <input type="text" v-model="fullname" />
+            <label for="">{{ $t("artworks.inpt_lbl.email") }}</label>
+            <input type="text" v-model="email" />
+            <label for="">{{ $t("artworks.inpt_lbl.address") }}</label>
+            <input type="text" v-model="address" />
+            <label for="">{{ $t("artworks.inpt_lbl.city") }}</label>
+            <input type="text" v-model="city" />
+            <label for="">{{ $t("artworks.inpt_lbl.country") }}</label>
+            <input type="text" v-model="country" />
+            <button @click="confirmOrder()">
+              {{ $t("buttons.confirm") }}
+            </button>
+          </div>
+          <!--   <div id="smart-button-container" v-if="pay_option">
           <pay-pal-button
             :key="'PPb' + componentKey"
             :totalPrice="total_price"
@@ -53,41 +70,45 @@
             @confirm-order="confirmOrder"
           ></pay-pal-button>
         </div>-->
-        <div
-          class="order-list-div"
-          v-if="show_order_list && order_list.length > 0"
-        >
-          <div class="order-top-line">
-            <h2 class="order-total-price">
-              {{ $t("artworks.total_price") }} <b>{{ total_price }}</b>
-            </h2>
-            <h1 class="order-list-title">{{ $t("artworks.order_list") }}</h1>
-            <i class="fas fa-times order-exit" @click="closeOrderList"></i>
-          </div>
-          <div class="order-list">
-            <div
-              class="order"
-              v-for="(order, index) in order_list"
-              :key="'o' + index"
-            >
-              <i
-                class="fas fa-times order-delete"
-                @click="removeFromOrder(order)"
-              ></i>
-              <img class="order-img" :src="order.artwork_imgpath" alt="" />
-              <p class="order-title">{{ order.title.toUpperCase() }}</p>
-              <p class="order-price">
-                Price: <b>{{ order.artwork_price }}</b> €
-              </p>
+
+          <div
+            class="order-list-div"
+            v-if="show_order_list && order_list.length > 0"
+          >
+            <div class="order-top-line">
+              <h2 class="order-total-price">
+                {{ $t("artworks.total_price") }} <b>{{ total_price }}</b>
+              </h2>
+              <h1 class="order-list-title">{{ $t("artworks.order_list") }}</h1>
+              <i class="fas fa-times order-exit" @click="closeOrderList"></i>
+            </div>
+            <div class="order-list">
+              <div
+                class="order"
+                v-for="(order, index) in order_list"
+                :key="'o' + index"
+              >
+                <i
+                  class="fas fa-times order-delete"
+                  @click="removeFromOrder(order)"
+                ></i>
+                <img class="order-img" :src="order.artwork_imgpath" alt="" />
+                <p class="order-title">{{ order.title.toUpperCase() }}</p>
+                <p class="order-price">
+                  Price: <b>{{ order.artwork_price }}</b> €
+                </p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </transition>
     </div>
     <div class="dtls-nav-div">
-      <p class="dtls-nav" @click="showArtwDetails">
+    <transition name="fade" >
+      <p class="dtls-nav" @click="showArtwDetails" v-if="chosen_artwork !== null">
         {{ $t("artworks.nav.artw_dtls") }}
       </p>
+    </transition>
     </div>
     <div
       :class="{
@@ -102,7 +123,7 @@
         <p></p>
       </div>
     </div>
-    <div class="pg-col">
+    <div class="pg-col" :class="{ fade: show_order_list }">
       <div class="preview">
         <div class="prev-gallery">
           <div
@@ -118,7 +139,7 @@
               class="prev-img"
               :data-url="art.artwork_imgpath"
               alt=""
-              src="../../public/images/placeholder_photo_l.gif"
+              src="../../public/images/placeholder.gif"
               @click="getImages(art)"
             />
             <div class="prev-desc">
@@ -180,6 +201,7 @@ export default {
       show_order_list: false,
       buttonKey: 0,
       total_price: 0,
+      num_cart: 0,
       // pay_option: false,
     };
   },
@@ -193,6 +215,7 @@ export default {
           this.artworks[i].sold = true;
           this.buttonKey += 1;
           this.total_price += art.artwork_price;
+          this.num_cart += 1;
         }
       }
     },
@@ -243,33 +266,34 @@ export default {
       axios.get(this.baseUrl + "artworks").then((res) => {
         console.log(res);
         this.artworks = res.data.data;
-        this.artworks[0].chosen = true;
+        // this.artworks[0].chosen = true;
         // this.changeLoader(false);
         this.changeToLanguage();
-        this.getImages();
+        // this.getImages();
       });
     },
     getImages(art) {
-      if (!art) {
-        this.images.push({
-          path: this.artworks[0].artwork_imgpath,
-          id: this.artworks[0].artwork_id,
-        });
+      // if (!art) {
+      //   this.images.push({
+      //     path: this.artworks[0].artwork_imgpath,
+      //     id: this.artworks[0].artwork_id,
+      //   });
 
-        axios
-          .get(this.baseUrl + "images", {
-            params: { artwork_id: this.artworks[0].artwork_id },
-          })
-          .then((res) => {
-            console.log(res);
-            for (let i = 0; i < res.data.data.length; i++) {
-              this.images.push({
-                path: res.data.data[i].img_path,
-                id: res.data.data[i].img_id,
-              });
-            }
-          });
-      } else if (art) {
+      //   axios
+      //     .get(this.baseUrl + "images", {
+      //       params: { artwork_id: this.artworks[0].artwork_id },
+      //     })
+      //     .then((res) => {
+      //       console.log(res);
+      //       for (let i = 0; i < res.data.data.length; i++) {
+      //         this.images.push({
+      //           path: res.data.data[i].img_path,
+      //           id: res.data.data[i].img_id,
+      //         });
+      //       }
+      //     });
+      // } 
+      // else if (art) {
         this.images = [];
         for (let i = 0; i < this.artworks.length; i++) {
           if (this.artworks[i].chosen === true) {
@@ -283,6 +307,7 @@ export default {
           path: art.artwork_imgpath,
           id: art.artwork_id,
         });
+        this.chosen_artwork = art;
         axios
           .get(this.baseUrl + "images", {
             params: { artwork_id: art.artwork_id },
@@ -298,7 +323,7 @@ export default {
           });
         this.forceRerender();
         this.scrollToElement("photo-slider");
-      }
+      // }
     },
     hideInstr() {
       this.how_to_buy = false;
@@ -315,6 +340,7 @@ export default {
         if (order === this.order_list[i]) {
           this.order_list.splice(i, 1);
           this.total_price -= order.artwork_price;
+          this.num_cart -= 1;
         }
       }
       for (let i = 0; i < this.artworks.length; i++) {
@@ -366,6 +392,26 @@ export default {
     top: 6vh;
   }
 }
+@keyframes slide_in_left {
+  from {
+    left: 100vw;
+    opacity: 0.1;
+  }
+  to {
+    left: 85vw;
+    opacity: 1;
+  }
+}
+@keyframes slide_out_right {
+  from {
+    left: 85vw;
+    opacity: 1;
+  }
+  to {
+    left: 120vw;
+    opacity: 0.1;
+  }
+}
 button {
   width: 5vw;
   height: 2.5vw;
@@ -384,12 +430,14 @@ p {
 .artw-title {
   font-size: 1.2rem;
   font-weight: 800;
-  text-align: start; /*
+  text-align: center; /*
   width: 20vw;*/
   align-self: center;
 }
 .btn-buy {
   align-self: center;
+  position: absolute;
+  margin-top: 10vw;
 }
 .btn-buy:disabled {
   opacity: 0.2;
@@ -408,14 +456,41 @@ p {
   display: flex;
   align-items: flex-end;
   justify-content: flex-end;
+  height: 2vh;
+  position: absolute;
+}
+.cart-amount {
+  position: absolute;
+  left: 10vw;
+  width: 5vw;
+  text-align: center;
+  color: #545454;
+  font-weight: 600;
+}
+.cart-icon {
+  position: absolute;
+  font-size: 1.8rem;
+  left: 10vw;
+  top: -1.5vh;
+  color: #27f2cb;
+  width: 5vw;
+  text-align: center;
 }
 .check-order-btn {
-  border: 3px dotted #27f2cb;
+  /*
+  border: 3px dotted #27f2cb;*/
   width: 10vw;
   margin-left: 2rem;
+  margin-top: 1rem;
+  font-family: "HortaRegular", cursive;
+  font-size: 1.8rem;
+  border-bottom: 2px solid #27f2cb;
+}
+.check-order-btn:hover {
+  color: #27f2cb;
 }
 .chosen-artwk {
-  border: 5px solid #545454;
+  border: 5px solid #27f2cb;
   width: 20vw;
   margin-bottom: 2rem;
   background-color: #ced0d1;
@@ -433,12 +508,16 @@ p {
 }
 .exit-order {
   width: 15vw;
-  border-bottom: 5px solid #27f2cb;
+  border-bottom: 3px solid #27f2cb;
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
+  height: 2.5vh;
+  position: absolute;
 }
-
+.fade {
+  opacity: 0.1;
+}
 .hide {
   visibility: hidden;
   height: 0;
@@ -467,9 +546,9 @@ p {
 }
 .order-exit {
   position: absolute;
-  top: 1rem;
-  left: 65vw;
-  font-size: 3rem;
+  top: 1vh;
+  left: 45vw;
+  font-size: 2rem;
 }
 .order-img {
   width: 15vw;
@@ -478,30 +557,33 @@ p {
   background-color: #d4d4d4;
 }
 .order-list {
-  width: 67vw;
+  width: 45vw;
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
-  justify-content: flex-start;
+  justify-content: center;
   gap: 1rem;
   margin-top: 10vh;
-  margin-left: 1rem;
+  margin-left: 2.5vw;
+  position: absolute;
 }
 .order-list-div {
   position: fixed;
-  width: 70vw;
+  width: 50vw;
   min-height: 80vh;
   top: 10vh;
-  left: 15vw;
-  background-color: white;
+  left: 25vw;
+  background-color: #f9fff7;
 
   overflow-y: scroll;
-  border: 4px solid #545454;
+  overflow-x: hidden;
+  border: 3px solid #27f2cb;
 }
 .order-list-title {
   margin-top: 1rem;
-  font-size: 3rem;
-  width: 65vw;
+  font-size: 2rem;
+  width: 50vw;
+  font-family: "HortaRegular", cursive;
 }
 .order-nav,
 .dtls-nav {
@@ -510,6 +592,8 @@ p {
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
+  height: 2.5vh;
+  position: absolute;
 }
 .order-nav-div {
   position: fixed;
@@ -520,8 +604,8 @@ p {
 .order-form {
   position: fixed;
   left: 85vw;
-  top: 15vh;
-
+  top: 13vh;
+  background-color: #f9fff7;
   width: 15vw;
 }
 .order-top-line {
@@ -533,7 +617,9 @@ p {
 .order-total-price {
   position: absolute;
   top: 1rem;
-  left: 1rem;
+  left: 3rem;
+  border-bottom: 1px solid #27f2cb;
+  font-family: "HortaRegular", cursive;
 }
 .pg-col {
   display: flex;
@@ -545,7 +631,6 @@ p {
   align-self: center;
   justify-self: center;
   margin-left: 4rem;
-  animation: in 2s 1;
   position: relative;
   top: 6vh;
 }
@@ -561,7 +646,7 @@ p {
   width: 20vw;
   height: 30vh;
   object-fit: contain;
-  background-color: #d4d4d4;
+  background-color: #7e7e7e;
 }
 .prev-div {
   width: 20vw; /*
@@ -581,7 +666,7 @@ p {
   margin-left: 1rem;*/
   margin-top: 1rem;
   width: 20vw;
-  height: 30vh;
+  height: 40vh;
 }
 .prev-desc-txt {
   margin-left: 1rem;
@@ -593,6 +678,7 @@ p {
   align-items: center;
   justify-content: center;
   gap: 1rem;
+  margin-top: 5vh;
 }
 .up-sqr {
   height: 15vh;
@@ -619,15 +705,21 @@ p {
 }
 .shop-instruction-div {
   width: 15vw;
-  background-color: white;
+  background-color: #f9fff7;
   display: flex;
   align-items: center;
   justify-content: center;
   height: fit-content;
   position: fixed;
-  top: 20vh;
-  left: 1rem;
+  top: 12.5vh;
+  left: 0;
   z-index: 2;
+}
+.slide-in-left {
+  animation: slide_in_left 1s 1;
+}
+.slide-out-right {
+  animation: slide_out_right 2s 1;
 }
 .tooltip .tooltip-txt {
   visibility: hidden;

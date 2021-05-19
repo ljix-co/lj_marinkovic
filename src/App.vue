@@ -52,10 +52,11 @@
     </footer>
      <custom-cursor
       :targets="[ 'a', 'button', 'i', 'nav-left', 'nav-scroll', 'order-nav', 'dtls-nav', 'order-exit', 'exit-order', 'order-delete', 'exit-order', 'check-order-btn',
-      'buy-nav', 'exit', 'prev-img', 'lines', 'delete', 'ctrl', 'img-gallery', 'logo', 'image-home', 'flag']"
+      'buy-nav', 'exit', 'prev-img', 'lines', 'delete', 'ctrl', 'img-gallery', 'logo', 'image-home', 'flag', 'cart-icon', 'cart-amount',
+      'add-icon']"
       :circleColor="'#27f2cb'"
       :circleColorHover="'#C3EAE3'"
-      :hoverSize="1.8"
+      :hoverSize="3"
     ></custom-cursor>
   </div>
 </template>
@@ -201,7 +202,7 @@ select:focus {
   font-weight: 800;
 }
 .fade-enter-active, .fade-leave-active{
-  transition: opacity .3s ease;
+  transition: opacity 1s ease;
 }
 .fade-enter, .fade-leave-to{
   opacity: 0;

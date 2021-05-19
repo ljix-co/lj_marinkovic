@@ -5,7 +5,7 @@ export default {
             el => el.nodeName === "IMG"
           );
           if(imageElement) {
-            imageElement.src = "../../public/images/placeholder_photo.jpg"
+            imageElement.src = "../../public/images/placeholder.gif"
             imageElement.addEventListener("load", () => {
               setTimeout(() =>  el.classList.add("loaded"), 100);
             });
