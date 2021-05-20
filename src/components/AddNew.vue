@@ -1,20 +1,20 @@
 <template>
   <div class="add-new">
-    <i class="far fa-arrow-alt-circle-left go-back" @click="goBack()"></i>
+    <i class="fas fa-times exit-add" @click="goBack()"></i>
     <div class="edited" v-if="newId === null">
       <button class="submit" @click="addNew()">ADD</button>
       <div class="basic-info">
         <div class="edit-content">
-          <h1>Title (EN):</h1>
+          <label>TITLE (EN)</label>
           <input class="e-title" v-model="title" />
         </div>
         <div class="edit-content">
-          <h1>Title (RS):</h1>
+          <label>TITLE (RS)</label>
           <input class="e-title" v-model="title_rs" />
         </div>
         <div class="edit-content">
-          <h1 v-if="type === 'newExh'">Time period:</h1>
-          <h1>Year:</h1>
+          <label v-if="type === 'newExh'">TIME PERIOD</label>
+          <label v-if="type !== 'newExh'">YEAR</label>
           <div class="time-period">
             <input
               class="year"
@@ -26,20 +26,20 @@
             <input class="year" type="text" v-model="yearFinish" />
           </div>
         </div>
-         <div class="edit-content" v-if="type !== 'newExh'">
-          <h1>Link to project:</h1>
+        <div class="edit-content" v-if="type !== 'newExh'">
+          <label>LINK TO PROJECT</label>
           <input class="e-title" v-model="link_project" />
         </div>
         <div class="edit-content" v-if="type === 'newExh'">
-          <h1>Place (EN):</h1>
+          <label>PLACE (EN)</label>
           <input class="e-title" v-model="place" />
         </div>
-         <div class="edit-content" v-if="type === 'newExh'">
-          <h1>Place (RS):</h1>
+        <div class="edit-content" v-if="type === 'newExh'">
+          <label>PLACE (RS)</label>
           <input class="e-title" v-model="place_rs" />
         </div>
         <div class="edit-content" v-if="type === 'newExh'">
-          <h1>Solo/group:</h1>
+          <label>SOLO/GROUP</label>
           <input class="e-title" v-model="exhType" />
         </div>
         <div class="cover-img-div">
@@ -63,20 +63,38 @@
         </div>
       </div>
       <div>
-        <div class="txt-editor-div">
-          <h1>Description (EN):</h1>
+        <div class="btns">
+          <button class="btn-show" @click="showDscEn()">DESCRIPTION(EN)</button>
+          <button class="btn-show" @click="showDscRs()">DESCRIPTION(RS)</button>
+          <button
+            class="btn-show"
+            v-if="type === 'newExh'"
+            @click="showRevEn()"
+          >
+            REVIEW(EN)
+          </button>
+          <button
+            class="btn-show"
+            v-if="type === 'newExh'"
+            @click="showRevRs()"
+          >
+            REVIEW(RS)
+          </button>
+        </div>
+        <div class="txt-editor-div" v-if="show_dsc_en">
+          <h1>Description (EN)</h1>
           <vue-editor class="vue_editor" v-model="desc" />
         </div>
-        <div class="txt-editor-div">
-          <h1>Description (RS):</h1>
+        <div class="txt-editor-div" v-if="show_dsc_rs">
+          <h1>Description (RS)</h1>
           <vue-editor class="vue_editor" v-model="desc_rs" />
         </div>
-        <div class="txt-editor-div" v-if="type === 'newExh'">
-          <h1>Review (EN):</h1>
+        <div class="txt-editor-div" v-if="type === 'newExh' && show_rev_en">
+          <h1>Review (EN)</h1>
           <vue-editor class="vue_editor" v-model="rev" />
         </div>
-          <div class="txt-editor-div" v-if="type === 'newExh'">
-          <h1>Review (RS):</h1>
+        <div class="txt-editor-div" v-if="type === 'newExh' && show_rev_rs">
+          <h1>Review (RS)</h1>
           <vue-editor class="vue_editor" v-model="rev_rs" />
         </div>
       </div>
@@ -143,7 +161,13 @@ export default {
       exhType: "",
       place: "",
       place_rs: "",
-      link_project: ""
+      link_project: "",
+      show_dsc_en: false,
+      show_dsc_rs: false,
+      show_rev_en: false,
+      show_rev_rs: false,
+      en: "en",
+      rs: "rs",
     };
   },
   methods: {
@@ -161,7 +185,7 @@ export default {
         exhType: this.exhType,
         place: this.place,
         place_rs: this.place_rs,
-        link_project: this.link_project
+        link_project: this.link_project,
       };
       this.$emit("add-new", newObject);
     },
@@ -194,33 +218,51 @@ export default {
     goBack() {
       this.$emit("go-back");
     },
+    showDscEn() {
+      this.show_dsc_en = true;
+      this.show_dsc_rs = false;
+      this.show_rev_en = false;
+      this.show_rev_rs = false;
+    },
+    showDscRs() {
+      this.show_dsc_rs = true;
+      this.show_dsc_en = false;
+      this.show_rev_en = false;
+      this.show_rev_rs = false;
+    },
+    showRevEn() {
+      this.show_rev_en = true;
+      this.show_dsc_rs = false;
+      this.show_dsc_en = false;
+      this.show_rev_rs = false;
+    },
+    showRevRs() {
+      this.show_rev_rs = true;
+      this.show_dsc_en = false;
+      this.show_rev_en = false;
+      this.show_dsc_rs = false;
+    },
   },
 };
 </script>
 <style scoped>
+
 .add-new {
   margin-top: 10vh;
   margin-left: 4rem;
 }
 .add-img {
-  width: 10vw;
-  height: 10vw;
+  width: 20vw;
+  height: 20vw;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 3px dashed #214478;
+  border: 5px dashed #F9FFF7;
   cursor: pointer;
   font-size: 2rem;
+  background-color: #7e7e7e;
 }
-.add-img-div {
-  box-shadow: 0px 5px 15px 2px rgba(0, 0, 0, 0.48);
-  width: 30vw;
-  height: 40vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 0.5rem;
-}
+
 .add-new-img-div {
   z-index: 3;
 }
@@ -229,13 +271,23 @@ export default {
   flex-direction: column;
   gap: 2rem;
 }
+.btns {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  width: 30vw;
+  gap: 1rem;
+}
+.btn-show {
+  font-size: 1rem;
+}
 .cover-img {
   width: 30vw;
+  background-color: #7e7e7e;
 }
 .cover-img-div {
   width: 30vw;
-  box-shadow: 0px 5px 15px 2px rgba(0, 0, 0, 0.48);
-  cursor: pointer;
   margin-top: 5vh;
 }
 .cover-title {
@@ -292,36 +344,31 @@ export default {
   gap: 10rem;
   width: 90vw;
 }
-.e-title {
-  width: 40vw;
-  height: 5vh;
-  font-size: 1.2rem;
-  font-family: "Forum", cursive;
-  text-align: center;
-  border: none;
-  cursor: pointer;
-  border-bottom: 1.5px solid gray;
-}
-.e-title:focus {
-  outline: none;
-}
+
 .edit-content {
   display: flex;
-  gap: 2rem;
-  align-items: center;
+  flex-direction: column;
+  gap: .5rem;
+  align-items: flex-start;
   justify-content: flex-start;
   width: 30vw;
 }
 .exit {
   font-size: 2rem;
   position: absolute;
-  cursor: pointer;
   z-index: 1;
-  margin-top: 2vh;
-  left: 32vw;
-  background-color: white;
-  border-radius: 50%;
-  border: 2px solid #214478;
+  left: 45vw;
+  
+}
+.exit-add {
+  position: absolute;
+  top: 10vh;
+  left: 92vw;
+  font-size: 3rem;
+}
+.fa-plus{
+color: #27f2cb;
+font-size: 3rem;
 }
 .gallery {
   width: 90vw;
@@ -349,20 +396,11 @@ export default {
   z-index: 2;
 }
 .submit {
-  position: absolute;
-  left: 85vw;
-  top: 7vh;
-  width: 10vh;
-  height: 5vh;
-  border-radius: 10px;
-  border: none;
-  background-color: #214478;
-  color: white;
-  cursor: pointer;
-  margin-top: 2rem;
-  font-size: 1rem;
-  font-family: "Forum", cursive;
-  text-align: center;
+  position: fixed;
+  left: 90vw;
+  top: 80vh;
+  z-index: 2;
+  width: 7vw;
 }
 .time-period {
   display: flex;
@@ -372,7 +410,7 @@ export default {
   text-align: start;
 }
 .vue_editor {
-  width: 50vw;
+  width: 30vw;
   margin-top: 2rem;
   margin-bottom: 1rem;
 }

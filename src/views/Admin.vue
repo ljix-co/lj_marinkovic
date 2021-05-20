@@ -2,44 +2,27 @@
   <div class="admin">
     <div
       class="admin-list-options"
-      v-if="edit === false && addNew === false && edit_artworks === false"
+      v-if="
+        edit === false &&
+        addNew === false &&
+        edit_artworks === false &&
+        projects.length === 0 &&
+        exh.length === 0
+      "
       :class="{ fade: warning || add_artwork }"
     >
-      <div class="aut-info" v-for="(info, index) in aut_info" :key="index">
-        <div class="title"><h1>Biography and author's image</h1></div>
-        <img
-          class="img-prof"
-          :class="{ fade: editImg }"
-          :src="info.profimg_path"
-         
-          @click="changeImg()"
-        />
-        <div v-if="editImg" class="edit-img">
-          <label v-if="url === ''" class="add-file" for="real-btn"
-            ><i class="fas fa-plus"></i
-          ></label>
-          <input id="real-btn" type="file" hidden @change="getFile" />
-          <img v-if="url" :src="url" alt="" />
-          <div class="btns">
-            <button @click="confrmNewAutImg()">CONFIRM</button>
-            <button @click="closeImgEdit()">DISMISS</button>
-          </div>
-        </div>
-        <div v-if="editor === false" class="bio" @click="changeBio(info)">
-          <div class="bio-content" v-html="info.aut_bio"></div>
-        </div>
-        <div class="bio" v-if="editor">
-          <div class="bio-content">
-            <vue-editor class="vue_editor" v-model="txt" />
-            <div class="btns">
-              <button @click="submitBioChanges()">SUBMIT</button>
-              <button @click="closeEditor()">DISMISS</button>
-            </div>
-          </div>
-        </div>
+      <div class="author-info">
+        <div class="title"><h1>AUTHOR'S INFO</h1></div>
+        <edit-author
+          v-if="aut_info.length > 0"
+          :aut_info="aut_info"
+          @confirm-new-img="confrmNewAutImg"
+          @submit-bio="submitBioChanges"
+          @confirm-new-pass="confirmNewPass"
+        ></edit-author>
       </div>
       <div class="projects">
-        <div class="title"><h1>Web projects</h1></div>
+        <div class="title"><h1>WEB PROJECTS</h1></div>
 
         <div class="list-projects">
           <div class="add-container">
@@ -47,34 +30,15 @@
               <i class="fas fa-plus"></i>
             </div>
           </div>
-          <div
-            class="project"
-            v-for="(project, index) in projects"
-            :key="'p' + index"
-          >
-            <div class="delete-img-div">
-              <i
-                class="fas fa-trash-alt delete-img"
-                @click="deleteProj(project)"
-              ></i>
-            </div>
-            <img
-              class="img-art"
-              :src="project.coverphoto_path"
-            
-            />
-
-            <div class="bottom-line">
-              <h3 class="bottom-title">
-                {{ project.proj_title.toUpperCase() }}
-              </h3>
-              <i class="far fa-edit icon" @click="editProj(project)"></i>
+          <div class="edit-container" @click="getProjects()">
+            <div class="edit-artwork">
+              <i class="far fa-edit"></i>
             </div>
           </div>
         </div>
       </div>
       <div class="exhbs">
-        <div class="title"><h1>Exhibitions</h1></div>
+        <div class="title"><h1>EXHIBITIONS</h1></div>
 
         <div class="list-exh">
           <div class="add-container" @click="addNewExh()">
@@ -82,27 +46,15 @@
               <i class="fas fa-plus"></i>
             </div>
           </div>
-          <div class="exh" v-for="(exh, index) in exh" :key="'e' + index">
-            <div class="delete-img-div">
-              <i
-                class="fas fa-trash-alt delete-img"
-                @click="deleteExh(exh)"
-              ></i>
-            </div>
-            <img
-              class="img-art"
-              :src="exh.coverphoto_path"
-            
-            />
-            <div class="bottom-line">
-              <h3 class="bottom-title">{{ exh.exh_title.toUpperCase() }}</h3>
-              <i class="far fa-edit icon" @click="editExh(exh)"></i>
+          <div class="edit-container" @click="getExh()">
+            <div class="edit-artwork">
+              <i class="far fa-edit"></i>
             </div>
           </div>
         </div>
       </div>
       <div class="artworks">
-        <div class="title"><h1>Artworks (shop)</h1></div>
+        <div class="title"><h1>ARTWORKS(SHOP)</h1></div>
         <div class="artworks-mng">
           <div class="add-artwork-container" @click="addArtwork()">
             <div class="add">
@@ -117,7 +69,22 @@
         </div>
       </div>
     </div>
-    <!-- 'dodaj u shop' dugme pri dodavanju fotografija-->
+    <edit-list-proj-exh
+      v-if="projects.length > 0"
+      :projects="projects"
+      :edit="edit"
+      @close-edit-list="closeEditList"
+      @delete-proj="deleteProj"
+      @edit-proj="editProj"
+    ></edit-list-proj-exh>
+    <edit-list-proj-exh
+      v-if="exh.length > 0"
+      :exh="exh"
+      :edit="edit"
+      @close-edit-list="closeEditList"
+      @delete-exh="deleteExh"
+      @edit-exh="editExh"
+    ></edit-list-proj-exh>
     <Edit
       :class="{ fade: warning }"
       v-if="edit"
@@ -176,6 +143,8 @@ import AddArtwork from "../components/AddArtwork.vue";
 import EditArtworks from "../components/EditArtworks.vue";
 import { mapState, mapActions } from "vuex";
 import axios from "axios";
+import EditAuthor from "../components/EditAuthor.vue";
+import EditListProjExh from "../components/EditListProjExh.vue";
 export default {
   components: {
     Edit,
@@ -183,6 +152,8 @@ export default {
     AddNew,
     AddArtwork,
     EditArtworks,
+    EditAuthor,
+    EditListProjExh,
   },
   data() {
     return {
@@ -191,17 +162,17 @@ export default {
       artworks: [],
       array: [],
       aut_info: [],
-      txt: "",
-      editor: false,
+      // txt: "",
+      // editor: false,
       edit: false,
       edit_artworks: false,
-      editImg: false,
+      // editImg: false,
       editObject: {},
       newEditedObject: {},
-      newImg: "",
+      // newImg: "",
       newGalleryImg: {},
       id: null,
-      url: "",
+      // url: "",
       projects: [],
       exh: [],
       images: [],
@@ -215,7 +186,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions([ "changeLoader"]),
+    ...mapActions(["changeLoader"]),
     addArtwork() {
       this.add_artwork = true;
     },
@@ -360,38 +331,34 @@ export default {
       localStorage.removeItem("sid");
       this.$router.push({ name: "Login" });
     },
-    changeBio(info) {
-      this.txt = info.aut_bio;
-      this.editor = true;
-    },
-    changeImg() {
-      this.editImg = true;
-    },
-    closeEditor() {
-      this.txt = "";
-      this.editor = false;
-    },
-    closeImgEdit() {
-      if (this.newImg != "") {
-        this.newImg = "";
-        this.url = "";
-      } else {
-        this.editImg = false;
-      }
+    closeEditList() {
+      this.projects = [];
+      this.exh = [];
     },
     confirm() {
       this.warning = false;
     },
-    confrmNewAutImg() {
-      if (this.newImg != "") {
+    confrmNewAutImg(newImg) {
+      if (newImg != "") {
         let formData = new FormData();
         formData.append("sid", localStorage.getItem("sid"));
-        formData.append("aut_profimg", this.newImg);
+        formData.append("aut_id", this.aut_info[0].aut_id);
+        formData.append("aut_profimg", newImg);
         axios.patch(this.baseUrl + "author_info", formData).then((res) => {
           console.log(res);
           this.$router.go();
         });
       }
+    },
+    confirmNewPass(chngd_pass) {
+      let formData = new FormData();
+      formData.append("sid", localStorage.getItem("sid"));
+      formData.append("aut_id", this.aut_info[0].aut_id);
+      formData.append("old_pass", chngd_pass.old_pass);
+      formData.append("new_pass", chngd_pass.new_pass);
+      axios.patch(this.baseUrl + "author_info", formData).then((res) => {
+        console.log(res);
+      });
     },
     deleteArtwork(art) {
       this.message = `Are you sure you want to remove '${art.artwork_title}' from artworks?`;
@@ -438,25 +405,25 @@ export default {
       this.id = img.img_id;
       this.warning = true;
       this.message = "Are you sure you want to delete this image?";
-         this.confirmEditFunction = function () {
-          axios
-            .delete(this.baseUrl + "images", {
-              params: {
-                img_id: this.id,
-                sid: localStorage.getItem("sid"),
-              },
-            })
-            .then((res) => {
-              console.log(res);
-              for (let i = 0; i < this.images.length; i++) {
-                if (this.id === this.images[i].img_id) {
-                  this.images.splice(i, 1);
-                }
+      this.confirmEditFunction = function () {
+        axios
+          .delete(this.baseUrl + "images", {
+            params: {
+              img_id: this.id,
+              sid: localStorage.getItem("sid"),
+            },
+          })
+          .then((res) => {
+            console.log(res);
+            for (let i = 0; i < this.images.length; i++) {
+              if (this.id === this.images[i].img_id) {
+                this.images.splice(i, 1);
               }
-            });
-        };
+            }
+          });
+      };
       // if (this.editObject.type === "project") {
-     
+
       // }
       // if (this.editObject.type === "exh") {
       //   this.confirmEditFunction = function () {
@@ -572,35 +539,38 @@ export default {
       this.add_artwork = false;
     },
     getAutInfo() {
-      this.changeLoader(true);
+      // this.changeLoader(true);
       axios.get(this.baseUrl + "author_info").then((res) => {
         this.aut_info.push(res.data.data[0]);
-        this.changeLoader(false);
+        // this.changeLoader(false);
       });
     },
     getExh() {
+      this.projects = [];
       this.changeLoader(true);
       axios.get(this.baseUrl + "exhibitions").then((res) => {
         this.exh = res.data.data;
         this.changeLoader(false);
       });
     },
-    getFile(e) {
-      this.newImg = e.target.files[0];
-      this.url = URL.createObjectURL(this.newImg);
-    },
+
     getProjects() {
-      this.changeLoader(true);
+      this.exh = [];
+      // this.changeLoader(true);
       axios.get(this.baseUrl + "projects").then((res) => {
         this.projects = res.data.data;
-        this.changeLoader(false);
+        // this.changeLoader(false);
         console.log(res.data.data);
       });
     },
     goBack() {
-      this.$router.go();
+      this.edit = false;
+      this.addNew = false;
+      this.editObject = null;
+      this.images = [];
+      
     },
-   
+
     updateArtwork(updatedArtwork) {
       this.message = "Are you sure you want to submit these changes?";
       this.warning = true;
@@ -615,20 +585,26 @@ export default {
             if (artwork.artwork_title !== updatedArtwork.title) {
               formData.append("artwork_title", updatedArtwork.title);
             }
-             if (artwork.artwork_title_rs !== updatedArtwork.title_rs) {
+            if (artwork.artwork_title_rs !== updatedArtwork.title_rs) {
               formData.append("artwork_title_rs", updatedArtwork.title_rs);
             }
             if (artwork.artwork_material !== updatedArtwork.material) {
               formData.append("artwork_material", updatedArtwork.material);
             }
-              if (artwork.artwork_material_rs !== updatedArtwork.material_rs) {
-              formData.append("artwork_material_rs", updatedArtwork.material_rs);
+            if (artwork.artwork_material_rs !== updatedArtwork.material_rs) {
+              formData.append(
+                "artwork_material_rs",
+                updatedArtwork.material_rs
+              );
             }
             if (artwork.artwork_technique !== updatedArtwork.technique) {
               formData.append("artwork_technique", updatedArtwork.technique);
             }
             if (artwork.artwork_technique_rs !== updatedArtwork.technique_rs) {
-              formData.append("artwork_technique_rs", updatedArtwork.technique_rs);
+              formData.append(
+                "artwork_technique_rs",
+                updatedArtwork.technique_rs
+              );
             }
             if (artwork.artwork_artform !== updatedArtwork.artform) {
               formData.append("artwork_artform", updatedArtwork.artform);
@@ -649,7 +625,7 @@ export default {
               formData.append("artwork_forsale", updatedArtwork.forSale);
             }
             // console.log(updatedArtwork.coverphoto)
-              if (artwork.artwork_coverphoto !== updatedArtwork.coverphoto) {
+            if (artwork.artwork_coverphoto !== updatedArtwork.coverphoto) {
               formData.append("artwork_coverphoto", updatedArtwork.coverphoto);
               // console.log(updatedArtwork.coverphoto)
             }
@@ -660,14 +636,15 @@ export default {
         }
       };
     },
-    submitBioChanges() {
+    submitBioChanges(txt) {
       let formData = new FormData();
       formData.append("sid", localStorage.getItem("sid"));
-      if (this.aut_info.aut_bio !== this.txt) {
-        formData.append("aut_bio", this.txt);
+      formData.append("aut_id", this.aut_info[0].aut_id);
+      if (this.aut_info.aut_bio !== txt) {
+        formData.append("aut_bio", txt);
         axios.patch(this.baseUrl + "author_info", formData).then((res) => {
           console.log(res);
-          this.$router.go();
+          // this.$router.go();
         });
       }
     },
@@ -765,8 +742,8 @@ export default {
   },
   mounted() {
     this.getAutInfo();
-    this.getProjects();
-    this.getExh();
+    // this.getProjects();
+    // this.getExh();
   },
 };
 </script>
@@ -786,14 +763,15 @@ button {
 }
 .add,
 .edit-artwork {
-  width: 10vw;
-  height: 10vw;
+  width: 20vw;
+  height: 20vw;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 3px dashed #27f2cb;
+  border: 5px dashed #F9FFF7;
   cursor: pointer;
   font-size: 3rem;
+  background-color: #7e7e7e;
 }
 .add-artwork {
   width: 100vw;
@@ -811,8 +789,6 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 4rem;
-  margin-left: -3rem;
 }
 .add-container {
   width: 30vw;
@@ -822,14 +798,7 @@ button {
   justify-content: center;
   margin-left: 2rem;
 }
-.add-file {
-  width: 5vw;
-  height: 5vw;
-  border: 3px dashed #27f2cb;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+
 .admin {
   height: fit-content;
   margin-bottom: 10vh;
@@ -851,36 +820,19 @@ button {
   justify-content: flex-start;
   margin-top: 15vh;
   width: 90vw;
+  margin-left: 20vw;
 }
 .artworks-mng {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: 2rem;
+  gap: 1rem;
+  margin-left: 1.5rem;
 }
-.aut-info {
+.author-info {
   display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  width: 90vw;
-}
-.bio {
-  width: 35vw;
-  height: fit-content;
-  text-align: justify;
-  margin-left: 5rem;
-  margin-top: 15vh;
-  margin-right: 5rem;
-  display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  box-shadow: 0px 5px 15px 2px rgba(0, 0, 0, 0.48);
-  cursor: pointer;
-}
-.bio-content {
-  width: 30vw;
-  margin: 2rem;
 }
 .bottom-line {
   display: flex;
@@ -898,53 +850,21 @@ button {
   justify-content: center;
   gap: 1rem;
 }
-.delete-img-div {
-  position: absolute;
-  background-color: white;
-  width: 3rem;
-  height: 2.5rem;
-  font-size: 2rem;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  margin-left: 27vw;
-  cursor: pointer;
-  z-index: 1;
-}
-.edit-img {
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 40vw;
-  left: 17vw;
-  margin-top: 15vh;
-}
-.exhbs {
-  margin-left: 6rem;
-}
+
 .fade {
   opacity: 0.1;
 }
-
-.icon {
-  font-size: 1.5rem;
-  cursor: pointer;
-  /* margin-right: 1rem; */
+.fa-plus, .fa-edit{
+color: #27f2cb;
+font-size: 4rem;
 }
+
 .img-art {
   width: 30vw;
   height: 30vh;
   object-fit: cover;
 }
-.img-prof {
-  width: 30vw;
-  cursor: pointer;
-  margin-top: 15vh;
-}
+
 .list-projects,
 .list-exh {
   display: flex;
@@ -952,8 +872,6 @@ button {
   justify-content: flex-start;
   flex-wrap: wrap;
   gap: 1rem;
-  /* justify-self: center;
-  align-self: center; */
 }
 .projects,
 .exhbs {
@@ -962,19 +880,17 @@ button {
   align-items: center;
   justify-content: flex-start;
   width: 90vw;
-  /* margin-left: 2rem; */
+  margin-left: 20vw;
 }
-.project,
-.exh {
-  margin-left: 2rem;
-  box-shadow: 0px 5px 15px 2px rgba(0, 0, 0, 0.48);
-}
+
 .title {
-  /* position: absolute; */
+  font-family: "HortaRegular", cursive;
+  position: absolute;
   transform: rotate(270deg);
-  /* margin-top: 17vh; */
-  height: 10vh;
-  width: 20vw;
+  left: 0;
+  width: 15vw;
+  font-size: 1.5rem;
+  color: #acabab;
 }
 .warning {
   position: fixed;
@@ -984,7 +900,7 @@ button {
   align-self: center;
   justify-self: center;
   box-shadow: 0px 5px 15px 2px rgba(0, 0, 0, 0.48);
-  border: 3px solid rgb(190, 3, 3);
+  border: 3px solid #f55977;
   z-index: 5;
 }
 .warning-div {

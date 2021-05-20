@@ -104,11 +104,15 @@
       </transition>
     </div>
     <div class="dtls-nav-div">
-    <transition name="fade" >
-      <p class="dtls-nav" @click="showArtwDetails" v-if="chosen_artwork !== null">
-        {{ $t("artworks.nav.artw_dtls") }}
-      </p>
-    </transition>
+      <transition name="fade">
+        <p
+          class="dtls-nav"
+          @click="showArtwDetails"
+          v-if="chosen_artwork !== null"
+        >
+          {{ $t("artworks.nav.artw_dtls") }}
+        </p>
+      </transition>
     </div>
     <div
       :class="{
@@ -292,37 +296,38 @@ export default {
       //         });
       //       }
       //     });
-      // } 
+      // }
       // else if (art) {
-        this.images = [];
-        for (let i = 0; i < this.artworks.length; i++) {
-          if (this.artworks[i].chosen === true) {
-            this.artworks[i].chosen = false;
-          }
-          if (art === this.artworks[i]) {
-            this.artworks[i].chosen = true;
-          }
+      this.images = [];
+      for (let i = 0; i < this.artworks.length; i++) {
+        if (this.artworks[i].chosen === true) {
+          this.artworks[i].chosen = false;
         }
-        this.images.push({
-          path: art.artwork_imgpath,
-          id: art.artwork_id,
+        if (art === this.artworks[i]) {
+          this.artworks[i].chosen = true;
+        }
+      }
+      this.images.push({
+        path: art.artwork_imgpath,
+        id: art.artwork_id,
+      });
+      this.chosen_artwork = art;
+      axios
+        .get(this.baseUrl + "images", {
+          params: { artwork_id: art.artwork_id },
+        })
+        .then((res) => {
+          console.log(res);
+          for (let i = 0; i < res.data.data.length; i++) {
+            this.images.push({
+              path: res.data.data[i].img_path,
+              id: res.data.data[i].img_id,
+            });
+          }
+          this.forceRerender();
+          this.scrollToElement("photo-slider");
         });
-        this.chosen_artwork = art;
-        axios
-          .get(this.baseUrl + "images", {
-            params: { artwork_id: art.artwork_id },
-          })
-          .then((res) => {
-            console.log(res);
-            for (let i = 0; i < res.data.data.length; i++) {
-              this.images.push({
-                path: res.data.data[i].img_path,
-                id: res.data.data[i].img_id,
-              });
-            }
-          });
-        this.forceRerender();
-        this.scrollToElement("photo-slider");
+
       // }
     },
     hideInstr() {

@@ -39,9 +39,7 @@ button {
   height: 5vh;
   border-radius: 10px;
   border: none;
-  box-shadow: 0px 5px 15px 2px rgba(0, 0, 0, 0.48);
-  color: white;
-  cursor: pointer;
+  color: #545454;
   margin-top: 2rem;
   font-size: 1rem;
   font-family: "Forum", cursive;
@@ -59,13 +57,13 @@ h1{
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: white;
+  background-color: #F9FFF7;
   gap: 2rem;
 }
 .yes {
-  background-color: #26905f;
+  background-color: #27f2cb;
 }
 .no {
-  background-color: rgb(190, 3, 3);
+  background-color: #f55977;
 }
 </style>

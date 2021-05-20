@@ -1,6 +1,6 @@
 <template>
   <div class="editor">
-    <i class="far fa-arrow-alt-circle-left go-back" @click="goBack()"></i>
+    <i class="fas fa-times exit-edit" @click="goBack()"></i>
     <div class="edited">
       <button class="submit" @click="submitEdit()">SUBMIT</button>
       <div class="basic-info">
@@ -37,7 +37,7 @@
           <h1>Solo/group:</h1>
           <input class="e-title" v-model="exhType" />
         </div>
-         <div class="edit-content" v-if="editObject.type === 'project'">
+        <div class="edit-content" v-if="editObject.type === 'project'">
           <h1>Link:</h1>
           <input class="e-title" v-model="proj_link" />
         </div>
@@ -167,7 +167,7 @@ export default {
       edit_desc_rs: "",
       edit_rev_en: "",
       edit_rev_rs: "",
-      proj_link: this.editObject.proj_link
+      proj_link: this.editObject.proj_link,
     };
   },
   methods: {
@@ -186,6 +186,7 @@ export default {
     deleteNewImg() {
       this.newImgUrl = "";
     },
+
     getFile(e) {
       this.newCover = e.target.files[0];
       this.url = URL.createObjectURL(this.newCover);
@@ -235,7 +236,7 @@ export default {
         place: this.place,
         place_rs: this.place_rs,
         exhType: this.exhType,
-        proj_link: this.proj_link
+        proj_link: this.proj_link,
       };
 
       // this.editObject.images = this.newImages;
@@ -252,14 +253,14 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 3px dashed #214478;
+  border: 3px dashed #27f2cb;
   cursor: pointer;
   font-size: 2rem;
 }
 .add-img-div {
-  box-shadow: 0px 5px 15px 2px rgba(0, 0, 0, 0.48);
+  /*
   width: 30vw;
-  height: 40vh;
+  height: 40vh;*/
   display: flex;
   align-items: center;
   justify-content: center;
@@ -278,9 +279,8 @@ export default {
 }
 .cover-img-div {
   width: 30vw;
-  box-shadow: 0px 5px 15px 2px rgba(0, 0, 0, 0.48);
-  cursor: pointer;
   margin-top: 5vh;
+  background-color: #7e7e7e;
 }
 .cover-title {
   height: 5vh;
@@ -377,16 +377,24 @@ export default {
   border-radius: 50%;
   border: 2px solid #214478;
 }
+.exit-edit {
+  position: fixed;
+  top: 10vh;
+  left: 92vw;
+  font-size: 3rem;
+}
 .gallery {
-  width: 90vw;
+  width: 70vw;
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
   margin-top: 5vh;
 }
 .gallery-div {
+  width: 80vw;
   margin-top: 10vh;
   text-align: start;
+  margin-left: 20vw;
 }
 .gallery-img {
   width: 15vw;
@@ -420,8 +428,8 @@ export default {
 
 .submit {
   position: fixed;
-  left: 87vw;
-  top: 7vh;
+  left: 90vw;
+  top: 80vh;
   z-index: 2;
   width: 7vw;
 }
