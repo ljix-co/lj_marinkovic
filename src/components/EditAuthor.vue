@@ -137,7 +137,7 @@ button {
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
-  width: 90vw;
+  width: 80vw;
 }
 .bio {
   width: 35vw;
@@ -153,8 +153,8 @@ button {
 }
 .bio-btns {
   width: 30vw;
-  margin-left: 10vw;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 1rem;

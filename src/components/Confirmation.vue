@@ -1,5 +1,5 @@
 <template>
-  <div class="wrong">
+  <div class="confirm">
     <div class="alert">
       <h1>{{ message }}</h1>
       <button @click="confirm()">OK</button>
@@ -20,7 +20,7 @@ export default {
 </script>
 <style scoped>
 h1{
-    color: #26905f;
+    color: #545454;
     width: 20vw;
 }
 button {
@@ -28,10 +28,8 @@ button {
   height: 5vh;
   border-radius: 10px;
   border: none;
-  box-shadow: 0px 5px 15px 2px rgba(0, 0, 0, 0.48);
-  background-color: #26905f;
-  color: white;
-  cursor: pointer;
+  background-color: #27f2cb;
+  color: #545454;
   margin-top: 2rem;
   font-size: 1rem;
   font-family: "Forum", cursive;
@@ -47,11 +45,10 @@ button {
   gap: 2rem;
   align-items: center;
   justify-content: center;
-  box-shadow: 0px 5px 15px 2px rgba(0, 0, 0, 0.48);
-  border: 3px solid #26905f;
-  background-color: white;
+  border: 3px solid #27f2cb;
+  background-color: #F9FFF7;
 }
-.wrong {
+.confirm {
 position: fixed;/*
 left: 35vw;*/
 top: 10vh;

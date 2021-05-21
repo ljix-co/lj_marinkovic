@@ -1,6 +1,6 @@
 <template>
   <div class="edit-artworks">
-    <i class="far fa-arrow-alt-circle-left go-back" @click="goBack()"></i>
+    <i class="fas fa-times exit-edit" @click="goBack()"></i>
     <div class="prev-gallery" :class="{ fade: edit }" v-if="edit === false">
       <div class="prev-div" v-for="(art, index) in artworks" :key="index">
         <div class="delete-img-div">
@@ -390,17 +390,16 @@ margin-left: 11vw;
   left: 70vw;
   font-size: 3rem;
 }
+.exit-edit {
+  position: fixed;
+  top: 10vh;
+  left: 92vw;
+  font-size: 3rem;
+}
 .fade {
   opacity: 0.1;
 }
-.go-back {
-  font-size: 2rem;
-  position: fixed;
-  left: 22vw;
-  top: 1rem;
-  cursor: pointer;
-  z-index: 2;
-}
+
 .icon {
   font-size: 1.5rem;
   position: absolute;

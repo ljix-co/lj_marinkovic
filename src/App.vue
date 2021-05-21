@@ -53,7 +53,7 @@
      <custom-cursor
       :targets="[ 'a', 'button', 'i', 'nav-left', 'nav-scroll', 'order-nav', 'dtls-nav', 'order-exit', 'exit-order', 'order-delete', 'exit-order', 'check-order-btn',
       'buy-nav', 'exit', 'prev-img', 'lines', 'delete', 'ctrl', 'img-gallery', 'logo', 'image-home', 'flag', 'cart-icon', 'cart-amount',
-      'add-icon', 'img-prof']"
+      'add-icon', 'img-prof', 'cover-img']"
       :circleColor="'#27f2cb'"
       :circleColorHover="'#C3EAE3'"
       :hoverSize="3"

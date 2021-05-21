@@ -101,7 +101,8 @@
     "no": "NE"
   },
   "success": {
-    "web_ord": "Uspešno ste poručili veb sajt. Bićete kontaktirani uskoro putem email-a."
+    "web_ord": "Uspešno ste poručili veb sajt. Bićete kontaktirani uskoro putem email-a. Hvala Vam na porudžbini.",
+    "art_ord": "Uspešno ste poručili umetninu/e. Bićete kontaktirani uskoro u vezi informacija o prispeću. Hvala Vam na porudžbini."
   },
   "tooltips": {
     "gallery": "KLIKNITE DA VIDITE SVE SLIKE",

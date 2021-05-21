@@ -101,7 +101,8 @@
     "no": "NO"
   },
   "success": {
-    "web_ord": "You have successfully ordered a web site. You will be contacted soon via email."
+    "web_ord": "You have successfully ordered a web site. You will be contacted soon via email. Thank You for ordering.",
+    "art_ord": "You have successfully ordered the artwork/s. You will be contacted soon about the information of the arrival. Thank You for ordering."
   },
   "tooltips": {
     "gallery": "CLICK TO SEE ALL IMAGES",

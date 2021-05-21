@@ -105,12 +105,16 @@
         :editObject="editObject"
         :array="array"
         :artworks="artworks"
+        :projects="projects"
+        :exh="exh"
+        :confirm_modal="confirm_modal"
         @confirm="confirm"
         @deny="deny"
       ></Warning>
     </div>
     <AddNew
       v-if="addNew"
+      :key="'adn' + componentKey"
       :type="type"
       :newId="newId"
       :images="images"
@@ -133,6 +137,11 @@
       @update-artwork="updateArtwork"
       @go-back="goBack"
     ></EditArtworks>
+    <confirmation
+      v-if="confirm_modal"
+      :message="message"
+      @confirm="confirm"
+    ></confirmation>
   </div>
 </template>
 <script>
@@ -145,6 +154,7 @@ import { mapState, mapActions } from "vuex";
 import axios from "axios";
 import EditAuthor from "../components/EditAuthor.vue";
 import EditListProjExh from "../components/EditListProjExh.vue";
+import Confirmation from "../components/Confirmation.vue";
 export default {
   components: {
     Edit,
@@ -154,6 +164,7 @@ export default {
     EditArtworks,
     EditAuthor,
     EditListProjExh,
+    Confirmation,
   },
   data() {
     return {
@@ -183,6 +194,8 @@ export default {
       addNew: false,
       newId: null,
       newArtworkId: null,
+      componentKey: 0,
+      confirm_modal: false,
     };
   },
   methods: {
@@ -223,7 +236,8 @@ export default {
 
           axios.post(this.baseUrl + "images", imgFormData).then((res) => {
             console.log(res);
-            this.$router.go();
+            this.confirm_modal = true;
+            this.message = "New artworks successfully added.";
           });
         }
       });
@@ -247,6 +261,8 @@ export default {
         axios.post(this.baseUrl + "projects", formData).then((res) => {
           console.log(res);
           this.newId = res.data.proj_id;
+          this.confirm_modal = true;
+          this.message = "New project successfully added.";
         });
       }
       if (this.type === "newExh") {
@@ -267,12 +283,14 @@ export default {
         axios.post(this.baseUrl + "exhibitions", formData).then((res) => {
           console.log(res);
           this.newId = res.data.exh_id;
+          this.confirm_modal = true;
+          this.message = "New exhibition successfully added.";
         });
       }
     },
     addNewImg(newImage) {
       let formData = new FormData();
-
+      this.newGalleryImg = {};
       formData.append("sid", localStorage.getItem("sid"));
       formData.append("img_image", newImage);
 
@@ -308,7 +326,6 @@ export default {
             this.baseUrl + "images/" + res.data.img_id + "/image";
           this.newGalleryImg.img_id = res.data.img_id;
           this.images.push(this.newGalleryImg);
-          console.log(this.newGalleryImg);
         });
       }
       if (this.type === "newExh") {
@@ -337,6 +354,7 @@ export default {
     },
     confirm() {
       this.warning = false;
+      this.confirm_modal = false;
     },
     confrmNewAutImg(newImg) {
       if (newImg != "") {
@@ -346,7 +364,8 @@ export default {
         formData.append("aut_profimg", newImg);
         axios.patch(this.baseUrl + "author_info", formData).then((res) => {
           console.log(res);
-          this.$router.go();
+          this.confirm_modal = true;
+          this.message = "Image successfully changed.";
         });
       }
     },
@@ -358,6 +377,8 @@ export default {
       formData.append("new_pass", chngd_pass.new_pass);
       axios.patch(this.baseUrl + "author_info", formData).then((res) => {
         console.log(res);
+        this.confirm_modal = true;
+        this.message = "Password successfully changed.";
       });
     },
     deleteArtwork(art) {
@@ -397,7 +418,12 @@ export default {
           })
           .then((res) => {
             console.log(res);
-            this.$router.go();
+            for (let i = 0; i < this.exh.length; i++) {
+              if (this.exh[i] === exh) {
+                this.exh.splice(i, 1);
+                this.warning = false;
+              }
+            }
           });
       };
     },
@@ -454,7 +480,10 @@ export default {
           console.log(res);
           for (let i = 0; i < this.images.length; i++) {
             if (img.img_id === this.images[i].img_id) {
+              console.log(this.images[i]);
               this.images.splice(i, 1);
+              console.log(this.images);
+              this.componentKey += 1;
             }
           }
         });
@@ -470,7 +499,13 @@ export default {
           })
           .then((res) => {
             console.log(res);
-            this.$router.go();
+            console.log(this.projects);
+            for (let i = 0; i < this.projects.length; i++) {
+              if (this.projects[i] === project) {
+                this.projects.splice(i, 1);
+                this.warning = false;
+              }
+            }
           });
       };
     },
@@ -566,9 +601,9 @@ export default {
     goBack() {
       this.edit = false;
       this.addNew = false;
+      this.edit_artworks = false;
       this.editObject = null;
       this.images = [];
-      
     },
 
     updateArtwork(updatedArtwork) {
@@ -631,6 +666,8 @@ export default {
             }
             axios.patch(this.baseUrl + "artworks", formData).then((res) => {
               console.log(res);
+              this.confirm_modal = true;
+            this.message = 'Artwork successfully updated.';
             });
           }
         }
@@ -645,6 +682,8 @@ export default {
         axios.patch(this.baseUrl + "author_info", formData).then((res) => {
           console.log(res);
           // this.$router.go();
+          this.confirm_modal = true;
+          this.message = "Biography successfully updated.";
         });
       }
     },
@@ -683,7 +722,8 @@ export default {
           }
           axios.patch(this.baseUrl + "projects", formData).then((res) => {
             console.log(res);
-            this.$router.go();
+            this.confirm_modal = true;
+            this.message = 'Project successfully updated.';
           });
         };
       }
@@ -731,7 +771,8 @@ export default {
           }
           axios.patch(this.baseUrl + "exhibitions", formData).then((res) => {
             console.log(res);
-            this.$router.go();
+            this.confirm_modal = true;
+            this.message = 'Exhibition successfully updated.';
           });
         };
       }
@@ -768,7 +809,7 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 5px dashed #F9FFF7;
+  border: 5px dashed #f9fff7;
   cursor: pointer;
   font-size: 3rem;
   background-color: #7e7e7e;
@@ -854,9 +895,10 @@ button {
 .fade {
   opacity: 0.1;
 }
-.fa-plus, .fa-edit{
-color: #27f2cb;
-font-size: 4rem;
+.fa-plus,
+.fa-edit {
+  color: #27f2cb;
+  font-size: 4rem;
 }
 
 .img-art {

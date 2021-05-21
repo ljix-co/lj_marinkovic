@@ -1,19 +1,20 @@
 <template>
   <div class="editor">
+    <h1 class="top-title">CHNAGE DETAILS</h1>
     <i class="fas fa-times exit-edit" @click="goBack()"></i>
     <div class="edited">
       <button class="submit" @click="submitEdit()">SUBMIT</button>
       <div class="basic-info">
         <div class="edit-content">
-          <h1>Title(EN):</h1>
+          <label>TITLE(EN)</label>
           <input class="e-title" v-model="title" />
         </div>
         <div class="edit-content">
-          <h1>Title(RS):</h1>
+          <label>TITLE(RS)</label>
           <input class="e-title" v-model="title_rs" />
         </div>
         <div class="edit-content">
-          <h1>Time period:</h1>
+          <label>TIME PERIOD</label>
           <div class="time-period">
             <input
               class="year"
@@ -26,19 +27,19 @@
           </div>
         </div>
         <div class="edit-content" v-if="editObject.type === 'exh'">
-          <h1>Place(EN):</h1>
+          <label>PLACE(EN)</label>
           <input class="e-title" v-model="place" />
         </div>
         <div class="edit-content" v-if="editObject.type === 'exh'">
-          <h1>Place(RS):</h1>
+          <label>PLACE(RS)</label>
           <input class="e-title" v-model="place_rs" />
         </div>
         <div class="edit-content" v-if="editObject.type === 'exh'">
-          <h1>Solo/group:</h1>
+          <label>SOLO/GROUP</label>
           <input class="e-title" v-model="exhType" />
         </div>
         <div class="edit-content" v-if="editObject.type === 'project'">
-          <h1>Link:</h1>
+          <label>LINK</label>
           <input class="e-title" v-model="proj_link" />
         </div>
         <div class="cover-img-div">
@@ -58,23 +59,23 @@
         </div>
       </div>
       <div>
-        <div class="links-editor">
-          <h2 class="link-editor" @click="showDescEn()">DESCRIPTION(EN)</h2>
-          <h2 class="link-editor" @click="showDescRs()">DESCRIPTION(RS)</h2>
-          <h2
-            class="link-editor"
+        <div class="btns">
+          <button class="btn-show" @click="showDescEn()">DESCRIPTION(EN)</button>
+          <button class="btn-show" @click="showDescRs()">DESCRIPTION(RS)</button>
+          <button
+            class="btn-show"
             v-if="editObject.type === 'exh'"
             @click="showRevEn()"
           >
             REVIEW(EN)
-          </h2>
-          <h2
-            class="link-editor"
+          </button>
+          <button
+            class="btn-show"
             v-if="editObject.type === 'exh'"
             @click="showRevRs()"
           >
             REVIEW(RS)
-          </h2>
+          </button>
         </div>
         <div class="txt-editor-div">
           <h1 v-if="edit_desc_en">Description(EN):</h1>
@@ -95,19 +96,19 @@
       </div>
     </div>
     <!-- GALLERY -->
+    <h2 class="gallery-title">GALLERY CONTENT</h2>
     <div class="gallery-div">
-      <h1>Gallery content:</h1>
-      <div class="gallery">
-        <div class="add-img-div" v-if="newImgUrl === ''">
-          <label for="img">
-            <div class="add-img-div">
-              <div class="add-img">
-                <i class="fas fa-plus"></i>
-              </div>
+    <div class="add-img-div" v-if="newImgUrl === ''">
+        <label for="img">
+          <div class="add-img-div">
+            <div class="add-img">
+              <i class="fas fa-plus"></i>
             </div>
-          </label>
-          <input type="file" id="img" hidden @change="getNewImg" />
-        </div>
+          </div>
+        </label>
+        <input type="file" id="img" hidden @change="getNewImg" />
+      </div>
+      
         <div v-if="newImgUrl">
           <div class="add-new-img-div">
             <div class="delconf-img-div">
@@ -117,13 +118,14 @@
               ></i>
               <i class="far fa-check-circle" @click="addNewImg()"></i>
             </div>
-            <img class="cover-img" :src="newImgUrl" alt="" />
+            <img class="gallery-img" :src="newImgUrl" alt="" />
           </div>
         </div>
+        <div class="gallery">
         <div class="dtl-imgs" v-if="images.length > 0">
           <div v-lazyload v-for="(img, index) in images" :key="'i' + index">
             <div class="">
-              <i class="fas fa-trash-alt" @click="deleteImg(img)"></i>
+              <i class="fas fa-trash-alt delete-gallery-img" @click="deleteImg(img)"></i>
             </div>
             <img
               class="gallery-img"
@@ -248,39 +250,48 @@ export default {
 </script>
 <style scoped>
 .add-img {
-  width: 10vw;
-  height: 10vw;
+  width: 20vw;
+  height: 20vw;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 3px dashed #27f2cb;
+  border: 5px dashed #f9fff7;
   cursor: pointer;
   font-size: 2rem;
+  background-color: #7e7e7e;
 }
-.add-img-div {
-  /*
-  width: 30vw;
-  height: 40vh;*/
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 0.5rem;
-}
+
 .add-new-img-div {
   z-index: 3;
 }
 .basic-info {
   display: flex;
-  flex-direction: column;
-  gap: 2rem;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  width: 60vw;
+}
+.btns {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  width: 30vw;
+  gap: 1rem;
+}
+.btn-show {
+  font-size: 1rem;
 }
 .cover-img {
   width: 30vw;
+  height: 40vh;
+  object-fit: contain;
+  background-color: #7e7e7e;
 }
 .cover-img-div {
   width: 30vw;
   margin-top: 5vh;
-  background-color: #7e7e7e;
 }
 .cover-title {
   height: 5vh;
@@ -290,22 +301,24 @@ export default {
 }
 .delconf-img-div {
   position: absolute;
-  background-color: white;
-  width: 6rem;
-  height: 2.5rem;
   font-size: 2rem;
   text-align: center;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  margin-left: 24vw;
-  cursor: pointer;
+  margin-left: 17vw;
   z-index: 1;
+}
+.delete-img {
+  color: #f55977;
+}
+.fa-check-circle {
+  color: #27f2cb;
 }
 .delete-img-div {
   position: absolute;
-  background-color: white;
   width: 3rem;
   height: 2.5rem;
   font-size: 2rem;
@@ -314,9 +327,9 @@ export default {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  margin-left: 27vw;
-  cursor: pointer;
+  margin-left: 17vw;
   z-index: 1;
+  color: #f55977;
 }
 .dtl-imgs {
   display: flex;
@@ -324,9 +337,7 @@ export default {
   align-items: flex-start;
   justify-content: flex-start;
   gap: 1rem;
-  width: 60vw;
   height: fit-content;
-  margin-left: 10vw;
 }
 .editor {
   margin-top: 10vh;
@@ -343,39 +354,24 @@ export default {
   justify-content: center;
   align-self: center;
   justify-self: center;
-  gap: 10rem;
-  width: 90vw;
-}
-.e-title {
-  width: 40vw;
-  height: 5vh;
-  font-size: 1.2rem;
-  font-family: "Forum", cursive;
-  text-align: center;
-  border: none;
-  cursor: pointer;
-  border-bottom: 1.5px solid gray;
-}
-.e-title:focus {
-  outline: none;
+  gap: 1rem;
+  width: 80vw;
+  margin-left: 10vw;
 }
 .edit-content {
   display: flex;
-  gap: 2rem;
+  flex-direction: column;
+  gap: 0.5rem;
   align-items: center;
-  justify-content: flex-start;
-  width: 30vw;
+  justify-content: center;
+  width: 20vw;
 }
+
 .exit {
   font-size: 2rem;
   position: absolute;
-  cursor: pointer;
   z-index: 1;
-  margin-top: 2vh;
-  left: 32vw;
-  background-color: white;
-  border-radius: 50%;
-  border: 2px solid #214478;
+  left: 55vw;
 }
 .exit-edit {
   position: fixed;
@@ -383,34 +379,46 @@ export default {
   left: 92vw;
   font-size: 3rem;
 }
+.fa-plus {
+  color: #27f2cb;
+  font-size: 3rem;
+}
+.delete-gallery-img{
+color: #f55977;
+font-size: 1.5rem;
+position: absolute;
+margin-left: 8vw;
+}
 .gallery {
-  width: 70vw;
+  width: 55vw;
   display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
-  margin-top: 5vh;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
 }
 .gallery-div {
+  margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: flex-start;
   width: 80vw;
-  margin-top: 10vh;
-  text-align: start;
   margin-left: 20vw;
+  gap: 2rem;
 }
 .gallery-img {
-  width: 15vw;
+  width: 20vw;
+  height: 30vh;
+  object-fit: contain;
+  background-color: #7e7e7e;
 }
-.gallery-img-div {
-  box-shadow: 0px 5px 15px 2px rgba(0, 0, 0, 0.48);
-  width: 30vw;
-  height: fit-content;
-}
-.go-back {
-  font-size: 2rem;
-  position: fixed;
-  left: 22vw;
-  top: 1rem;
-  cursor: pointer;
-  z-index: 2;
+
+.gallery-title{
+margin-top: 10vh;
+width: 80vw;
+margin-left: 20vw;
+text-align: start;
 }
 .link-editor {
   border-bottom: 2px solid #27f2cb;
@@ -428,8 +436,8 @@ export default {
 
 .submit {
   position: fixed;
-  left: 90vw;
-  top: 80vh;
+  left: 5vw;
+  top: 7vh;
   z-index: 2;
   width: 7vw;
 }
@@ -437,8 +445,13 @@ export default {
   display: flex;
   font-size: 2rem;
 }
+.top-title {
+  font-family: "HortaRegular", cursive;
+  font-size: 4rem;
+  margin-top: 1rem;
+}
 .txt-editor-div {
-  text-align: start;
+  background-color: #f9fff7;
 }
 .vue_editor {
   width: 30vw;

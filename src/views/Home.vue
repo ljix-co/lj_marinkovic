@@ -679,7 +679,7 @@ border-radius: 2rem;*/
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border-bottom: 2px solid #27f2cb;
+  border-bottom: 1px solid #27f2cb;
   width: 50vw;
 
   position: fixed;

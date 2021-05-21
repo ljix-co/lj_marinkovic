@@ -175,6 +175,11 @@
         </div>
       </div>
     </div>
+    <confirmation
+      v-if="order_success"
+      :message="message"
+      @confirm="confirm"
+    ></confirmation>
   </div>
 </template>
 
@@ -184,10 +189,11 @@ import axios from "axios";
 import PhotoSlider from "../components/PhotoSlider.vue";
 import { checkLanguage } from "../mixins/checkLanguage.js";
 import { scrollToElement } from "../mixins/scrollToElement.js";
+import Confirmation from "../components/Confirmation.vue";
 // import PayPalButton from "../components/PayPalButton.vue";
 // import PayPalButton from '../components/PayPalButton.vue';
 export default {
-  components: { PhotoSlider },
+  components: { PhotoSlider, Confirmation },
   data() {
     return {
       artworks: [],
@@ -206,6 +212,8 @@ export default {
       buttonKey: 0,
       total_price: 0,
       num_cart: 0,
+      order_success: false,
+      message: "",
       // pay_option: false,
     };
   },
@@ -249,9 +257,12 @@ export default {
               })
               .then((res) => {
                 console.log(res);
-
-                //ovde ubaciti modal kojim se potvrđuje porudžbina
-              });
+                this.message = this.$t("success.art_ord");
+                this.order_success = true;
+              }).catch(error => {
+                console.log(error) 
+                //ubaci wrong
+              })
           });
         }
       });
@@ -259,6 +270,10 @@ export default {
     // confirmCustomerInfo() {
     //   this.pay_option = true;
     // },
+    confirm() {
+      this.order_success = false;
+      this.message = "";
+    },
     closeOrderList() {
       this.show_order_list = false;
     },

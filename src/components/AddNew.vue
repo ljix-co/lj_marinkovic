@@ -1,5 +1,6 @@
 <template>
   <div class="add-new">
+    <h1 class="top-title">ADD NEW</h1>
     <i class="fas fa-times exit-add" @click="goBack()"></i>
     <div class="edited" v-if="newId === null">
       <button class="submit" @click="addNew()">ADD</button>
@@ -23,7 +24,11 @@
               v-if="type === 'newExh'"
             />
             <p v-if="type === 'newExh'">-</p>
-            <input class="year" type="text" v-model="yearFinish" />
+            <input
+              :class="{ year: type === 'newExh' }"
+              type="text"
+              v-model="yearFinish"
+            />
           </div>
         </div>
         <div class="edit-content" v-if="type !== 'newExh'">
@@ -81,22 +86,30 @@
             REVIEW(RS)
           </button>
         </div>
-        <div class="txt-editor-div" v-if="show_dsc_en">
-          <h1>Description (EN)</h1>
-          <vue-editor class="vue_editor" v-model="desc" />
-        </div>
-        <div class="txt-editor-div" v-if="show_dsc_rs">
-          <h1>Description (RS)</h1>
-          <vue-editor class="vue_editor" v-model="desc_rs" />
-        </div>
-        <div class="txt-editor-div" v-if="type === 'newExh' && show_rev_en">
-          <h1>Review (EN)</h1>
-          <vue-editor class="vue_editor" v-model="rev" />
-        </div>
-        <div class="txt-editor-div" v-if="type === 'newExh' && show_rev_rs">
-          <h1>Review (RS)</h1>
-          <vue-editor class="vue_editor" v-model="rev_rs" />
-        </div>
+        <transition name="fade" mode="out-in">
+          <div class="txt-editor-div" v-if="show_dsc_en">
+            <h2>DESCRIPTION (EN)</h2>
+            <vue-editor class="vue_editor" v-model="desc" />
+          </div>
+        </transition>
+        <transition name="fade" mode="out-in">
+          <div class="txt-editor-div" v-if="show_dsc_rs">
+            <h2>DESCRIPTION (RS)</h2>
+            <vue-editor class="vue_editor" v-model="desc_rs" />
+          </div>
+        </transition>
+        <transition name="fade" mode="out-in">
+          <div class="txt-editor-div" v-if="type === 'newExh' && show_rev_en">
+            <h2>REVIEW (EN)</h2>
+            <vue-editor class="vue_editor" v-model="rev" />
+          </div>
+        </transition>
+        <transition name="fade" mode="out-in">
+          <div class="txt-editor-div" v-if="type === 'newExh' && show_rev_rs">
+            <h2>REVIEW (RS)</h2>
+            <vue-editor class="vue_editor" v-model="rev_rs" />
+          </div>
+        </transition>
       </div>
     </div>
     <div class="gallery-div" v-if="newId !== null">
@@ -121,7 +134,7 @@
           <img class="gallery-img" :src="newImgUrl" alt="" />
         </div>
       </div>
-      <div v-if="images.length > 0">
+      <div class="gallery" v-if="images.length > 0">
         <div v-lazyload v-for="(img, index) in images" :key="'i' + index">
           <div class="delete-img-div">
             <i class="fas fa-trash-alt delete-img" @click="deleteImg(img)"></i>
@@ -219,34 +232,49 @@ export default {
       this.$emit("go-back");
     },
     showDscEn() {
-      this.show_dsc_en = true;
-      this.show_dsc_rs = false;
-      this.show_rev_en = false;
-      this.show_rev_rs = false;
+      if (this.show_dsc_en === false) {
+        this.show_dsc_en = true;
+        this.show_dsc_rs = false;
+        this.show_rev_en = false;
+        this.show_rev_rs = false;
+      } else {
+        this.show_dsc_en = false;
+      }
     },
     showDscRs() {
-      this.show_dsc_rs = true;
-      this.show_dsc_en = false;
-      this.show_rev_en = false;
-      this.show_rev_rs = false;
+      if (this.show_dsc_rs === false) {
+        this.show_dsc_rs = true;
+        this.show_dsc_en = false;
+        this.show_rev_en = false;
+        this.show_rev_rs = false;
+      } else {
+        this.show_dsc_rs = false;
+      }
     },
     showRevEn() {
-      this.show_rev_en = true;
-      this.show_dsc_rs = false;
-      this.show_dsc_en = false;
-      this.show_rev_rs = false;
+      if (this.show_rev_en === false) {
+        this.show_rev_en = true;
+        this.show_dsc_rs = false;
+        this.show_dsc_en = false;
+        this.show_rev_rs = false;
+      } else {
+        this.show_rev_en = false;
+      }
     },
     showRevRs() {
-      this.show_rev_rs = true;
-      this.show_dsc_en = false;
-      this.show_rev_en = false;
-      this.show_dsc_rs = false;
+      if (this.show_rev_rs === false) {
+        this.show_rev_rs = true;
+        this.show_dsc_en = false;
+        this.show_rev_en = false;
+        this.show_dsc_rs = false;
+      } else {
+        this.show_rev_rs = false;
+      }
     },
   },
 };
 </script>
 <style scoped>
-
 .add-new {
   margin-top: 10vh;
   margin-left: 4rem;
@@ -257,7 +285,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 5px dashed #F9FFF7;
+  border: 5px dashed #f9fff7;
   cursor: pointer;
   font-size: 2rem;
   background-color: #7e7e7e;
@@ -268,8 +296,11 @@ export default {
 }
 .basic-info {
   display: flex;
-  flex-direction: column;
-  gap: 2rem;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  width: 60vw;
 }
 .btns {
   display: flex;
@@ -298,22 +329,24 @@ export default {
 }
 .delconf-img-div {
   position: absolute;
-  background-color: white;
-  width: 6rem;
-  height: 2.5rem;
   font-size: 2rem;
   text-align: center;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  margin-left: 24vw;
-  cursor: pointer;
+  margin-left: 17vw;
   z-index: 1;
+}
+.delete-img{
+color: #f55977;
+}
+.fa-check-circle{
+color: #27f2cb;
 }
 .delete-img-div {
   position: absolute;
-  background-color: white;
   width: 3rem;
   height: 2.5rem;
   font-size: 2rem;
@@ -322,9 +355,9 @@ export default {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  margin-left: 27vw;
-  cursor: pointer;
+  margin-left: 17vw;
   z-index: 1;
+  color: #f55977;
 }
 .editor {
   margin-top: 10vh;
@@ -341,64 +374,63 @@ export default {
   justify-content: center;
   align-self: center;
   justify-self: center;
-  gap: 10rem;
-  width: 90vw;
+  gap: 1rem;
+  width: 80vw;
+  margin-left: 10vw;
 }
 
 .edit-content {
   display: flex;
   flex-direction: column;
-  gap: .5rem;
-  align-items: flex-start;
-  justify-content: flex-start;
-  width: 30vw;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+  width: 20vw;
 }
 .exit {
   font-size: 2rem;
   position: absolute;
   z-index: 1;
-  left: 45vw;
-  
+  left: 55vw;
 }
 .exit-add {
-  position: absolute;
+  position: fixed;
   top: 10vh;
   left: 92vw;
   font-size: 3rem;
 }
-.fa-plus{
-color: #27f2cb;
-font-size: 3rem;
+.fa-plus {
+  color: #27f2cb;
+  font-size: 3rem;
 }
 .gallery {
-  width: 90vw;
-  columns: 3;
-  margin-top: 5vh;
+  width: 60vw;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
 }
 .gallery-div {
   margin-top: 10vh;
-  text-align: start;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 80vw;
+  margin-left: 10vw;
 }
 .gallery-img {
-  width: 30vw;
+  width: 20vw;
+  height: 30vh;
+  object-fit: contain;
+  background-color: #7e7e7e;
 }
-.gallery-img-div {
-  box-shadow: 0px 5px 15px 2px rgba(0, 0, 0, 0.48);
-  width: 30vw;
-  height: fit-content;
-}
-.go-back {
-  font-size: 2rem;
-  position: fixed;
-  left: 22vw;
-  top: 1rem;
-  cursor: pointer;
-  z-index: 2;
-}
+
 .submit {
   position: fixed;
-  left: 90vw;
-  top: 80vh;
+  left: 5vw;
+  top: 7vh;
   z-index: 2;
   width: 7vw;
 }
@@ -406,8 +438,13 @@ font-size: 3rem;
   display: flex;
   font-size: 2rem;
 }
+.top-title {
+  font-family: "HortaRegular", cursive;
+  font-size: 4rem;
+  margin-top: 1rem;
+}
 .txt-editor-div {
-  text-align: start;
+  background-color: #f9fff7;
 }
 .vue_editor {
   width: 30vw;

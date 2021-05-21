@@ -17,7 +17,10 @@ export default {
     images: Array,
     editObject: Object,
     array: Array,
-    artworks: Array
+    artworks: Array,
+    projects: Array,
+    exh: Array,
+    confirm_modal: Boolean
   },
   methods: {
     confirm() {
