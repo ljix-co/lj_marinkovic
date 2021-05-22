@@ -1,37 +1,43 @@
 <template>
   <div class="projects">
-    <div class="pg-col" v-if="showGallery === false">
-      <div class="preview">
-        <div
-          class="prev-div"
-          v-for="(project, index) in projects"
-          :key="index"
-          @click="showProj(project)"
-        >
-        <div class="year">
-        <div class="triangle-right"></div>
-        <p class="year-string">{{project.proj_year}}</p>
-        </div>
-        <div class="line"></div>
-          <div class="img-title">
-            <div class="tooltip">
-              <img class="prev-img" :src="project.coverphoto_path" alt="" />
-              <span class="tooltiptxt">{{ $t("tooltips.nav") }}</span>
+    <transition name="fade" mode="out-in">
+      <div class="pg-col" v-if="showGallery === false">
+        <div class="preview">
+          <div
+            class="prev-div"
+            v-for="(project, index) in projects"
+            :key="index"
+            @click="showProj(project)"
+          >
+            <div class="year">
+              <div class="triangle-right"></div>
+              <p class="year-string">{{ project.proj_year }}</p>
             </div>
-            <h3 class="proj-title">{{ project.title.toUpperCase() }}</h3>
-            <a :href="project.proj_link" target="blank" class="link">{{project.proj_link}}</a>
+            <div class="line"></div>
+            <div class="img-title">
+              <div class="tooltip">
+                <img class="prev-img" :src="project.coverphoto_path" alt="" />
+                <span class="tooltiptxt">{{ $t("tooltips.nav") }}</span>
+              </div>
+              <h3 class="proj-title">{{ project.title.toUpperCase() }}</h3>
+              <a :href="project.proj_link" target="blank" class="link">{{
+                project.proj_link
+              }}</a>
+            </div>
+            <div class="short-desc" v-html="project.short_desc"></div>
           </div>
-          <div class="short-desc" v-html="project.short_desc"></div>
         </div>
       </div>
-    </div>
-    <Gallery
-      :key="'g' + componentKey"
-      v-if="showGallery"
-      :images="images"
-      :chosenProj="chosenProj"
-      @go-back="goBack()"
-    ></Gallery>
+    </transition>
+    <transition name="fade" mode="out-in">
+      <Gallery
+        :key="'g' + componentKey"
+        v-if="showGallery"
+        :images="images"
+        :chosenProj="chosenProj"
+        @go-back="goBack()"
+      ></Gallery>
+    </transition>
   </div>
 </template>
 <script>
@@ -108,16 +114,15 @@ export default {
     top: 6vh;
   }
 }
-.img-title{
+.img-title {
   width: 45vw;
-  
 }
-.line{
+.line {
   height: 60vh;
-  width: 3px;
+  width: 1px;
   background-color: #27f2cb;
 }
-.link{
+.link {
   text-align: center;
   font-size: 1.2rem;
   font-weight: 800;
@@ -134,7 +139,6 @@ export default {
   align-self: center;
   justify-self: center;
   margin-left: 4rem;
-  animation: in 2s 1;
   position: relative;
   top: 6vh;
 }
@@ -151,8 +155,8 @@ export default {
 .prev-div {
   width: 70vw;
   height: 60vh;
-  margin-top: 10vh;
-  
+  margin-top: 10vh;/*
+background-color: #F9FFF7;*/
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
@@ -170,27 +174,19 @@ export default {
   height: 60vh;
   width: 20vw;
   border-bottom: 5px solid #27f2cb;
+  
 }
 .tooltip .tooltiptxt {
   position: absolute;
-  margin-left: -35vw;
+  margin-left: -40vw;
   background-color: #63f8daab;
-  width: 30vw;
+  width: 40vw;
   transition-delay: 0.2s;
   visibility: hidden;
-  border-bottom-left-radius: 1rem;
-  border-bottom-right-radius: 1rem;
 }
 .tooltip:hover .tooltiptxt {
   visibility: visible;
-}/*
-.triangle-right {
-      width: 0;
-      height: 0;
-      border-right: 25px solid transparent;
-      border-left: 25px solid transparent;
-      border-top: 50px solid #27f2cb;
-    }*/
+}
 .year {
   display: flex;
   align-items: center;
@@ -202,7 +198,7 @@ export default {
 }
 .year-string {
   color: #545454;
- 
+
   font-size: 4rem;
 }
 @media only screen and (max-width: 768px) {

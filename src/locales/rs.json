@@ -7,11 +7,12 @@
       "order_list": "PROVERITE LISTU PORUDŽBINE"
     },
     "inpt_lbl": {
-      "fullname": "PUNO IME",
+      "fullname": "IME I PREZIME",
       "email": "E-MAIL",
       "address": "ADRESA",
       "country": "ZEMLJA",
-      "city": "GRAD"
+      "city": "GRAD",
+      "phone_num": "BROJ TELEFONA"
     },
     "order_list": "LISTA PORUDŽBINE",
     "total_price": "Ukupna cena:"
@@ -21,6 +22,17 @@
     "confirm": "POTVRDI",
     "send": "POŠALJI"
   },
+  "country_list" : [
+    {
+      "country": "SRBIJA"
+    },
+    {
+      "country": "BOSNA I HERCEGOVINA"
+    },
+    {
+      "country": "CRNA GORA"
+    }
+  ],
   "home": {
     "categories": [
       {

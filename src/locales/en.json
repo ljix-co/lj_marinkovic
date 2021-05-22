@@ -11,7 +11,8 @@
       "email": "E-MAIL",
       "address": "ADDRESS",
       "country": "COUNTRY",
-      "city": "CITY"
+      "city": "CITY",
+      "phone_num": "PHONE NUMBER"
     },
     "order_list": "ORDER LIST",
     "total_price": "Total price:"
@@ -21,6 +22,17 @@
     "confirm": "CONFIRM",
     "send": "SEND"
   },
+  "country_list" : [
+    {
+      "country": "SERBIA"
+    },
+    {
+      "country": "BOSNIA AND HERZEGOVINA"
+    },
+    {
+      "country": "MONTENEGRO"
+    }
+  ],
   "home": {
     "categories": [
       {

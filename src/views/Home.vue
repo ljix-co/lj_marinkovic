@@ -206,7 +206,6 @@ export default {
       message: "",
       cust_message: "",
       wrong: false,
-      emailReg: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
       orderSuccess: false,
       scrollDirectionLeave: "up-leave",
       scrollDirectionIn: "up-in",
@@ -324,7 +323,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(["baseUrl"]),
+    ...mapState(["baseUrl", "emailReg"]),
   },
   mounted() {
     // window.addEventListener('scroll', this.scrollEvent())

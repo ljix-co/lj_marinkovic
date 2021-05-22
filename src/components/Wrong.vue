@@ -20,18 +20,17 @@ export default {
 </script>
 <style scoped>
 h1{
-    color: rgb(190, 3, 3);
+    color: #f55977;
     width: 20vw;
+    
 }
 button {
   width: 10vh;
   height: 5vh;
   border-radius: 10px;
   border: none;
-  box-shadow: 0px 5px 15px 2px rgba(0, 0, 0, 0.48);
-  background-color: #26905f;
-  color: white;
-  cursor: pointer;
+  background-color: #27f2cb;
+  color: #545454;
   margin-top: 2rem;
   font-size: 1rem;
   font-family: "Forum", cursive;
@@ -47,9 +46,8 @@ button {
   gap: 2rem;
   align-items: center;
   justify-content: center;
-  box-shadow: 0px 5px 15px 2px rgba(0, 0, 0, 0.48);
-  border: 3px solid rgb(190, 3, 3);
-  background-color: white;
+  border: 3px solid #f55977;
+  background-color: #F9FFF7;
 }
 .wrong {
 position: fixed;/*

@@ -1,5 +1,6 @@
 <template>
   <div class="exhibitions">
+  <transition name="fade" mode="out-in">
     <div class="pg-col" v-if="showGallery === false">
       <div class="preview">
         <div
@@ -28,6 +29,8 @@
         </div>
       </div>
     </div>
+  </transition>
+  <transition name="fade" mode="out-in">
     <Gallery
       v-if="showGallery"
       :key="'g' + componentKey"
@@ -35,6 +38,7 @@
       :chosenExh="chosenExh"
       @go-back="goBack()"
     ></Gallery>
+    </transition>
   </div>
 </template>
 <script>
@@ -139,7 +143,7 @@ p {
 }
 .line{
   height: 70vh;
-  width: 2px;
+  width: 1px;
   background-color: #27f2cb;
 }
 .pg-col {
@@ -152,7 +156,6 @@ p {
   align-self: center;
   justify-self: center;
   margin-top: 5vh;
-  animation: in 2s 1;
   position: relative;
   top: 6vh;
 }
@@ -202,13 +205,11 @@ p {
 
 .tooltip .tooltiptxt {
   position: absolute;
-  margin-left: -35vw;
+  margin-left: -40vw;
   background-color: #63f8daab;
-  width: 30vw;
+  width: 40vw;
   transition-delay: 0.2s;
   visibility: hidden;
-  border-bottom-left-radius: 1rem;
-  border-bottom-right-radius: 1rem;
 }
 .tooltip:hover .tooltiptxt {
   visibility: visible;

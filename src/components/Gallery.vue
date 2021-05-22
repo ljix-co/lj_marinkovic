@@ -2,12 +2,12 @@
   <div class="gallery">
     <i
       :class="{
-        'far fa-arrow-alt-circle-left go-back': enlarged === false,
+        'fas fa-times exit': enlarged === false,
       }"
       @click="goBack()"
     ></i>
     <i
-      :class="{ 'far fa-times-circle go-back': enlarged }"
+      :class="{ 'fas fa-times exit': enlarged }"
       @click="exitLargeGallery()"
     ></i>
     <div class="content" v-if="enlarged === false">
@@ -25,9 +25,9 @@
       </div>
       <div class="images">
         <div v-for="(image, index) in images" :key="index">
-          <div  v-lazyload class="tooltip">
+          <div v-lazyload class="tooltip">
             <img
-            class="img-gallery"
+              class="img-gallery"
               :data-url="image.img_path"
               alt=""
               @click="showLarge(image, index)"
@@ -42,7 +42,11 @@
       v-if="enlarged"
       :class="{ 'enlarged-gallery': enlarged, 'no-show': enlarged === false }"
     >
-    <photo-slider :key="'p' + componentKey" :images="photoslider_imgs" :chosen_image="chosen_image"></photo-slider>
+      <photo-slider
+        :key="'p' + componentKey"
+        :images="photoslider_imgs"
+        :chosen_image="chosen_image"
+      ></photo-slider>
       <!-- <div class="left-side-bar">
         <i
           class="far fa-arrow-alt-circle-left link-btn"
@@ -61,7 +65,7 @@
 </template>
 <script>
 import { mapActions } from "vuex";
-import PhotoSlider from './PhotoSlider.vue';
+import PhotoSlider from "./PhotoSlider.vue";
 export default {
   components: { PhotoSlider },
   props: {
@@ -84,7 +88,7 @@ export default {
       review: "",
       photoslider_imgs: [],
       chosen_image: new Object(),
-      componentKey: 0
+      componentKey: 0,
     };
   },
   methods: {
@@ -131,12 +135,15 @@ export default {
     showLarge(image, index) {
       this.enlarged = true;
       this.curIndex = index;
-      for(let i = 0; i < this.images.length; i++) {
-        this.photoslider_imgs.push({path: this.images[i].img_path, id: this.images[i].img_id})
+      for (let i = 0; i < this.images.length; i++) {
+        this.photoslider_imgs.push({
+          path: this.images[i].img_path,
+          id: this.images[i].img_id,
+        });
       }
       this.chosen_image = image;
-      console.log(this.chosen_image)
-      this.componentKey +=1;
+      console.log(this.chosen_image);
+      this.componentKey += 1;
       // this.enlarged_img = image.img_path;
     },
   },
@@ -158,13 +165,9 @@ export default {
 }
 img {
   width: 20vw;
-  /* height: fit-content; */
-  /* object-fit: contain; */
-  margin-left: 1rem;
-  margin-bottom: 0.7rem;
- 
-  /* align-self: space; */
-  min-height: 200px;
+  height: 30vh;
+  object-fit: contain;
+  background-color: #7e7e7e;
 }
 .content {
   display: flex;
@@ -192,43 +195,29 @@ img {
   height: 100vh;
   display: flex;
   align-items: center;
-  justify-content: center;/*
+  justify-content: center; /*
   background-color: #c8c8ca;*/
-
 }
 
 .exit {
-  font-size: 2rem;
   position: fixed;
-  left: 22vw;
-  top: 0.7rem;
-  cursor: pointer;
-  z-index: 2;
+  top: 10vh;
+  left: 92vw;
+  font-size: 3rem;
 }
 .gallery {
   position: relative;
-  animation: in 2s 1;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-bottom: 10vh;
 }
-.go-back {
-  font-size: 2rem;
-  position: fixed;
-  left: 2vw;
-  top: 1.2rem;
 
-  z-index: 2;
-  color: #27f2cb;
-}
 .images {
   display: flex;
   flex-wrap: wrap;
-
   width: 50vw;
   margin-top: 10vh;
- 
-  min-height: 90vh;
   gap: 1rem;
 }
 .link-btn {
@@ -255,7 +244,7 @@ img {
   width: 25vw;
 }
 .title-date {
-  border-bottom: 2px solid #27f2cb;
+  border-bottom: 1px solid #27f2cb;
 }
 .tooltip .tooltiptxt {
   position: absolute;
@@ -264,14 +253,12 @@ img {
   width: 20vw;
   transition-delay: 0.2s;
   visibility: hidden;
-  border-bottom-left-radius: 1rem;
-  border-bottom-right-radius: 1rem;
 }
 .tooltip:hover .tooltiptxt {
   visibility: visible;
 }
 .txt {
-  border-right: 5px solid #27f2cb;
+  border-right: 3px solid #27f2cb;
   width: 30vw;
   height: fit-content;
   display: flex;
@@ -279,7 +266,6 @@ img {
   align-items: center;
   justify-content: flex-start;
   margin-top: 10vh;
- 
 }
 @media only screen and (max-width: 768px) {
   .content {
@@ -293,17 +279,7 @@ img {
   .enlarged-img {
     width: 100vw;
   }
-  .exit {
-    top: 4rem;
-    left: 1rem;
-    background-color: transparent;
-    width: 2rem;
-    height: 2rem;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+
   .go-back {
     top: 4rem;
     left: 1rem;

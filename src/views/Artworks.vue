@@ -52,12 +52,23 @@
             <input type="text" v-model="fullname" />
             <label for="">{{ $t("artworks.inpt_lbl.email") }}</label>
             <input type="text" v-model="email" />
+            <label for="">{{ $t("artworks.inpt_lbl.country") }}</label>
+            <select name="" id="" v-model="country">
+              <option
+                v-for="(i, index) in contry_index_arr"
+                :key="'c' + index"
+                :value="$t(`country_list[${i}].country`)"
+              >
+                {{ $t(`country_list[${i}].country`) }}
+              </option>
+            </select>
             <label for="">{{ $t("artworks.inpt_lbl.address") }}</label>
             <input type="text" v-model="address" />
             <label for="">{{ $t("artworks.inpt_lbl.city") }}</label>
             <input type="text" v-model="city" />
-            <label for="">{{ $t("artworks.inpt_lbl.country") }}</label>
-            <input type="text" v-model="country" />
+            <label for="">{{ $t("artworks.inpt_lbl.phone_num") }}</label>
+            <input type="text" v-model="phone_num" />
+
             <button @click="confirmOrder()">
               {{ $t("buttons.confirm") }}
             </button>
@@ -77,7 +88,8 @@
           >
             <div class="order-top-line">
               <h2 class="order-total-price">
-                {{ $t("artworks.total_price") }} <b>{{ total_price }}</b>
+                {{ $t("artworks.total_price") }} <b>{{ total_price }}</b
+                >€
               </h2>
               <h1 class="order-list-title">{{ $t("artworks.order_list") }}</h1>
               <i class="fas fa-times order-exit" @click="closeOrderList"></i>
@@ -131,7 +143,6 @@
       <div class="preview">
         <div class="prev-gallery">
           <div
-            v-lazyload
             v-for="(art, index) in artworks"
             :key="index"
             :class="{
@@ -139,13 +150,20 @@
               'prev-div': art.chosen === false || !art.chosen,
             }"
           >
-            <img
-              class="prev-img"
-              :data-url="art.artwork_imgpath"
-              alt=""
-              src="../../public/images/placeholder.gif"
-              @click="getImages(art)"
-            />
+            <div
+              v-lazyload
+              class="tooltip"
+              :class="{ 'tooltip-chsn': art.chosen }"
+            >
+              <img
+                class="prev-img"
+                :data-url="art.artwork_imgpath"
+                alt=""
+                src="../../public/images/placeholder.gif"
+                @click="getImages(art)"
+              />
+              <span class="tooltiptxt">{{ $t("tooltips.nav") }}</span>
+            </div>
             <div class="prev-desc">
               <p class="artw-title">{{ art.title.toUpperCase() }}</p>
               <p class="prev-desc-txt">
@@ -180,6 +198,7 @@
       :message="message"
       @confirm="confirm"
     ></confirmation>
+    <wrong v-if="wrong" :message="message" @confirm="confirm"></wrong>
   </div>
 </template>
 
@@ -190,10 +209,11 @@ import PhotoSlider from "../components/PhotoSlider.vue";
 import { checkLanguage } from "../mixins/checkLanguage.js";
 import { scrollToElement } from "../mixins/scrollToElement.js";
 import Confirmation from "../components/Confirmation.vue";
+import Wrong from "../components/Wrong.vue";
 // import PayPalButton from "../components/PayPalButton.vue";
 // import PayPalButton from '../components/PayPalButton.vue';
 export default {
-  components: { PhotoSlider, Confirmation },
+  components: { PhotoSlider, Confirmation, Wrong },
   data() {
     return {
       artworks: [],
@@ -208,12 +228,15 @@ export default {
       address: "",
       city: "",
       country: "",
+      phone_num: "",
       show_order_list: false,
       buttonKey: 0,
       total_price: 0,
       num_cart: 0,
       order_success: false,
       message: "",
+      wrong: false,
+      contry_index_arr: [0, 1, 2],
       // pay_option: false,
     };
   },
@@ -222,6 +245,7 @@ export default {
     ...mapActions(["changeLoader"]),
     buyArtwork(art) {
       this.order_list.push(art);
+      localStorage.setItem("order_list", JSON.stringify(this.order_list));
       for (let i = 0; i < this.artworks.length; i++) {
         if (art === this.artworks[i]) {
           this.artworks[i].sold = true;
@@ -231,48 +255,87 @@ export default {
         }
       }
     },
-
+    chckOrderList() {
+      if (!localStorage.getItem("order_list")) {
+        this.order_list = [];
+      } else {
+        this.order_list = JSON.parse(localStorage.getItem("order_list"));
+        this.num_cart = this.order_list.length;
+        for (let art of this.order_list) {
+          this.total_price += art.artwork_price;
+          for (let i = 0; i < this.artworks.length; i++) {
+            // console.log(art)
+            if (art.artwork_id === this.artworks[i].artwork_id) {
+              this.artworks[i].sold = true;
+              // this.buttonKey += 1;
+            }
+          }
+        }
+      }
+    },
     confirmOrder() {
       let formData = new FormData();
-      formData.append("cust_fullname", this.fullname);
-      formData.append("cust_email", this.email);
-      formData.append("cust_address", this.address);
-      formData.append("cust_city", this.city);
-      formData.append("cust_country", this.country);
-      axios.post(this.baseUrl + "customers", formData).then((res) => {
-        console.log(res);
-        let cust_id = res.data.cust_id;
-        for (let i = 0; i < this.order_list.length; i++) {
-          let artwk_id = this.order_list[i].artwork_id;
-          let orderFormData = new FormData();
-          orderFormData.append("cust_id", cust_id);
-          orderFormData.append("artwork_id", artwk_id);
-          axios.post(this.baseUrl + "orders", orderFormData).then((res) => {
+      if (
+        this.fullname === "" ||
+        this.email === "" ||
+        this.address === "" ||
+        this.city === "" ||
+        this.country === "" ||
+        this.phone_num === ""
+      ) {
+        this.message = this.$t("wrong.empty_fields");
+        this.wrong = true;
+      } else {
+        if (!this.emailReg.test(this.email)) {
+          this.message = this.$t("wrong.invld_email");
+          this.wrong = true;
+        } else {
+          formData.append("cust_fullname", this.fullname);
+          formData.append("cust_email", this.email);
+          formData.append("cust_address", this.address);
+          formData.append("cust_city", this.city);
+          formData.append("cust_country", this.country);
+          formData.append("cust_phone", this.phone_num);
+          axios.post(this.baseUrl + "customers", formData).then((res) => {
             console.log(res);
-            let order_id = res.data.order_id;
-
-            axios
-              .get(this.baseUrl + "send_email", {
-                params: { order_id: order_id },
-              })
-              .then((res) => {
+            let cust_id = res.data.cust_id;
+            for (let i = 0; i < this.order_list.length; i++) {
+              let artwk_id = this.order_list[i].artwork_id;
+              let orderFormData = new FormData();
+              orderFormData.append("cust_id", cust_id);
+              orderFormData.append("artwork_id", artwk_id);
+              axios.post(this.baseUrl + "orders", orderFormData).then((res) => {
                 console.log(res);
-                this.message = this.$t("success.art_ord");
-                this.order_success = true;
-              }).catch(error => {
-                console.log(error) 
-                //ubaci wrong
-              })
+                let order_id = res.data.order_id;
+
+                axios
+                  .get(this.baseUrl + "send_email", {
+                    params: { order_id: order_id },
+                  })
+                  .then((res) => {
+                    console.log(res);
+                    this.message = this.$t("success.art_ord");
+                    this.order_success = true;
+                    localStorage.removeItem("order_list");
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                  });
+              });
+            }
           });
         }
-      });
+      }
     },
     // confirmCustomerInfo() {
     //   this.pay_option = true;
     // },
     confirm() {
       this.order_success = false;
+      this.wrong = false;
       this.message = "";
+      this.show_order_list = false;
+      this.show_order = false;
     },
     closeOrderList() {
       this.show_order_list = false;
@@ -288,31 +351,11 @@ export default {
         // this.artworks[0].chosen = true;
         // this.changeLoader(false);
         this.changeToLanguage();
+        this.chckOrderList();
         // this.getImages();
       });
     },
     getImages(art) {
-      // if (!art) {
-      //   this.images.push({
-      //     path: this.artworks[0].artwork_imgpath,
-      //     id: this.artworks[0].artwork_id,
-      //   });
-
-      //   axios
-      //     .get(this.baseUrl + "images", {
-      //       params: { artwork_id: this.artworks[0].artwork_id },
-      //     })
-      //     .then((res) => {
-      //       console.log(res);
-      //       for (let i = 0; i < res.data.data.length; i++) {
-      //         this.images.push({
-      //           path: res.data.data[i].img_path,
-      //           id: res.data.data[i].img_id,
-      //         });
-      //       }
-      //     });
-      // }
-      // else if (art) {
       this.images = [];
       for (let i = 0; i < this.artworks.length; i++) {
         if (this.artworks[i].chosen === true) {
@@ -342,8 +385,6 @@ export default {
           this.forceRerender();
           this.scrollToElement("photo-slider");
         });
-
-      // }
     },
     hideInstr() {
       this.how_to_buy = false;
@@ -361,12 +402,18 @@ export default {
           this.order_list.splice(i, 1);
           this.total_price -= order.artwork_price;
           this.num_cart -= 1;
+          localStorage.setItem("order_list", JSON.stringify(this.order_list));
         }
       }
       for (let i = 0; i < this.artworks.length; i++) {
-        if (order === this.artworks[i]) {
+        if (order.artwork_id === this.artworks[i].artwork_id) {
           this.artworks[i].sold = false;
+          console.log(this.artworks[i].sold);
+          this.buttonKey += 1;
         }
+      }
+      if (this.order_list.length === 0) {
+        this.show_order_list = false;
       }
     },
 
@@ -377,14 +424,18 @@ export default {
       this.how_to_buy = true;
     },
     showOrder() {
-      this.show_order = true;
+      if (this.show_order === false) {
+        this.show_order = true;
+      } else {
+        this.show_order_list = true;
+      }
     },
     showOrderList() {
       this.show_order_list = true;
     },
   },
   computed: {
-    ...mapState(["baseUrl", "loader", "curLanguage"]),
+    ...mapState(["baseUrl", "loader", "curLanguage", "emailReg"]),
   },
   mounted() {
     this.getArtworks();
@@ -446,6 +497,11 @@ input {
 p {
   color: #545454;
   text-align: start;
+}
+select {
+  width: 10vw;
+  height: 5vh;
+  border-radius: 0.5rem;
 }
 .artw-title {
   font-size: 1.2rem;
@@ -524,7 +580,6 @@ p {
   position: fixed;
   top: 85vh;
   left: 85vw;
-  z-index: 2;
 }
 .exit-order {
   width: 15vw;
@@ -583,15 +638,15 @@ p {
   align-items: flex-start;
   justify-content: center;
   gap: 1rem;
-  margin-top: 10vh;
+  margin-top: 20vh;
   margin-left: 2.5vw;
   position: absolute;
 }
 .order-list-div {
   position: fixed;
   width: 50vw;
-  min-height: 80vh;
-  top: 10vh;
+  min-height: 60vh;
+  top: 20vh;
   left: 25vw;
   background-color: #f9fff7;
 
@@ -741,20 +796,23 @@ p {
 .slide-out-right {
   animation: slide_out_right 2s 1;
 }
-.tooltip .tooltip-txt {
-  visibility: hidden;
-  background-color: #545454af;
-  color: #545454;
+.tooltip .tooltiptxt {
   position: absolute;
-  margin-left: -5.5vw;
-  margin-top: -1rem;
+  margin-left: -20vw;
+
   background-color: #63f8daab;
-  width: 10vw;
+  width: 20vw;
   transition-delay: 0.2s;
+  visibility: hidden;
 }
-.tooltip:hover .tooltip-txt {
+.tooltip-chsn .tooltiptxt {
+  margin-left: -18vw;
+  width: 18vw;
+}
+.tooltip:hover .tooltiptxt {
   visibility: visible;
 }
+
 @media only screen and (max-width: 768px) {
   .pg-col {
     margin-left: 2rem;

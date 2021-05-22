@@ -4,7 +4,7 @@ export const scrollToElement = {
             const el = this.$el.getElementsByClassName(clss)[0];
            
             if (el) {
-              el.scrollIntoView({ behavior: "smooth" });
+              el.scrollIntoView({ behavior: "smooth",block: "center", inline: "nearest" });
               
             }
         }
