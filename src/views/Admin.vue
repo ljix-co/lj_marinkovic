@@ -7,7 +7,8 @@
         addNew === false &&
         edit_artworks === false &&
         projects.length === 0 &&
-        exh.length === 0
+        exh.length === 0 &&
+        order_list.length === 0
       "
       :class="{ fade: warning || add_artwork }"
     >
@@ -66,6 +67,11 @@
               <i class="far fa-edit"></i>
             </div>
           </div>
+          <div class="edit-orders">
+            <button class="edit-orders-btn" @click="editOrders">
+              ORDER LIST
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -88,6 +94,7 @@
     <Edit
       :class="{ fade: warning }"
       v-if="edit"
+      :key="'edit' + componentKey"
       :editObject="editObject"
       :images="images"
       @delete-img="deleteImg"
@@ -132,6 +139,7 @@
     ></AddArtwork>
     <EditArtworks
       v-if="edit_artworks"
+      :key="'edart' + componentKey"
       :artworks="artworks"
       @delete-artwork="deleteArtwork"
       @update-artwork="updateArtwork"
@@ -139,9 +147,13 @@
     ></EditArtworks>
     <confirmation
       v-if="confirm_modal"
-      :message="message"
-      @confirm="confirm"
+      :message="confirm_mssg"
+      @confirm="confirmConfirmation"
     ></confirmation>
+    <edit-orders
+      v-if="order_list.length > 0"
+      :order_list="order_list"
+    ></edit-orders>
   </div>
 </template>
 <script>
@@ -155,6 +167,7 @@ import axios from "axios";
 import EditAuthor from "../components/EditAuthor.vue";
 import EditListProjExh from "../components/EditListProjExh.vue";
 import Confirmation from "../components/Confirmation.vue";
+import EditOrders from "../components/EditOrders.vue";
 export default {
   components: {
     Edit,
@@ -165,6 +178,7 @@ export default {
     EditAuthor,
     EditListProjExh,
     Confirmation,
+    EditOrders,
   },
   data() {
     return {
@@ -195,11 +209,12 @@ export default {
       newId: null,
       newArtworkId: null,
       componentKey: 0,
-      confirm_modal: false,
+      // confirm_modal: false,
+      order_list: [],
     };
   },
   methods: {
-    ...mapActions(["changeLoader"]),
+    ...mapActions(["changeLoader", "changeConfirm", "changeConfirmMssg"]),
     addArtwork() {
       this.add_artwork = true;
     },
@@ -236,8 +251,9 @@ export default {
 
           axios.post(this.baseUrl + "images", imgFormData).then((res) => {
             console.log(res);
-            this.confirm_modal = true;
-            this.message = "New artworks successfully added.";
+            this.changeConfirm(true);
+            this.changeConfirmMssg("New artworks successfully added.");
+            // this.message = "New artworks successfully added.";
           });
         }
       });
@@ -261,8 +277,9 @@ export default {
         axios.post(this.baseUrl + "projects", formData).then((res) => {
           console.log(res);
           this.newId = res.data.proj_id;
-          this.confirm_modal = true;
-          this.message = "New project successfully added.";
+          this.changeConfirm(true);
+          this.changeConfirmMssg("New project successfully added.");
+          // this.message = "New project successfully added.";
         });
       }
       if (this.type === "newExh") {
@@ -283,8 +300,9 @@ export default {
         axios.post(this.baseUrl + "exhibitions", formData).then((res) => {
           console.log(res);
           this.newId = res.data.exh_id;
-          this.confirm_modal = true;
-          this.message = "New exhibition successfully added.";
+          this.changeConfirm(true);
+          this.changeConfirmMssg("New exhibition successfully added.");
+          // this.message = "New exhibition successfully added.";
         });
       }
     },
@@ -354,7 +372,20 @@ export default {
     },
     confirm() {
       this.warning = false;
-      this.confirm_modal = false;
+    },
+    confirmConfirmation() {
+      this.changeConfirm(false);
+      if (this.edit_artworks === true) {
+        this.getArtworks();
+      }
+
+      if (this.editObject.type === "project") {
+        this.getProjects();
+      }
+
+      if (this.editObject.type === "exh") {
+        this.getExh();
+      }
     },
     confrmNewAutImg(newImg) {
       if (newImg != "") {
@@ -364,8 +395,9 @@ export default {
         formData.append("aut_profimg", newImg);
         axios.patch(this.baseUrl + "author_info", formData).then((res) => {
           console.log(res);
-          this.confirm_modal = true;
-          this.message = "Image successfully changed.";
+          this.changeConfirm(true);
+          this.changeConfirmMssg("Image successfully changed.");
+          // this.message = "Image successfully changed.";
         });
       }
     },
@@ -377,7 +409,7 @@ export default {
       formData.append("new_pass", chngd_pass.new_pass);
       axios.patch(this.baseUrl + "author_info", formData).then((res) => {
         console.log(res);
-        this.confirm_modal = true;
+        this.changeConfirm(true);
         this.message = "Password successfully changed.";
       });
     },
@@ -448,28 +480,6 @@ export default {
             }
           });
       };
-      // if (this.editObject.type === "project") {
-
-      // }
-      // if (this.editObject.type === "exh") {
-      //   this.confirmEditFunction = function () {
-      //     axios
-      //       .delete(this.baseUrl + "exh_images", {
-      //         params: {
-      //           img_id: this.id,
-      //           sid: localStorage.getItem("sid"),
-      //         },
-      //       })
-      //       .then((res) => {
-      //         console.log(res);
-      //         for (let i = 0; i < this.images.length; i++) {
-      //           if (this.id === this.images[i].img_id) {
-      //             this.images.splice(i, 1);
-      //           }
-      //         }
-      //       });
-      //   };
-      // }
     },
     deleteNewImg(img) {
       axios
@@ -514,10 +524,8 @@ export default {
       this.warning = false;
     },
     editArtworks() {
-      axios.get(this.baseUrl + "artworks").then((res) => {
-        this.artworks = res.data.data;
-        this.edit_artworks = true;
-      });
+      this.getArtworks();
+      this.edit_artworks = true;
     },
     editExh(exh) {
       this.editObject = {};
@@ -547,6 +555,12 @@ export default {
           this.edit = true;
         });
     },
+    editOrders() {
+      axios.get(this.baseUrl + "orders").then((res) => {
+        console.log(res);
+        this.order_list = res.data.data;
+      });
+    },
     editProj(project) {
       this.editObject = {};
       this.images = [];
@@ -572,6 +586,13 @@ export default {
     },
     exitAddArtwork() {
       this.add_artwork = false;
+    },
+    getArtworks() {
+      axios.get(this.baseUrl + "artworks").then((res) => {
+        this.artworks = res.data.data;
+        this.componentKey += 1;
+        // this.edit_artworks = true;
+      });
     },
     getAutInfo() {
       // this.changeLoader(true);
@@ -653,6 +674,9 @@ export default {
             if (artwork.artwork_year !== updatedArtwork.year) {
               formData.append("artwork_year", updatedArtwork.year);
             }
+            if (artwork.artwork_dmns !== updatedArtwork.dmns) {
+              formData.append("artwork_dmns", updatedArtwork.dmns);
+            }
             if (artwork.artwork_sold !== updatedArtwork.sold) {
               formData.append("artwork_sold", updatedArtwork.sold);
             }
@@ -660,14 +684,19 @@ export default {
               formData.append("artwork_forsale", updatedArtwork.forSale);
             }
             // console.log(updatedArtwork.coverphoto)
-            if (artwork.artwork_coverphoto !== updatedArtwork.coverphoto) {
+            if (
+              artwork.artwork_coverphoto !== updatedArtwork.coverphoto &&
+              updatedArtwork.coverphoto !== ""
+            ) {
               formData.append("artwork_coverphoto", updatedArtwork.coverphoto);
               // console.log(updatedArtwork.coverphoto)
             }
             axios.patch(this.baseUrl + "artworks", formData).then((res) => {
               console.log(res);
-              this.confirm_modal = true;
-            this.message = 'Artwork successfully updated.';
+              this.changeConfirm(true);
+              this.changeConfirmMssg("Artwork successfully updated.");
+
+              // this.message = "Artwork successfully updated.";
             });
           }
         }
@@ -682,8 +711,9 @@ export default {
         axios.patch(this.baseUrl + "author_info", formData).then((res) => {
           console.log(res);
           // this.$router.go();
-          this.confirm_modal = true;
-          this.message = "Biography successfully updated.";
+          this.changeConfirm(true);
+          this.changeConfirmMssg("Biography successfully updated.");
+          // this.message = "Biography successfully updated.";
         });
       }
     },
@@ -714,7 +744,10 @@ export default {
           if (editedObject.yearFinish !== this.editObject.yearfinish) {
             formData.append("proj_year", editedObject.yearFinish);
           }
-          if (editedObject.newCover !== this.editObject.coverphoto) {
+          if (
+            editedObject.newCover !== this.editObject.coverphoto &&
+            editedObject.newCover !== ""
+          ) {
             formData.append("proj_coverphoto", editedObject.newCover);
           }
           if (editedObject.proj_link !== this.editObject.proj_link) {
@@ -722,8 +755,9 @@ export default {
           }
           axios.patch(this.baseUrl + "projects", formData).then((res) => {
             console.log(res);
-            this.confirm_modal = true;
-            this.message = 'Project successfully updated.';
+            this.changeConfirm(true);
+            this.changeConfirmMssg("Project successfully updated.");
+            // this.message = "Project successfully updated.";
           });
         };
       }
@@ -766,20 +800,24 @@ export default {
           if (editedObject.yearFinish !== this.editObject.yearfinish) {
             formData.append("exh_date_finish", editedObject.yearFinish);
           }
-          if (editedObject.newCover !== this.editObject.coverphoto) {
+          if (
+            editedObject.newCover !== this.editObject.coverphoto &&
+            editedObject.newCover !== ""
+          ) {
             formData.append("exh_coverphoto", editedObject.newCover);
           }
           axios.patch(this.baseUrl + "exhibitions", formData).then((res) => {
             console.log(res);
-            this.confirm_modal = true;
-            this.message = 'Exhibition successfully updated.';
+            this.changeConfirm(true);
+            this.changeConfirmMssg("Exhibition successfully updated.");
+            // this.message = "Exhibition successfully updated.";
           });
         };
       }
     },
   },
   computed: {
-    ...mapState(["baseUrl"]),
+    ...mapState(["baseUrl", "confirm_modal", "confirm_mssg"]),
   },
   mounted() {
     this.getAutInfo();
@@ -891,7 +929,10 @@ button {
   justify-content: center;
   gap: 1rem;
 }
-
+.edit-orders-btn {
+  width: 7vw;
+  height: 6vh;
+}
 .fade {
   opacity: 0.1;
 }

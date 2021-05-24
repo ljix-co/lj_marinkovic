@@ -8,7 +8,7 @@
   </div>
 </template>
 <script>
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 export default {
   props: {
     message: String,
@@ -20,9 +20,9 @@ export default {
     artworks: Array,
     projects: Array,
     exh: Array,
-    confirm_modal: Boolean
   },
   methods: {
+    ...mapActions(["changeConfirm", "changeConfirmMssg"]),
     confirm() {
       this.confirmEditFunction();
       this.$emit("confirm");
@@ -32,7 +32,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(["baseUrl"]),
+    ...mapState(["baseUrl", "confirm_modal", "confirm_mssg"]),
   },
 };
 </script>
@@ -48,8 +48,8 @@ button {
   font-family: "Forum", cursive;
   text-align: center;
 }
-h1{
-    width: 30vw;
+h1 {
+  width: 30vw;
 }
 .btns {
   display: flex;
@@ -60,7 +60,7 @@ h1{
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #F9FFF7;
+  background-color: #f9fff7;
   gap: 2rem;
 }
 .yes {

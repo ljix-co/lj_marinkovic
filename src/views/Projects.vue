@@ -21,7 +21,7 @@
               </div>
               <h3 class="proj-title">{{ project.title.toUpperCase() }}</h3>
               <a :href="project.proj_link" target="blank" class="link">{{
-                project.proj_link
+               $t('tooltips.go-to-website')
               }}</a>
             </div>
             <div class="short-desc" v-html="project.short_desc"></div>

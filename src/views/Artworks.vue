@@ -126,19 +126,24 @@
         </p>
       </transition>
     </div>
+      <transition
+        name="fade-in-out"
+        enter-active-class="slide-in-right"
+        leave-active-class="slide-out-left"
+      >
     <div
-      :class="{
-        'shop-instruction-div': how_to_buy,
-        hide: how_to_buy === false,
-      }"
+    v-if="how_to_buy"
+    class="shop-instruction-div"
     >
       <div
-        :class="{ 'shop-instruction': how_to_buy, hide: how_to_buy === false }"
+      class="shop-instruction"
       >
-        <h2>How to buy</h2>
-        <p></p>
+        <h2 class="how-to-instr">{{ $t("artworks.nav.how_to_buy") }}</h2>
+        <p class="how-to-instr">{{ $t("artworks.how-buy") }}</p>
+        
       </div>
     </div>
+      </transition>
     <div class="pg-col" :class="{ fade: show_order_list }">
       <div class="preview">
         <div class="prev-gallery">
@@ -166,18 +171,43 @@
             </div>
             <div class="prev-desc">
               <p class="artw-title">{{ art.title.toUpperCase() }}</p>
-              <p class="prev-desc-txt">
-                Artform: <b>{{ art.artform }}</b>
+              <div class="prev-desc-txt">
+              <p >
+                Artform: 
               </p>
-              <p class="prev-desc-txt">
-                Tehcnique: <b>{{ art.technique }}</b>
+              <p class="prev-txt"><b>{{ art.artform }}</b></p>
+              </div>
+              <div class="prev-desc-txt">
+              <p >
+                Tehcnique: 
               </p>
-              <p class="prev-desc-txt">
-                Materials: <b>{{ art.material }}</b>
+              <p class="prev-txt"><b>{{ art.technique }}</b></p>
+              </div>
+              <div class="prev-desc-txt">
+              <p >
+                Materials: 
               </p>
-              <p class="prev-desc-txt">
-                Price: <b>{{ art.artwork_price }}</b> €
+              <p class="prev-txt"><b>{{ art.material }}</b></p>
+              </div>
+              <div class="prev-desc-txt">
+               <p >
+                Dimensions:  
               </p>
+              <p class="prev-txt"><b>{{ art.artwork_dmns }}</b></p>
+              </div>
+              <div class="prev-desc-txt">
+               <p >
+                Year:  
+              </p>
+              <p class="prev-txt"><b>{{ art.artwork_year }}</b></p>
+              </div>
+              <div class="prev-desc-txt">
+              <p >
+                Price: 
+              </p>
+              <p class="prev-txt"><b>{{ art.artwork_price }}</b> €</p>
+              </div>
+
               <button
                 :key="'b' + buttonKey"
                 class="btn-buy"
@@ -237,6 +267,9 @@ export default {
       message: "",
       wrong: false,
       contry_index_arr: [0, 1, 2],
+      email_trigger: 0,
+      cust_id: null,
+      order_id: null
       // pay_option: false,
     };
   },
@@ -254,6 +287,7 @@ export default {
           this.num_cart += 1;
         }
       }
+
     },
     chckOrderList() {
       if (!localStorage.getItem("order_list")) {
@@ -275,6 +309,7 @@ export default {
     },
     confirmOrder() {
       let formData = new FormData();
+      this.order_id = null;
       if (
         this.fullname === "" ||
         this.email === "" ||
@@ -298,31 +333,31 @@ export default {
           formData.append("cust_phone", this.phone_num);
           axios.post(this.baseUrl + "customers", formData).then((res) => {
             console.log(res);
-            let cust_id = res.data.cust_id;
-            for (let i = 0; i < this.order_list.length; i++) {
-              let artwk_id = this.order_list[i].artwork_id;
-              let orderFormData = new FormData();
-              orderFormData.append("cust_id", cust_id);
-              orderFormData.append("artwork_id", artwk_id);
-              axios.post(this.baseUrl + "orders", orderFormData).then((res) => {
+           
+            this.cust_id = res.data.cust_id;
+            let orderFormData = new FormData();
+            orderFormData.append('cust_id', this.cust_id);
+            axios
+              .post(this.baseUrl + "orders", orderFormData)
+              .then((res) => {
                 console.log(res);
-                let order_id = res.data.order_id;
 
-                axios
-                  .get(this.baseUrl + "send_email", {
-                    params: { order_id: order_id },
-                  })
-                  .then((res) => {
-                    console.log(res);
-                    this.message = this.$t("success.art_ord");
-                    this.order_success = true;
-                    localStorage.removeItem("order_list");
-                  })
-                  .catch((error) => {
-                    console.log(error);
-                  });
+                this.order_id = res.data.order_id;
+                this.email_trigger += 1;
+                for (let i = 0; i < this.order_list.length; i++) {
+                  let artwk_id = this.order_list[i].artwork_id;
+                  let orderListFormData = new FormData();
+                  orderListFormData.append("cust_id", this.cust_id);
+                  orderListFormData.append("order_id", this.order_id);
+                  orderListFormData.append("artwork_id", artwk_id);
+                  axios
+                    .post(this.baseUrl + "order_list", orderListFormData)
+                    .then((res) => {
+                      console.log(res);
+                      
+                    });
+                }
               });
-            }
           });
         }
       }
@@ -451,6 +486,28 @@ export default {
         this.componentKey += 1;
       },
     },
+    email_trigger: {
+      handler() {
+        let email_txt = "";
+        for (let i = 0; i < this.order_list.length; i++) {
+          email_txt += `<li><p>${this.order_list[i].artwork_title}</p>
+                        <img width="200px" src="${this.order_list[i].artwork_imgpath}"/>
+                        <p>${this.order_list[i].artwork_price}€</p>
+                        </li>`;
+        }
+        email_txt += ` <h2>Total price: ${this.total_price}€</h2>`;
+        let emailFormData = new FormData();
+        emailFormData.append("email_txt", email_txt);
+        // emailFormData.append("cust_id", this.cust_id);
+        emailFormData.append("order_id", this.order_id);
+        axios.post(this.baseUrl + "send_email", emailFormData).then((res) => {
+          console.log(res);
+          this.message = this.$t("success.art_ord");
+          this.order_success = true;
+          localStorage.removeItem("order_list");
+        });
+      },
+    },
   },
 };
 </script>
@@ -473,6 +530,26 @@ export default {
     opacity: 1;
   }
 }
+@keyframes slide_in_right {
+  from {
+    left: -20vw;
+    opacity: 0.1;
+  }
+  to {
+    left: 0;
+    opacity: 1;
+  }
+}
+@keyframes slide_out_left {
+  from {
+    left: 0;
+    opacity: 1;
+  }
+  to {
+    left: -20vw;
+    opacity: 0.1;
+  }
+}
 @keyframes slide_out_right {
   from {
     left: 85vw;
@@ -482,6 +559,10 @@ export default {
     left: 120vw;
     opacity: 0.1;
   }
+}
+b{
+  width: 10vw;
+  margin-left: 1rem;
 }
 button {
   width: 5vw;
@@ -497,6 +578,7 @@ input {
 p {
   color: #545454;
   text-align: start;
+  width: 5vw;
 }
 select {
   width: 10vw;
@@ -506,14 +588,14 @@ select {
 .artw-title {
   font-size: 1.2rem;
   font-weight: 800;
-  text-align: center; /*
-  width: 20vw;*/
+  text-align: center; 
+  width: 20vw;
   align-self: center;
 }
 .btn-buy {
   align-self: center;
   position: absolute;
-  margin-top: 10vw;
+  margin-top: 30vh;
 }
 .btn-buy:disabled {
   opacity: 0.2;
@@ -596,6 +678,11 @@ select {
 .hide {
   visibility: hidden;
   height: 0;
+}
+.how-to-instr{
+  width: 15vw;
+  text-align: justify;
+  margin-left: 1rem;
 }
 .inpts {
   display: flex;
@@ -728,7 +815,7 @@ select {
   margin-left: 2rem;*/
   margin-bottom: 2rem;
   background-color: #ced0d1;
-  height: 60vh; /*
+  height: 70vh; /*
   border-radius: 2rem;*/
   border-bottom: 5px solid #27f2cb;
 }
@@ -741,10 +828,14 @@ select {
   margin-left: 1rem;*/
   margin-top: 1rem;
   width: 20vw;
-  height: 40vh;
+  height: 50vh;
+ 
 }
 .prev-desc-txt {
   margin-left: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }
 .prev-gallery {
   width: 70vw;
@@ -754,6 +845,10 @@ select {
   justify-content: center;
   gap: 1rem;
   margin-top: 5vh;
+}
+.prev-txt{
+  width: 15vw;
+  margin-left: .5rem;
 }
 .up-sqr {
   height: 15vh;
@@ -779,7 +874,7 @@ select {
   margin-top: 2rem;
 }
 .shop-instruction-div {
-  width: 15vw;
+  width: 18vw;
   background-color: #f9fff7;
   display: flex;
   align-items: center;
@@ -793,8 +888,14 @@ select {
 .slide-in-left {
   animation: slide_in_left 1s 1;
 }
+.slide-in-right {
+  animation: slide_in_right 1s 1;
+}
 .slide-out-right {
   animation: slide_out_right 2s 1;
+}
+.slide-out-left {
+  animation: slide_out_left 2s 1;
 }
 .tooltip .tooltiptxt {
   position: absolute;

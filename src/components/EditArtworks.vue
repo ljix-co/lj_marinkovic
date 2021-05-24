@@ -44,7 +44,7 @@
           <input v-model="artform_rs" type="text" placeholder="Artform(RS)" />
           <input v-model="price" type="number" placeholder="Price" />
           <input v-model="year" type="number" placeholder="Year" />
-
+          <input v-model="dmns" type="text" placeholder="Dimensions" />
           <div class="selects">
             <label for="for-sale">For sale?</label>
             <select v-model="forSale" id="for-sale" @change="updateForSale">
@@ -72,7 +72,10 @@
               v-if="coverUrl === ''"
             />
             <div class="" v-if="coverUrl !== ''">
-              <i class="fas fa-trash-alt delete-cover" @click="deleteNewCover()"></i>
+              <i
+                class="fas fa-trash-alt delete-cover"
+                @click="deleteNewCover()"
+              ></i>
             </div>
             <img
               class="cover-img"
@@ -125,7 +128,7 @@ export default {
       technique: "",
       price: null,
       year: null,
-
+      dmns: "",
       forSale: 1,
       sold: 0,
       title_rs: "",
@@ -204,7 +207,7 @@ export default {
       this.cover.path = art.artwork_imgpath;
       this.price = art.artwork_price;
       this.year = art.artwork_year;
-
+      this.dmns = art.artwork_dmns;
       this.forSale = art.artwork_forsale;
       this.sold = art.artwork_sold;
       if (this.forSale === null) {
@@ -231,6 +234,9 @@ export default {
       this.edit = false;
       this.id = null;
       this.dtl_images = [];
+      this.cover = {};
+      this.newCover = "";
+      this.coverUrl = "";
     },
     getCover(e) {
       this.newCover = e.target.files[0];
@@ -254,6 +260,7 @@ export default {
         artform_rs: this.artform_rs,
         price: this.price,
         year: this.year,
+        dmns: this.dmns,
         coverphoto: this.newCover,
         forSale: this.forSale,
         sold: this.sold,
@@ -288,8 +295,8 @@ h1 {
   font-size: 3rem;
   font-family: "HortaRegular", cursive;
 }
-h2{
-font-family: "HortaRegular", cursive;
+h2 {
+  font-family: "HortaRegular", cursive;
   margin-top: 2rem;
   margin-bottom: 1rem;
 }
@@ -310,11 +317,11 @@ font-family: "HortaRegular", cursive;
   object-fit: contain;
   background-color: #7e7e7e;
 }
-.delete-cover{
-color: #f55977;
-font-size: 2rem;
-position: absolute;
-margin-left: 11vw;
+.delete-cover {
+  color: #f55977;
+  font-size: 2rem;
+  position: absolute;
+  margin-left: 11vw;
 }
 .delete-img {
   color: #f55977;

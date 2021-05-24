@@ -6,6 +6,7 @@
       "artw_dtls": "IDITE DO DETALJA RADA",
       "order_list": "PROVERITE LISTU PORUDŽBINE"
     },
+    "how-buy": "Kako biste poručili radove potrebno je da kliknete na dugme 'KUPI', a zatim i popunite formu sa svojim podacima (kliknite na korpu u desnom uglu Vašeg prozora). Radovi koji su u ne digitalnoj formi šalju se isključivo u Srbiji, Bosni i Hercegovini, i Crnoj Gori, a plaćanje se vrši po uzeću. Za radove u digitalnoj formi naplata se vrši uplatom na paypal nalog autora, a fotografija se potom prosleđuje kupcu. Sve informacije o potvrdi porudžbine, slanju i prispeću dobićete putem e-mail-a ili telefonskog broja. Istaknute cene su sa uračunatim porezima, ali bez cene poštarine (koja se može kretati od 300 dinara ili 3 evra do 6.000 dinara ili 50 evra, otprilike).",
     "inpt_lbl": {
       "fullname": "IME I PREZIME",
       "email": "E-MAIL",
@@ -120,7 +121,8 @@
     "gallery": "KLIKNITE DA VIDITE SVE SLIKE",
     "nav": "KLIKNITE DA VIDITE VIŠE",
     "nav-gallery": "KLIKNITE ZA UVEĆAN PRIKAZ",
-    "nt_show": "NEMA NIČEG ZA PRIKAZ"
+    "nt_show": "NEMA NIČEG ZA PRIKAZ",
+    "go-to-website": "POSETI VEB SAJT"
   },
   "wrong": {
     "empty_fields": "Neka polja su ostala prazna.",
