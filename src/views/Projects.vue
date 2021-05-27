@@ -65,6 +65,7 @@ export default {
       this.componentKey += 1;
     },
     getProjects() {
+      this.changeLoader(true);
       axios.get(this.baseUrl + "projects").then((res) => {
         console.log(res);
         this.projects = res.data.data;
@@ -79,13 +80,14 @@ export default {
 
     showProj(project) {
       let proj_id = project.proj_id;
-      // this.changeLoader(true);
+      this.changeLoader(true);
       axios
         .get(this.baseUrl + "project_images", { params: { proj_id: proj_id } })
         .then((res) => {
           this.images = res.data.data;
           this.chosenProj = project;
           this.showGallery = true;
+          this.changeLoader(false);
         });
     },
   },

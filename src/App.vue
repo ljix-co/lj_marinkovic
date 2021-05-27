@@ -46,7 +46,7 @@
     <transition name="fade" mode="out-in">
     <router-view :class="{ 'no-show': loader }" />
     </transition>
-    <!-- <Loader v-if="loader"></Loader> -->
+    <Loader v-if="loader"></Loader>
     <footer>
       <Footer></Footer>
     </footer>
@@ -56,23 +56,24 @@
       'add-icon', 'img-prof', 'cover-img']"
       :circleColor="'#27f2cb'"
       :circleColorHover="'#C3EAE3'"
-      :hoverSize="3"
+      :hoverSize="4"
     ></custom-cursor>
   </div>
 </template>
 <script>
 import { mapState, mapActions } from "vuex";
 import Footer from "./components/Footer.vue";
-// import Loader from "./components/Loader.vue";
+import Loader from "./components/Loader.vue";
 import LocalSwitcher from "./components/LocalSwitcher.vue";
 import CustomCursor from './components/CustomCursor'
 export default {
-  components: { Footer, LocalSwitcher, CustomCursor },
-  // Loader,
+  components: { Footer, LocalSwitcher, CustomCursor, Loader},
+  // ,
   data() {
     return {
       showMenu: false,
       loggedIn: false,
+     
     };
   },
   methods: {

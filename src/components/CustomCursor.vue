@@ -84,8 +84,8 @@ $ease: cubic-bezier(0.23, 1, 0.32, 1);*/
   cursor: none;
   top: 0;
   left: 0;
-  width: 1rem;
-  height: 1rem; /*
+  width: .7rem;
+  height: .7rem; /*
   border: 7px solid #27f2cb;*/
   background-color: #27f2cb;
   border-radius: 50%;

@@ -8,7 +8,7 @@
         edit_artworks === false &&
         projects.length === 0 &&
         exh.length === 0 &&
-        order_list.length === 0
+        show_orderlist === false
       "
       :class="{ fade: warning || add_artwork }"
     >
@@ -115,6 +115,7 @@
         :projects="projects"
         :exh="exh"
         :confirm_modal="confirm_modal"
+        :sendEmail="sendEmail"
         @confirm="confirm"
         @deny="deny"
       ></Warning>
@@ -151,8 +152,12 @@
       @confirm="confirmConfirmation"
     ></confirmation>
     <edit-orders
-      v-if="order_list.length > 0"
+      v-if="show_orderlist"
       :order_list="order_list"
+      @cancel-order="orderCancel"
+      @received-order="orderReceived"
+      @sent-order="orderSent"
+      @exit="goBack"
     ></edit-orders>
   </div>
 </template>
@@ -211,6 +216,7 @@ export default {
       componentKey: 0,
       // confirm_modal: false,
       order_list: [],
+      show_orderlist: false,
     };
   },
   methods: {
@@ -386,6 +392,9 @@ export default {
       if (this.editObject.type === "exh") {
         this.getExh();
       }
+      if (this.editObject.type === "orders") {
+        this.editOrders();
+      }
     },
     confrmNewAutImg(newImg) {
       if (newImg != "") {
@@ -410,7 +419,7 @@ export default {
       axios.patch(this.baseUrl + "author_info", formData).then((res) => {
         console.log(res);
         this.changeConfirm(true);
-        this.message = "Password successfully changed.";
+        this.changeConfirmMssg("Password successfully changed.");
       });
     },
     deleteArtwork(art) {
@@ -556,9 +565,21 @@ export default {
         });
     },
     editOrders() {
+      this.editObject.type = "orders";
+      this.order_list = [];
       axios.get(this.baseUrl + "orders").then((res) => {
         console.log(res);
         this.order_list = res.data.data;
+        for (let i = 0; i < this.order_list.length; i++) {
+          this.order_list[i].artworks = [];
+          for (let j = 0; j < res.data.artworks.length; j++) {
+            let artwork = res.data.artworks[j];
+            if (artwork.order_id == this.order_list[i].order_id) {
+              this.order_list[i].artworks.push(artwork);
+            }
+          }
+        }
+        this.show_orderlist = true;
       });
     },
     editProj(project) {
@@ -623,10 +644,72 @@ export default {
       this.edit = false;
       this.addNew = false;
       this.edit_artworks = false;
-      this.editObject = null;
+      this.show_orderlist = false;
+      this.editObject = {};
       this.images = [];
     },
-
+    orderCancel(order) {
+      let id = order.order_id;
+      this.message = "Are you sure you want to cancel this order?";
+      this.warning = true;
+      this.array = this.order_list;
+      this.confirmEditFunction = function () {
+        axios
+          .delete(this.baseUrl + "orders", {
+            params: { sid: localStorage.getItem("sid"), order_id: id },
+          })
+          .then((res) => {
+            console.log(res);
+            for (let i = 0; i < order.artworks.length; i++) {
+              let formData = new FormData();
+              formData.append("sid", localStorage.getItem("sid"));
+              formData.append("artwork_id", order.artworks[i].artwork_id);
+              axios.put(this.baseUrl + "artworks", formData).then((res) => {
+                console.log(res);
+                this.changeConfirm(true);
+                this.changeConfirmMssg("Order successfully canceled.");
+              });
+            }
+          });
+      };
+    },
+    orderSent(order) {
+      let id = order.order_id;
+      this.message = "Are you sure you want to declare this order as 'sent'?";
+      this.warning = true;
+      this.array = this.order_list;
+      this.confirmEditFunction = function () {
+        let formData = new FormData();
+        formData.append("sid", localStorage.getItem("sid"));
+        formData.append("order_id", id);
+        formData.append("order_sent", true);
+        axios.patch(this.baseUrl + "orders", formData).then((res) => {
+          console.log(res);
+          this.sendEmail(order);
+          this.changeConfirm(true);
+          this.changeConfirmMssg("Order successfully declared as 'sent'.");
+        });
+      };
+    },
+    orderReceived(order) {
+      let id = order.order_id;
+      this.message =
+        "Are you sure you want to declare this order as 'received'?";
+      this.warning = true;
+      this.array = this.order_list;
+      this.confirmEditFunction = function () {
+        let formData = new FormData();
+        formData.append("sid", localStorage.getItem("sid"));
+        formData.append("order_id", id);
+        formData.append("order_received", true);
+        axios.patch(this.baseUrl + "orders", formData).then((res) => {
+          console.log(res);
+          this.sendEmail(order);
+          this.changeConfirm(true);
+          this.changeConfirmMssg("Order successfully declared as 'received'.");
+        });
+      };
+    },
     updateArtwork(updatedArtwork) {
       this.message = "Are you sure you want to submit these changes?";
       this.warning = true;
@@ -701,6 +784,24 @@ export default {
           }
         }
       };
+    },
+    sendEmail(order) {
+      let email_txt = "";
+      for (let i = 0; i < order.artworks.length; i++) {
+        email_txt += `<li><p>${order.artworks[i].artwork_title}</p>
+                        <img width="200px" src="${order.artworks[i].artwork_imgpath}"/>
+                        <p>${order.artworks[i].artwork_price}€</p>
+                        </li>`;
+      }
+      email_txt += ` <h2>Total price: ${order.order_totalprice}€</h2>`;
+
+      let emailFormData = new FormData();
+      emailFormData.append("sid", localStorage.getItem("sid"));
+      emailFormData.append("email_txt", email_txt);
+      emailFormData.append("order_id", order.order_id);
+      axios.post(this.baseUrl + "send_email", emailFormData).then((res) => {
+        console.log(res);
+      });
     },
     submitBioChanges(txt) {
       let formData = new FormData();

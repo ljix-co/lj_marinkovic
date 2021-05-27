@@ -20,6 +20,7 @@ export default {
     artworks: Array,
     projects: Array,
     exh: Array,
+    sendEmail: Function
   },
   methods: {
     ...mapActions(["changeConfirm", "changeConfirmMssg"]),

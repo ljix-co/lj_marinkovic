@@ -126,24 +126,18 @@
         </p>
       </transition>
     </div>
-      <transition
-        name="fade-in-out"
-        enter-active-class="slide-in-right"
-        leave-active-class="slide-out-left"
-      >
-    <div
-    v-if="how_to_buy"
-    class="shop-instruction-div"
+    <transition
+      name="fade-in-out"
+      enter-active-class="slide-in-right"
+      leave-active-class="slide-out-left"
     >
-      <div
-      class="shop-instruction"
-      >
-        <h2 class="how-to-instr">{{ $t("artworks.nav.how_to_buy") }}</h2>
-        <p class="how-to-instr">{{ $t("artworks.how-buy") }}</p>
-        
+      <div v-if="how_to_buy" class="shop-instruction-div">
+        <div class="shop-instruction">
+          <h2 class="how-to-instr">{{ $t("artworks.nav.how_to_buy") }}</h2>
+          <p class="how-to-instr">{{ $t("artworks.how-buy") }}</p>
+        </div>
       </div>
-    </div>
-      </transition>
+    </transition>
     <div class="pg-col" :class="{ fade: show_order_list }">
       <div class="preview">
         <div class="prev-gallery">
@@ -172,40 +166,40 @@
             <div class="prev-desc">
               <p class="artw-title">{{ art.title.toUpperCase() }}</p>
               <div class="prev-desc-txt">
-              <p >
-                Artform: 
-              </p>
-              <p class="prev-txt"><b>{{ art.artform }}</b></p>
+                <p>Artform:</p>
+                <p class="prev-txt">
+                  <b>{{ art.artform }}</b>
+                </p>
               </div>
               <div class="prev-desc-txt">
-              <p >
-                Tehcnique: 
-              </p>
-              <p class="prev-txt"><b>{{ art.technique }}</b></p>
+                <p>Tehcnique:</p>
+                <p class="prev-txt">
+                  <b>{{ art.technique }}</b>
+                </p>
               </div>
               <div class="prev-desc-txt">
-              <p >
-                Materials: 
-              </p>
-              <p class="prev-txt"><b>{{ art.material }}</b></p>
+                <p>Materials:</p>
+                <p class="prev-txt">
+                  <b>{{ art.material }}</b>
+                </p>
               </div>
               <div class="prev-desc-txt">
-               <p >
-                Dimensions:  
-              </p>
-              <p class="prev-txt"><b>{{ art.artwork_dmns }}</b></p>
+                <p>Dimensions:</p>
+                <p class="prev-txt">
+                  <b>{{ art.artwork_dmns }}</b>
+                </p>
               </div>
               <div class="prev-desc-txt">
-               <p >
-                Year:  
-              </p>
-              <p class="prev-txt"><b>{{ art.artwork_year }}</b></p>
+                <p>Year:</p>
+                <p class="prev-txt">
+                  <b>{{ art.artwork_year }}</b>
+                </p>
               </div>
               <div class="prev-desc-txt">
-              <p >
-                Price: 
-              </p>
-              <p class="prev-txt"><b>{{ art.artwork_price }}</b> €</p>
+                <p>Price:</p>
+                <p class="prev-txt">
+                  <b>{{ art.artwork_price }}</b> €
+                </p>
               </div>
 
               <button
@@ -269,7 +263,7 @@ export default {
       contry_index_arr: [0, 1, 2],
       email_trigger: 0,
       cust_id: null,
-      order_id: null
+      order_id: null,
       // pay_option: false,
     };
   },
@@ -287,7 +281,6 @@ export default {
           this.num_cart += 1;
         }
       }
-
     },
     chckOrderList() {
       if (!localStorage.getItem("order_list")) {
@@ -333,31 +326,40 @@ export default {
           formData.append("cust_phone", this.phone_num);
           axios.post(this.baseUrl + "customers", formData).then((res) => {
             console.log(res);
-           
-            this.cust_id = res.data.cust_id;
-            let orderFormData = new FormData();
-            orderFormData.append('cust_id', this.cust_id);
-            axios
-              .post(this.baseUrl + "orders", orderFormData)
-              .then((res) => {
-                console.log(res);
 
-                this.order_id = res.data.order_id;
-                this.email_trigger += 1;
-                for (let i = 0; i < this.order_list.length; i++) {
-                  let artwk_id = this.order_list[i].artwork_id;
-                  let orderListFormData = new FormData();
-                  orderListFormData.append("cust_id", this.cust_id);
-                  orderListFormData.append("order_id", this.order_id);
-                  orderListFormData.append("artwork_id", artwk_id);
-                  axios
-                    .post(this.baseUrl + "order_list", orderListFormData)
-                    .then((res) => {
-                      console.log(res);
-                      
-                    });
-                }
-              });
+            this.cust_id = res.data.cust_id;
+
+            let email_txt = "";
+            for (let i = 0; i < this.order_list.length; i++) {
+              email_txt += `<li><p>${this.order_list[i].artwork_title}</p>
+                        <img width="200px" src="${this.order_list[i].artwork_imgpath}"/>
+                        <p>${this.order_list[i].artwork_price}€</p>
+                        </li>`;
+            }
+            email_txt += ` <h2>Total price: ${this.total_price}€</h2>`;
+
+            let orderFormData = new FormData();
+            orderFormData.append("cust_id", this.cust_id);
+            orderFormData.append("order_totalprice", this.total_price);
+            orderFormData.append("email_txt", email_txt);
+            axios.post(this.baseUrl + "orders", orderFormData).then((res) => {
+              console.log(res);
+
+              this.order_id = res.data.order_id;
+              this.email_trigger += 1;
+              for (let i = 0; i < this.order_list.length; i++) {
+                let artwk_id = this.order_list[i].artwork_id;
+                let orderListFormData = new FormData();
+                orderListFormData.append("cust_id", this.cust_id);
+                orderListFormData.append("order_id", this.order_id);
+                orderListFormData.append("artwork_id", artwk_id);
+                axios
+                  .post(this.baseUrl + "order_list", orderListFormData)
+                  .then((res) => {
+                    console.log(res);
+                  });
+              }
+            });
           });
         }
       }
@@ -379,12 +381,12 @@ export default {
       this.componentKey += 1;
     },
     getArtworks() {
-      // this.changeLoader(true);
+      this.changeLoader(true);
       axios.get(this.baseUrl + "artworks").then((res) => {
         console.log(res);
         this.artworks = res.data.data;
         // this.artworks[0].chosen = true;
-        // this.changeLoader(false);
+        this.changeLoader(false);
         this.changeToLanguage();
         this.chckOrderList();
         // this.getImages();
@@ -505,6 +507,9 @@ export default {
           this.message = this.$t("success.art_ord");
           this.order_success = true;
           localStorage.removeItem("order_list");
+          this.order_list = [];
+          this.num_cart = 0;
+          this.total_price = 0;
         });
       },
     },
@@ -560,7 +565,7 @@ export default {
     opacity: 0.1;
   }
 }
-b{
+b {
   width: 10vw;
   margin-left: 1rem;
 }
@@ -588,7 +593,7 @@ select {
 .artw-title {
   font-size: 1.2rem;
   font-weight: 800;
-  text-align: center; 
+  text-align: center;
   width: 20vw;
   align-self: center;
 }
@@ -652,7 +657,7 @@ select {
   width: 20vw;
   margin-bottom: 2rem;
   background-color: #ced0d1;
-  height: 65vh;
+  height: 75vh;
 }
 .chosen-artwk .prev-img {
   width: 18vw;
@@ -679,7 +684,7 @@ select {
   visibility: hidden;
   height: 0;
 }
-.how-to-instr{
+.how-to-instr {
   width: 15vw;
   text-align: justify;
   margin-left: 1rem;
@@ -829,7 +834,6 @@ select {
   margin-top: 1rem;
   width: 20vw;
   height: 50vh;
- 
 }
 .prev-desc-txt {
   margin-left: 1rem;
@@ -846,9 +850,9 @@ select {
   gap: 1rem;
   margin-top: 5vh;
 }
-.prev-txt{
+.prev-txt {
   width: 15vw;
-  margin-left: .5rem;
+  margin-left: 0.5rem;
 }
 .up-sqr {
   height: 15vh;

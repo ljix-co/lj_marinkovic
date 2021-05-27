@@ -66,6 +66,7 @@ export default {
       this.componentKey += 1;
     },
     getExhbtns() {
+      this.changeLoader(true);
       axios.get(this.baseUrl + "exhibitions").then((res) => {
         console.log(res);
 
@@ -79,6 +80,7 @@ export default {
     },
 
     showExh(exh) {
+      this.changeLoader(true);
       let exh_id = exh.exh_id;
       axios
         .get(this.baseUrl + "exh_images", { params: { exh_id: exh_id } })
@@ -87,6 +89,7 @@ export default {
           this.images = res.data.data;
           this.showGallery = true;
           this.chosenExh = exh;
+          this.changeLoader(false);
         });
     },
   },
@@ -181,6 +184,9 @@ p {
 .prev-img {
   width: 40vw;
   filter: grayscale(.3);
+  height: 50vh;
+  background-color: #7e7e7e;
+  object-fit: contain;
   /* height: 30vh;
   object-fit: cover;
   border-radius: 2rem;*/

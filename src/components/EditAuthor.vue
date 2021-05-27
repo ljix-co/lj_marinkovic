@@ -97,7 +97,7 @@ export default {
     },
     confrmNewAutImg() {
       let newImg = this.newImg;
-      this.$$emit("confirm-new-img", newImg);
+      this.$emit("confirm-new-img", newImg);
     },
     confirmNewPass() {
       let chngd_pass = {

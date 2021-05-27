@@ -6,7 +6,7 @@
         "artw_dtls": "GO TO ATWORK'S DETAILS",
         "order_list" : "CHECK ORDER LIST"
     },
-    "how-buy": "To order works, you need to click on the 'BUY' button and then fill in the form with your data (click on the basket in the right corner of your window). Works that are in the non-digital form are sent exclusively to Serbia, Bosnia and Herzegovina, and Montenegro, and payment is made upon receipt. For works in digital form, the transaction is made by payment to the PayPal account of the author, and the photo is then forwarded to the customer. You will receive all information on the order confirmation, shipping, and arrival via e-mail or telephone number. The shown prices include taxes but without the price of postage (which can range from 300 dinars or 3 euros to 6,000 dinars or 50 euros, approximately).",
+    "how-buy": "To order works, you need to click on the 'BUY' button and then fill in the form with your data (click on the basket in the right corner of your window). All works are sent exclusively to Serbia, Bosnia and Herzegovina, and Montenegro, and payment is made upon receipt. You will receive all information on the order confirmation, shipping, and arrival via e-mail or telephone number. The shown prices include taxes but without the price of postage (which can range from 300 dinars or 3 euros to 6,000 dinars or 50 euros, approximately).",
     "inpt_lbl": {
       "fullname": "FULL NAME",
       "email": "E-MAIL",
@@ -59,7 +59,7 @@
       }
     ],
     "subtitle": "Visual artist and Web developer",
-    "art_desc": "",
+    "art_desc": "21st-century art is a global mix of local elements, where techniques are mostly globally present and artistic style is related to local identity. The mix of media with socio-local themes, where the artistic expression can mostly be interpreted as 'cheerful' is what I single out as important.",
     "web_desc": "The simplicity of usage and content maintenance, as well as the clarity of the web page, represent the base of web development. Design should be adjusted to the needs of the client and the user so that it could represent the client and its business in the best possible way, thereby functionalities and access to the information should remain intuitive for the user. ",
     "order_title": "ORDER WEBSITE",
     "order_instr": "If you are intrested in ordering a website, please fill in the form and click the button 'SEND', and you will be contacted soon. The price of the website and the time required for its development depends on different factors, like the type of the website (personal page, corporate presentation, portfolio, web app...), domain and web hosting, photo editing, etc. Therefore, by filling in the form, you will get the answer about the price and the time needed for its completion. ",
