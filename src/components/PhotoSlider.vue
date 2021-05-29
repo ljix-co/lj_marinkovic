@@ -279,7 +279,7 @@ background-color: #27f2cb;
     width: 90vw;
   }
 }
-@media only screen and (min-width: 768px) and (max-width: 991px) {
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
   .ctrl {
     font-size: 1.5rem;
   }
@@ -299,6 +299,9 @@ background-color: #27f2cb;
   .delete-img-div {
     font-size: 1.5rem;
     margin-top: 0;
+  }
+  .photo-slider{
+  margin-left: 14vw;
   }
 }
 @media only screen and (max-width: 768px) {

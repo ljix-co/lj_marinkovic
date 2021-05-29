@@ -1,6 +1,6 @@
 <template>
   <div class="exhibitions">
-  <transition name="fade" mode="out-in">
+  <transition name="fade">
     <div class="pg-col" v-if="showGallery === false">
       <div class="preview">
         <div
@@ -8,6 +8,7 @@
           v-for="(exh, index) in exhibitions"
           :key="'e' + index"
           @click="showExh(exh)"
+          :class="{'selected-exh': exh.selected}"
         >
           <div class="date">
             <p class="date-string">{{ exh.exh_date_start }}</p>
@@ -30,7 +31,7 @@
       </div>
     </div>
   </transition>
-  <transition name="fade" mode="out-in">
+  <transition name="fade">
     <Gallery
       v-if="showGallery"
       :key="'g' + componentKey"
@@ -46,6 +47,7 @@ import axios from "axios";
 import { mapState, mapActions } from "vuex";
 import Gallery from "../components/Gallery.vue";
 import { checkLanguage } from "../mixins/checkLanguage.js";
+import {scrollToElement} from '../mixins/scrollToElement.js'
 export default {
   components: {
     Gallery,
@@ -59,7 +61,7 @@ export default {
       chosenExh: null,
     };
   },
-  mixins: [checkLanguage],
+  mixins: [checkLanguage, scrollToElement],
   methods: {
     ...mapActions(["changeLoader"]),
     forceRerender() {
@@ -77,19 +79,33 @@ export default {
     },
     goBack() {
       this.showGallery = false;
+      window.scrollTo(0,0)
+      setTimeout(() => {
+        this.scrollToElement("selected-exh");
+      }, 200);
     },
 
     showExh(exh) {
       this.changeLoader(true);
       let exh_id = exh.exh_id;
+        for (let i = 0; i < this.exhibitions.length; i++) {
+        if (this.exhibitions[i].selected === true) {
+          this.exhibitions[i].selected = false;
+        }
+        if (exh === this.exhibitions[i]) {
+          this.exhibitions[i].selected = true;
+        }
+      }
       axios
         .get(this.baseUrl + "exh_images", { params: { exh_id: exh_id } })
         .then((res) => {
           console.log(res);
+          this.changeLoader(false);
           this.images = res.data.data;
           this.showGallery = true;
           this.chosenExh = exh;
-          this.changeLoader(false);
+          
+          
         });
     },
   },
@@ -220,7 +236,68 @@ p {
 .tooltip:hover .tooltiptxt {
   visibility: visible;
 }
+@media only screen and (min-width: 1024px) and (max-width: 1440px) {
+.date-string {
+font-size: 2rem;
+}
+.exh-title{
+font-size: 1.5rem;
+width: 40vw;
+margin-left: 5vw;
+}
+.line, .short-desc{
+height: 55vh;
+}
+.place {
+font-size: 1rem;
+}
+.prev-div{
+height: 60vh;
+}
+.prev-img{
+height: 40vh;
+}
+}
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+.line{
+display: none;
+}
+.place{
+font-size: 1rem;
+}
+.img-title{
+width: 70vw;
+}
+.preview{
+margin-top: 0;
+}
+.prev-div{
+flex-direction: column;
+width: 70vw;
+height: 90vh;
+margin-top: 0;
+margin-bottom: 5vh;
+}
 
+.prev-img{
+width: 65vw;
+}
+.exh-title{
+font-size: 1.5rem;
+}
+.short-desc{
+width: 65vw;
+margin-left: 1rem;
+border-width: 3px;
+}
+.date{
+position: absolute;
+margin-left: -5vw;
+}
+.date-string{
+font-size: 2rem;
+}
+}
 @media only screen and (max-width: 768px) {
   .pg-col {
     margin-left: 2rem;

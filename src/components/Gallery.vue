@@ -1,5 +1,5 @@
 <template>
-  <div class="gallery">
+  <div class="gallery" :style="{height: gallery_hight}">
     <i
       :class="{
         'fas fa-times exit': enlarged === false,
@@ -10,62 +10,56 @@
       :class="{ 'fas fa-times exit': enlarged }"
       @click="exitLargeGallery()"
     ></i>
-    <div class="content" v-if="enlarged === false">
-      <div>
-        <div class="txt">
-          <div class="title-date">
-            <h2 class="title">{{ title.toUpperCase() }}</h2>
-            <div>
-              <p class="date">{{ date }}</p>
+    <transition name="fade">
+      <div class="content" v-if="enlarged === false" ref="content">
+        <div>
+          <div class="txt">
+            <div class="title-date">
+              <h2 class="title">{{ title.toUpperCase() }}</h2>
+              <div>
+                <p class="date">{{ date }}</p>
+              </div>
+            </div>
+            <div class="description" v-html="description"></div>
+            <div class="description" v-if="review" v-html="review"></div>
+          </div>
+        </div>
+        <div class="images">
+          <div v-for="(image, index) in images" :key="index">
+            <div v-lazyload class="tooltip">
+              <img
+                :key="'img' + elementKey"
+                class="img-gallery"
+                :class="{ 'img-selected': image.selected }"
+                :data-url="image.img_path"
+                alt=""
+                @click="showLarge(image, index)"
+                src="../../public/images/placeholder.gif"
+              />
+              <span class="tooltiptxt">{{ $t("tooltips.nav-gallery") }}</span>
             </div>
           </div>
-          <div class="description" v-html="description"></div>
-          <div class="description" v-if="review" v-html="review"></div>
         </div>
       </div>
-      <div class="images">
-        <div v-for="(image, index) in images" :key="index">
-          <div v-lazyload class="tooltip">
-            <img
-              class="img-gallery"
-              :data-url="image.img_path"
-              alt=""
-              @click="showLarge(image, index)"
-              src="../../public/images/placeholder.gif"
-            />
-            <span class="tooltiptxt">{{ $t("tooltips.nav-gallery") }}</span>
-          </div>
-        </div>
+    </transition>
+    <transition name="fade">
+      <div
+        v-if="enlarged"
+        :class="{ 'enlarged-gallery': enlarged, 'no-show': enlarged === false }"
+      >
+        <photo-slider
+          :key="'p' + componentKey"
+          :images="photoslider_imgs"
+          :chosen_image="chosen_image"
+        ></photo-slider>
       </div>
-    </div>
-    <div
-      v-if="enlarged"
-      :class="{ 'enlarged-gallery': enlarged, 'no-show': enlarged === false }"
-    >
-      <photo-slider
-        :key="'p' + componentKey"
-        :images="photoslider_imgs"
-        :chosen_image="chosen_image"
-      ></photo-slider>
-      <!-- <div class="left-side-bar">
-        <i
-          class="far fa-arrow-alt-circle-left link-btn"
-          @click="prevImg(curIndex)"
-        ></i>
-      </div>
-      <img class="enlarged-img" :src="enlarged_img" alt="" />
-      <div class="rigth-side-bar">
-        <i
-          class="far fa-arrow-alt-circle-right link-btn"
-          @click="nextImg(curIndex)"
-        ></i>
-      </div> -->
-    </div>
+    </transition>
   </div>
 </template>
 <script>
 import { mapActions } from "vuex";
 import PhotoSlider from "./PhotoSlider.vue";
+import { scrollToElement } from "../mixins/scrollToElement.js";
 export default {
   components: { PhotoSlider },
   props: {
@@ -89,12 +83,18 @@ export default {
       photoslider_imgs: [],
       chosen_image: new Object(),
       componentKey: 0,
+      elementKey: 0,
+      gallery_hight: '150px'
     };
   },
+  mixins: [scrollToElement],
   methods: {
     ...mapActions(["changeLoader"]),
     exitLargeGallery() {
       this.enlarged = false;
+      setTimeout(() => {
+        this.scrollToElement("img-selected");
+      }, 500);
     },
     getDetails() {
       if (this.chosenExh) {
@@ -111,6 +111,12 @@ export default {
         this.title = this.chosenProj.title;
         this.date = this.chosenProj.proj_year;
       }
+      setTimeout(() => {
+      this.gallery_hight = this.$refs.content.clientHeight + 100 + 'px';
+      this.scrollToElement('title')
+      }, 500);
+      console.log(this.gallery_hight)
+    //  window.scrollTo(0,0)
     },
     goBack() {
       this.$emit("go-back");
@@ -140,16 +146,24 @@ export default {
           path: this.images[i].img_path,
           id: this.images[i].img_id,
         });
+        if (this.images[i].selected === true) {
+          this.images[i].selected = false;
+        }
+        if (image === this.images[i]) {
+          this.images[i].selected = true;
+          this.elementKey += 1;
+        }
       }
       this.chosen_image = image;
-      console.log(this.chosen_image);
       this.componentKey += 1;
+      window.scrollTo(0, 0);
       // this.enlarged_img = image.img_path;
     },
   },
 
   mounted() {
     // this.changeLoader(true);
+    
     this.getDetails();
   },
 };
@@ -169,11 +183,13 @@ img {
   object-fit: contain;
   background-color: #7e7e7e;
 }
+
 .content {
   display: flex;
   gap: 1rem;
-
-  margin-top: 10vh;
+  position: absolute;
+  top: 10vh;
+  left: 10vw;
   align-items: flex-start;
   justify-content: flex-start;
   width: 80vw;
@@ -195,8 +211,10 @@ img {
   height: 100vh;
   display: flex;
   align-items: center;
-  justify-content: center; /*
-  background-color: #c8c8ca;*/
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .exit {
@@ -204,9 +222,9 @@ img {
   top: 10vh;
   left: 92vw;
   font-size: 3rem;
+  z-index: 2;
 }
 .gallery {
-  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -266,6 +284,29 @@ img {
   align-items: center;
   justify-content: flex-start;
   margin-top: 10vh;
+}
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+img{
+width: 50vw;
+}
+.content{
+width: 90vw;
+left: 1rem;
+}
+.description{
+width: 30vw;
+}
+.exit{
+font-size: 2rem;
+left: 95vw;
+}
+.title{
+width: 30vw;
+font-size: 1.5rem;
+}
+.txt{
+width: 35vw;
+}
 }
 @media only screen and (max-width: 768px) {
   .content {

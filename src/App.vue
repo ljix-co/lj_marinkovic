@@ -53,11 +53,12 @@
      <custom-cursor
       :targets="[ 'a', 'button', 'i', 'nav-left', 'nav-scroll', 'order-nav', 'dtls-nav', 'order-exit', 'exit-order', 'order-delete', 'exit-order', 'check-order-btn',
       'buy-nav', 'exit', 'prev-img', 'lines', 'delete', 'ctrl', 'img-gallery', 'logo', 'image-home', 'flag', 'cart-icon', 'cart-amount',
-      'add-icon', 'img-prof', 'cover-img']"
+      'add-icon', 'img-prof', 'cover-img', 'conct-mail']"
       :circleColor="'#27f2cb'"
-      :circleColorHover="'#C3EAE3'"
+      :circleColorHover="'#bebebe'"
       :hoverSize="4"
     ></custom-cursor>
+   
   </div>
 </template>
 <script>
@@ -73,7 +74,6 @@ export default {
     return {
       showMenu: false,
       loggedIn: false,
-     
     };
   },
   methods: {
@@ -238,13 +238,49 @@ select:focus {
   top: 3vh;
   left: 90vw;
 }
-.logout {
-  cursor: pointer;
-}
+
 
 .prof-link {
   font-size: 1.5rem;
   margin-left: 1rem;
+}
+@media only screen and (min-width: 1024px) and (max-width: 1440px) {
+p, li{
+font-size: .8rem;
+}
+#nav a{
+font-size: 1.2rem;
+}
+.logo{
+top: 1.5rem;
+}
+.logged-icons{
+top: .5rem;
+}
+}
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+input {
+font-size: .8rem;
+}
+label{
+font-size: .8rem;
+}
+p, li{
+font-size: .8rem;
+}
+option{
+font-size: .8rem;
+}
+#nav a{
+font-size: 1rem;
+}
+.logo{
+top: 1.5rem;
+width: 9vw;
+}
+.logged-icons{
+top: .5rem;
+}
 }
 @media only screen and (max-width: 768px) {
   #nav {

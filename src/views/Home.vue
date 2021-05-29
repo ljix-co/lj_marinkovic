@@ -125,7 +125,10 @@
         </div>
       </div>
     </transition>
-    <transition name="fade" enter-active-class="down-in-order">
+    <transition
+      enter-active-class="down-in-order"
+      leave-active-class="up-out-order"
+    >
       <div class="order-form" v-if="order_web_form">
         <h1 class="order-title">{{ $t("home.order_title") }}</h1>
         <i class="fas fa-times order-exit" @click="exitOrderWeb"></i>
@@ -359,6 +362,16 @@ export default {
     opacity: 0.1;
   }
 }
+@keyframes up_out_order {
+  from {
+    top: 0;
+    opacity: 1;
+  }
+  to {
+    top: -50vh;
+    opacity: 0.1;
+  }
+}
 @keyframes left_in {
   from {
     left: -15vh;
@@ -400,7 +413,7 @@ h3 {
   margin-top: 1vh;
 }
 p {
-  font-size: 1.2rem;
+  font-size: 1rem;
 }
 label {
   font-size: 1.5rem;
@@ -459,13 +472,14 @@ select {
   left: 30vw;
 }
 .cat-title {
-  font-size: 2rem; /*
+  font-size: 3rem; /*
   transform: rotate(270deg);
   width: 5vw;
   margin-top: 25vh;*/
   font-family: "HortaRegular", cursive;
   animation: left_in 2s 1;
   position: relative;
+  color: #aaaaaa;
 }
 .dec-div {
   display: flex;
@@ -559,7 +573,7 @@ border-radius: 2rem;*/
   text-align: justify;
   width: 30vw;
   align-self: center;
-
+  font-size: 1.2rem;
   margin-top: 2rem;
 }
 
@@ -602,7 +616,6 @@ border-radius: 2rem;*/
   top: 1rem;
   left: 55vw;
   font-size: 3rem;
-  
 }
 .order-form {
   width: 60vw;
@@ -613,10 +626,11 @@ border-radius: 2rem;*/
   justify-content: center;
   margin-top: 15vh;
   position: absolute;
-  background-color: #F9FFF7;
+  background-color: #f9fff7;
   border: 2px solid #27f2cb;
+  z-index: 2;
 }
-.order-title{
+.order-title {
   margin-top: 2rem;
   font-family: "HortaRegular", cursive;
   font-size: 3rem;
@@ -638,7 +652,7 @@ border-radius: 2rem;*/
   justify-content: center;
   gap: 0;
   position: fixed;
-  top: 90vh;
+  top: 85vh;
 } /*
 .slide-fade-leave-active {
   transition: all .1s cubic-bezier(1.0, 0.5, 0.8, 1.0);
@@ -667,6 +681,9 @@ border-radius: 2rem;*/
 .up-leave {
   animation: up_leave 1s 1;
 }
+.up-out-order {
+  animation: up_out_order 1s 1;
+}
 .web-img {
   position: fixed;
   top: 15vh;
@@ -683,6 +700,111 @@ border-radius: 2rem;*/
 
   position: fixed;
   top: 20vh;
+}
+@media only screen and (min-width: 1024px) and (max-width: 1440px) {
+  p {
+    font-size: 0.9rem;
+  }
+  .category {
+    margin-top: 0;
+  }
+  .cat-title {
+    font-size: 2rem;
+  }
+  .f-letter,
+  .name {
+    font-size: 3.5rem;
+  }
+  .img-prof,
+  .logo-img,
+  .detail-img {
+    width: 30vw;
+  }
+  .intro-txt {
+    font-size: 1rem;
+  }
+  .occup {
+    font-size: 1.5rem;
+  }
+}
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+label{
+font-size: 1rem;
+}
+  p {
+    font-size: 0.8rem;
+  }
+  select{
+  font-size: .8rem;
+  }
+  .art-img,  .web-img {
+    top: 20vh;
+  }
+  .btn-send{
+  width: 15vw;
+  }
+  .category {
+    margin-top: 0;
+    gap: 0;
+    margin-left: 1rem;
+    top: 32vh;
+  }
+  .cat-content {
+    flex-direction: column;
+  }
+  .cat-desc {
+    width: 45vw;
+    margin-left: 1rem;
+  }
+  .cat-title {
+    font-size: 2rem;
+    margin-left: 1rem;
+  }
+  .dec-line {
+    height: 40vh;
+  }
+  .f-letter,
+  .name {
+    font-size: 3.5rem;
+  }
+  .img-prof,
+  .logo-img,
+  .detail-img {
+    width: 35vw;
+  }
+  .image-home {
+    width: 45vw;
+    margin-left: 1rem;
+  }
+  .intro-txt {
+    font-size: 1rem;
+    margin-left: 3rem;
+    width: 40vw;
+    margin-top: 0;
+  }
+  .nav {
+    border-width: 3px;
+  }
+  .nav-scroll {
+    font-size: 1.5rem;
+  }
+  .occup {
+    font-size: 1.5rem;
+  }
+  .order-exit{
+  font-size: 2rem;
+  }
+  .order-title{
+  font-size: 2rem;
+  margin-top: 1.5rem;
+  }
+  .start-img {
+    top: 25vh;
+  }
+  .web-title {
+    margin-left: 3rem;
+    top: 18vh;
+  }
 }
 @media only screen and (max-width: 768px) {
   .pg {

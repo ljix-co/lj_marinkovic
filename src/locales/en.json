@@ -23,6 +23,12 @@
     "confirm": "CONFIRM",
     "send": "SEND"
   },
+  "contact": {
+    "title": "i would be happy to hear from you!",
+    "soc": "If You wish to connect with me on social networks, use these links.",
+    "personal": "If You have any questions, concerns, or wish to send me feedback, please feel free to contact me. ",
+    "inpt_lbl_mssg": "MESSAGE"
+  },
   "country_list" : [
     {
       "country": "SERBIA"
@@ -37,10 +43,10 @@
   "home": {
     "categories": [
       {
-        "title": "ART"
+        "title": "art"
       },
       {
-        "title": "WEB"
+        "title": "web"
       }
     ],
     "description": "Ljiljana Marinković is both artist and front end programmer, whose main occupation is web development. Considering art, her main medium is ceramics, but she also greatly uses other art forms such as video, photography, painting, etc. Regarding web development, her prime language and tool is javascript.",
@@ -115,7 +121,8 @@
   },
   "success": {
     "web_ord": "You have successfully ordered a web site. You will be contacted soon via email. Thank You for ordering.",
-    "art_ord": "You have successfully ordered the artwork/s. You will be contacted soon about the information of the arrival. Thank You for ordering."
+    "art_ord": "You have successfully ordered the artwork/s. You will be contacted soon about the information of the arrival. Thank You for ordering.",
+    "contact": "Your message was sent. You will get the answer as soon as posible. Thank You for contacing me!"
   },
   "tooltips": {
     "gallery": "CLICK TO SEE ALL IMAGES",

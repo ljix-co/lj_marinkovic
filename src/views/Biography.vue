@@ -1,12 +1,31 @@
 <template>
   <div class="biography">
     <div class="author-info" v-for="(info, index) in author_info" :key="index">
+      <div class="dec-div">
+        <div class="dec-line"></div>
+        <div class="dec-line"></div>
+        <div class="dec-line"></div>
+      </div>
       <div class="prof-img">
-        <img :src="info.profimg_path" alt=""  />
+        <img :src="info.profimg_path" alt="" />
       </div>
       <div class="txt">
         <!-- <h2 class="title">BIOGRAPHY</h2> -->
         <div class="bio" v-html="info.aut_bio"></div>
+      </div>
+      <div class="dec-div">
+        <div class="dec-line"></div>
+        <div class="dec-line"></div>
+        <div class="dec-line"></div>
+
+        <div class="dec-line-mob"></div>
+        <div class="dec-line-mob"></div>
+        <div class="dec-line-mob"></div>
+        <div class="dec-line-mob"></div>
+        <div class="dec-line-mob"></div>
+        <div class="dec-line-mob"></div>
+        <div class="dec-line-mob"></div>
+        
       </div>
     </div>
   </div>
@@ -31,14 +50,12 @@ export default {
         this.changeLoader(false);
       });
     },
-
   },
   computed: {
     ...mapState(["baseUrl"]),
   },
   mounted() {
     this.getAuthInfo();
-  
   },
 };
 </script>
@@ -52,70 +69,95 @@ export default {
   }
 }
 img {
-  width: 50vw;
+  width: 30vw;
+  height: 90vh;
+  object-fit: contain;
   margin-left: 0;
   margin-top: 15vh;
-  box-shadow: 0px 5px 10px 1px rgba(0, 0, 0, 0.23);/*
-  border-radius: 2rem;*/
+  filter: grayscale(50%);
+  background-color: #7e7e7e;
 }
 .author-info {
   display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  margin-left: 0;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 5vw;
   height: 100%;
   margin-bottom: 15vh;
 }
 .bio {
-  width: 30vw;
+  width: 25vw;
   text-align: justify;
 }
 .biography {
   margin-left: 0;
-  animation: in 2s 1;
-  position: relative;
 }
-.prof-img {
-  margin-top: 2rem;
+.dec-div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 2rem;
+  margin-top: 15vh;
 }
-.title {
-  margin-bottom: 5vh;
-  font-size: 2.5rem;
+.dec-line {
+  height: 90vh;
+  width: 3vw;
+  border-left: 7px dotted #c3eae3;
 }
 .txt {
-
+  margin-top: 15vh;
   height: 90vh;
   width: 35vw;
-  position: absolute;
-  top: 7vh;
-  left: 60vw;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  
+  background-color: #c3eae3;
+}
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+  img {
+    height: 50vh;
+  }
+  .bio {
+    width: 40vw;
+  }
+  .dec-div {
+    position: absolute;
+    left: 1rem;
+    top: 55vh;
+  }
+  .dec-line, .dec-line-mob {
+    height: 35vh;
+  }
+  .dec-line-mob {
+  width: 3vw;
+  border-left: 7px dotted #c3eae3;
+  }
+  .txt {
+    width: 55vw;
+  }
 }
 @media only screen and (max-width: 768px) {
-  img{
+  img {
     width: 90vw;
     margin-top: 7vh;
   }
-.author-info {
-  display: flex;
-  flex-direction: column;
-}
-.bio{
-  width: 75vw;
-  margin-bottom: 1rem;
-}
-.prof-img {
-  margin-top: 0;
-}
-.txt{
-  position: initial;
-  width: 90vw;
-  height: fit-content;
-  border: none;
-}
+  .author-info {
+    display: flex;
+    flex-direction: column;
+  }
+  .bio {
+    width: 75vw;
+    margin-bottom: 1rem;
+  }
+  .prof-img {
+    margin-top: 0;
+  }
+  .txt {
+    position: initial;
+    width: 90vw;
+    height: fit-content;
+    border: none;
+  }
 }
 </style>

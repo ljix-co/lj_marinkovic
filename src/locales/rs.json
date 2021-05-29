@@ -23,6 +23,12 @@
     "confirm": "POTVRDI",
     "send": "POŠALJI"
   },
+  "contact": {
+    "title": "bilo bi mi drago da vas čujem!",
+    "soc": "Ukoliko želite da se povežete samnom putem društvenih mreža, koristite ove linkove.",
+    "personal": "Ukoliko imate bilo kakva pitanja ili želite da mi pošaljete povratne informacije, slobodno me kontaktirajte. ",
+    "inpt_lbl_mssg": "PORUKA"
+  },
   "country_list" : [
     {
       "country": "SRBIJA"
@@ -37,10 +43,10 @@
   "home": {
     "categories": [
       {
-        "title": "UMETNOST"
+        "title": "umetnost"
       },
       {
-        "title": "VEB"
+        "title": "veb"
       }
     ],
     "description": "Ljiljana Marinković je umetnik i front end promgramer, čija je glavna delatnost veb razvoj. U pogledu umetnosti, njen osnovni medij je keramika, ali u velikoj meri koristi i druge umetničke forme kao što su video, fotografija, slika, itd. Što se tiče izrade veb stranica, njen glavni jezik i alat je javascript.",
@@ -115,7 +121,8 @@
   },
   "success": {
     "web_ord": "Uspešno ste poručili veb sajt. Bićete kontaktirani uskoro putem email-a. Hvala Vam na porudžbini.",
-    "art_ord": "Uspešno ste poručili umetninu/e. Bićete kontaktirani uskoro u vezi informacija o prispeću. Hvala Vam na porudžbini."
+    "art_ord": "Uspešno ste poručili umetninu/e. Bićete kontaktirani uskoro u vezi informacija o prispeću. Hvala Vam na porudžbini.",
+    "contact": "Vaša poruka je poslata. Odgovor ćete dobiti u najkraćem mogućem roku. Hvala Vam što ste me kontaktirali!"
   },
   "tooltips": {
     "gallery": "KLIKNITE DA VIDITE SVE SLIKE",

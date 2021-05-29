@@ -69,6 +69,12 @@ img {
   left: 85vw;
   z-index: 2;
 }
+@media only screen and (min-width: 1024px) and (max-width: 1440px) {
+img{
+width: 2rem;
+height: 1.5rem;
+}
+}
 @media screen and (min-width: 992px) and (max-width: 1280px) {
 .lang-title{
 display: none;

@@ -24,7 +24,7 @@ h1{
     width: 20vw;
     margin-top: 5vh;
     text-align: justify;
-    font-size: 1.2rem;
+    font-size: 1.5rem;
 }
 button {
   width: 10vh;
@@ -41,7 +41,7 @@ button {
 .alert {/*
   margin-top: 20vh;
   margin-bottom: 10vh;*/
-  width: 30vw;/*
+  width: 35vw;/*
   height: 40vh;*/
   display: flex;
   flex-direction: column;

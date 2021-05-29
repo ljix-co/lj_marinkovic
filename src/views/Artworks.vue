@@ -69,7 +69,7 @@
             <label for="">{{ $t("artworks.inpt_lbl.phone_num") }}</label>
             <input type="text" v-model="phone_num" />
 
-            <button @click="confirmOrder()">
+            <button class="btn-confirm" @click="confirmOrder()">
               {{ $t("buttons.confirm") }}
             </button>
           </div>
@@ -279,6 +279,7 @@ export default {
           this.buttonKey += 1;
           this.total_price += art.artwork_price;
           this.num_cart += 1;
+          this.show_order = true;
         }
       }
     },
@@ -775,6 +776,11 @@ select {
   background-color: #f9fff7;
   width: 15vw;
 }
+
+.order-title, .order-price{
+width: 15vw;
+text-align: center;
+}
 .order-top-line {
   width: 60vw;
   position: absolute;
@@ -917,7 +923,70 @@ select {
 .tooltip:hover .tooltiptxt {
   visibility: visible;
 }
+@media only screen and (min-width: 1024px) and (max-width: 1440px) {
 
+.btn-confirm{
+width: 10vw;
+height: 6vh;
+}
+.order-total-price{
+left: 1rem;
+}
+}
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+h2{
+font-size: 1rem;
+}
+p{
+width: 7vw;
+}
+.artw-title, .chosen-artwk, .prev-div, .prev-img{
+width: 30vw;
+}
+.artw-title{
+font-size: 1rem;
+align-self: end;
+}
+.buy-nav, .exit{
+width: 20vw;
+}
+.btn-buy{
+margin-top: 25vh;
+margin-left: 5rem;
+width: 10vw;
+height: 5vh;
+}
+.btn-confirm{
+width: 10vw;
+height: 5vh;
+font-size: .8rem;
+}
+.check-order-btn{
+font-size: 1.2rem;
+margin-left: 1rem;
+}
+.chosen-artwk{
+height: 70vh;
+}
+.chosen-artwk .prev-img{
+width: 28vw;
+}
+.dtls-nav{
+font-size: .6rem;
+}
+.prev-div{
+height: 65vh;
+}
+.prev-gallery{
+margin-left: -3rem;
+}
+.prev-txt{
+width: 20vw;
+}
+.tooltip:hover .tooltiptxt {
+visibility: hidden;
+}
+}
 @media only screen and (max-width: 768px) {
   .pg-col {
     margin-left: 2rem;

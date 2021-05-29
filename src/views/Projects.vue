@@ -8,6 +8,7 @@
             v-for="(project, index) in projects"
             :key="index"
             @click="showProj(project)"
+            :class="{ 'selected-proj': project.selected }"
           >
             <div class="year">
               <div class="triangle-right"></div>
@@ -21,7 +22,7 @@
               </div>
               <h3 class="proj-title">{{ project.title.toUpperCase() }}</h3>
               <a :href="project.proj_link" target="blank" class="link">{{
-               $t('tooltips.go-to-website')
+                $t("tooltips.go-to-website")
               }}</a>
             </div>
             <div class="short-desc" v-html="project.short_desc"></div>
@@ -45,6 +46,7 @@ import Gallery from "../components/Gallery.vue";
 import axios from "axios";
 import { mapState, mapActions } from "vuex";
 import { checkLanguage } from "../mixins/checkLanguage.js";
+import {scrollToElement} from "../mixins/scrollToElement.js";
 export default {
   components: {
     Gallery,
@@ -58,7 +60,7 @@ export default {
       componentKey: 0,
     };
   },
-  mixins: [checkLanguage],
+  mixins: [checkLanguage, scrollToElement],
   methods: {
     ...mapActions(["changeLoader"]),
     forceRerender() {
@@ -76,11 +78,23 @@ export default {
     },
     goBack() {
       this.showGallery = false;
+      window.scrollTo(0,0)
+      setTimeout(() => {
+        this.scrollToElement("selected-proj");
+      }, 200);
     },
 
     showProj(project) {
       let proj_id = project.proj_id;
       this.changeLoader(true);
+      for (let i = 0; i < this.projects.length; i++) {
+        if (this.projects[i].selected === true) {
+          this.projects[i].selected = false;
+        }
+        if (project === this.projects[i]) {
+          this.projects[i].selected = true;
+        }
+      }
       axios
         .get(this.baseUrl + "project_images", { params: { proj_id: proj_id } })
         .then((res) => {
@@ -141,8 +155,6 @@ export default {
   align-self: center;
   justify-self: center;
   margin-left: 4rem;
-  position: relative;
-  top: 6vh;
 }
 .preview {
   display: flex;
@@ -157,7 +169,7 @@ export default {
 .prev-div {
   width: 70vw;
   height: 60vh;
-  margin-top: 10vh;/*
+  margin-top: 10vh; /*
 background-color: #F9FFF7;*/
   display: flex;
   align-items: flex-start;
@@ -176,7 +188,6 @@ background-color: #F9FFF7;*/
   height: 60vh;
   width: 20vw;
   border-bottom: 5px solid #27f2cb;
-  
 }
 .tooltip .tooltiptxt {
   position: absolute;
@@ -202,6 +213,56 @@ background-color: #F9FFF7;*/
   color: #545454;
 
   font-size: 4rem;
+}
+@media only screen and (min-width: 1024px) and (max-width: 1440px) {
+.line, .short-desc{
+height: 50vh;
+}
+.link{
+font-size: 1rem;
+}
+.proj-title{
+font-size: 1.5rem;
+
+}
+.year-string {
+font-size: 3rem;
+}
+}
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+.line{
+display: none;
+}
+.link{
+font-size: 1rem;
+margin-bottom: 5vh;
+}
+.img-title{
+width: 70vw;
+margin-bottom: 5vh;
+}
+.prev-div{
+flex-direction: column;
+width: 70vw;
+height: 90vh;
+margin-top: 15vh;
+}
+
+.prev-img{
+width: 65vw;
+}
+.proj-title{
+font-size: 1.5rem;
+}
+.short-desc{
+width: 65vw;
+margin-left: 1rem;
+border-width: 3px;
+}
+.year{
+position: absolute;
+margin-left: -10vw;
+}
 }
 @media only screen and (max-width: 768px) {
   .pg-col {

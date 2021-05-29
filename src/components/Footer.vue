@@ -1,5 +1,5 @@
 <template>
-  <div class="footer">
+  <div class="footer" :class="{'footer-homepg': home}">
     <div class="footer-content">
     <div class="footer-txt">
       <p>Designed and coded by</p>
@@ -16,17 +16,53 @@
   </div>
 </template>
 <script>
-export default {};
+export default {
+data() {
+  return{
+    home: true
+  }
+},
+methods: {
+chckPage() {
+   if(this.$route.name === 'Home') {
+        this.home = true;
+      } else {
+        this.home = false;
+      }
+}
+},
+mounted(){
+this.chckPage();
+},
+watch: {
+  $route: {
+    handler() {
+      if(this.$route.name === 'Home') {
+        this.home = true;
+      } else {
+        this.home = false;
+      }
+    }
+  }
+}
+};
 </script>
 <style scoped>
 img {
-  width: 100px;
+  width: 80px;
   margin-left: 0.5rem;
+}
+p{
+font-size: .8rem;
 }
 .footer {
   width: 100vw;
   height: 10vh;
   margin-top: 2rem;
+}
+.footer-homepg{
+position: fixed;
+top: 89vh;
 }
 .footer-content {
   display: flex;
@@ -42,8 +78,11 @@ justify-content: center;
 gap: 0.5rem;
 }
 .lj_logo{
-width: 80px;
+width: 60px;
 margin-left: 0;
+}
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+
 }
 @media only screen and (max-width: 768px) {
   .footer-content {
