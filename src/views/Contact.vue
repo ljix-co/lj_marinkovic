@@ -440,12 +440,13 @@ input {
   }
   input{
   width: 40vw;
-  height: 3vh;
+  height: 5vh;
   }
   .btn-send{
   width: 30vw;
-  height: 5vh;
+  height: 7vh;
   left: 33vw;
+  top: 80vh;
   }
   .editor{
   width: 60vw;
@@ -463,6 +464,7 @@ input {
   }
   .email-form {
     width: 90vw;
+    height: 100vh;
     left: 5vw;
     top: 7vh;
     flex-direction: column;
@@ -477,7 +479,7 @@ input {
     font-size: 3rem;
   }
   .fas {
-    font-size: 1rem;
+    font-size: 1.5rem;
     margin-left: 0;
   }
   .fa-times {
@@ -501,7 +503,7 @@ input {
   .pers-info {
     width: 50vw;
     gap: 1.5rem;
-    margin-top: -2vh;
+    margin-top: 2vh;
   }
   .soc-icons {
     width: 40vw;
@@ -511,7 +513,10 @@ input {
   .sqr {
     width: 60vw;
     height: 60vw;
-    margin-top: 10vh;
+    margin-top: 5vh;
+  }
+  .up-sqr{
+  margin-top: 15vh;
   }
 }
 </style>

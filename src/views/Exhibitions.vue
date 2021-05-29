@@ -315,7 +315,7 @@ p {
   .prev-div {
     flex-direction: column;
     width: 70vw;
-    height: 70vh;
+    height: auto;
     margin-top: 0;
     margin-bottom: 5vh;
   }

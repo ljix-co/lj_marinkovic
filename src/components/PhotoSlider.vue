@@ -326,7 +326,7 @@ export default {
     width: 80vw;
   }
   .exit {
-    font-size: 3rem;
+    font-size: 2rem;
     color: #545454;
   }
   .exit-div {

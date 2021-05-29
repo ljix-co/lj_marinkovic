@@ -282,7 +282,7 @@ background-color: #F9FFF7;*/
   .prev-div {
     flex-direction: column;
     width: 70vw;
-    height: 70vh;
+    height: auto;
 
     margin-bottom: 5vh;
   }

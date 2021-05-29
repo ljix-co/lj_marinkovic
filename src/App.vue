@@ -51,6 +51,7 @@
       <Footer></Footer>
     </footer>
     <custom-cursor
+    class="custom-curs"
       :targets="[
         'a',
         'button',
@@ -312,13 +313,18 @@ select:focus {
   label {
     font-size: 0.9rem;
   }
-
+  p{
+  font-size: .8rem;
+  }
   #nav {
     z-index: 3;
     height: 5vh;
   }
   #nav a {
     font-size: 2rem;
+  }
+  .custom-curs{
+  visibility: hidden;
   }
   .hide {
     visibility: hidden;
@@ -334,12 +340,13 @@ select:focus {
     font-size: 2rem;
     position: absolute;
     left: 90vw;
-    top: 1vh;
+    top: 0;
   }
 
   .logo {
     width: 100px;
     z-index: 2;
+    top: 0;
   }
   .logged-icons {
     position: unset;

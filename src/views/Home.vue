@@ -826,16 +826,19 @@ border-radius: 2rem;*/
 }
 @media only screen and (max-width: 768px) {
 input{
-width: 25vw;
-height: 3vh;
+width: 30vw;
+height: 5vh;
 font-size: .9rem;
 }
 label{
 font-size: .9rem;
 }
+p{
+font-size: .8rem;
+}
 select{
-width: 25vw;
-height: 3vh;
+width: 30vw;
+height: 5vh;
 font-size: .9rem;
 }
 .btn-send{
@@ -853,11 +856,12 @@ width: 30vw;
   }
   .cat-desc {
     width: 50vw;
-    margin-top: 20vh;
+    margin-top: 25vh;
   }
   .cat-title{
   position: absolute;
-  top: 15vh;
+  top: 20vh;
+  font-size: 2rem;
   }
   .category-txt {
     width: 50vw;
@@ -917,7 +921,8 @@ width: 30vw;
   }
   .intro-txt {
     width: 50vw;
-    font-size: 1rem;
+    font-size: .8rem;
+    margin-top: 10vh;
   }
   .name {
     font-size: 3.5rem;
@@ -925,7 +930,7 @@ width: 30vw;
   }
   .nav {
     width: 30vw;
-    border-width: 3px;
+    border-width: 1px;
   }
   .nav-mob-left {
     position: fixed;
@@ -985,7 +990,7 @@ width: 30vw;
     width: 90vw;
     height: fit-content;
     margin-bottom: 6vh;
-    top: 15vh;
+    top: 13vh;
   }
   .web-img, .art-img {
     visibility: hidden;

@@ -1021,20 +1021,20 @@ select {
 @media only screen and (max-width: 768px) {
   input {
     width: 30vw;
-    height: 3vh;
+    height: 5vh;
     font-size: 0.9rem;
   }
   label {
-    font-size: 0.9rem;
+    font-size: 1rem;
   }
   select {
     width: 30vw;
-    height: 3vh;
+    height: 5vh;
     font-size: 0.9rem;
   }
   p{
   width: 25vw;
-  font-size: 1.2rem;
+  font-size: .9rem;
   }
   .artw-title{
   width: 70vw;
@@ -1048,8 +1048,10 @@ select {
   .buy-nav,
   .exit {
     margin-top: 2vh;
-    width: 40vw;
+    width: 30vw;
     background-color: #fff7f9;
+    font-size: .8rem;
+    border-width: 2px;
   }
   .buy-nav-div {
     position: fixed;
@@ -1060,12 +1062,13 @@ select {
     background-color: #fff7f9;
   }
   .cart-icon{
-  left: 30vw;
-font-size: 2.5rem;
+  left: 28vw;
+  font-size: 1.4rem;
+  top: 0;
   }
   .cart-amount{
-  left: 31vw;
-  font-size: 1.5rem;
+  left: 33vw;
+  top: 1vh;
   }
 
   .check-order-btn {
@@ -1088,11 +1091,12 @@ font-size: 2.5rem;
     font-size: 1.5rem;
   }
   .inpts {
-    margin-top: 15vh;
+    margin-top: 2vh;
+    gap: .8rem;
   }
   .order{
   width: 80vw;
-  height: 40vh;
+  height: 45vh;
   margin-left: 1rem;
   }
   .order-delete{
@@ -1138,10 +1142,14 @@ font-size: 2.5rem;
   .exit-order {
     width: 40vw;
     background-color: #fff7f9;
+    height: auto;
+    font-size: .8rem;
+    margin-top: 1.4vh;
+    border-width: 2px;
   }
   .order-nav-div {
     left: 60vw;
-    top: 6.5vh;
+    top: 5.5vh;
   }
   .pg-col {
     margin-left: 1rem;
@@ -1187,6 +1195,7 @@ font-size: 2.5rem;
     height: 100vh;
     margin-left: 0;
     align-items: flex-start;
+    top: 10vh;
   }
   .up-sqr {
     width: 80vw;

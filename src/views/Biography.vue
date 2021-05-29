@@ -151,6 +151,7 @@ img {
   .bio {
     width: 75vw;
     margin-bottom: 1rem;
+    margin-top: 1rem;
   }
   .dec-div{
 display: none;
@@ -161,7 +162,7 @@ display: none;
   .txt {
     position: initial;
     width: 90vw;
-    height: 70vh;
+    height: auto;
     margin-top: 0;
   }
 }

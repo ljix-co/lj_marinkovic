@@ -96,17 +96,9 @@ $ease: cubic-bezier(0.23, 1, 0.32, 1);*/
   align-items: center;
   justify-content: center;*/
 }
-.custom-cursor__dot {
-  /*
-//   position: fixed;*/
-
-  cursor: none;
-
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background-color: #545454;
-  transform: translate(-100%, -100%); /*
-  transition: transform 0.2s;*/
+@media only screen and (max-width: 768px) {
+.custom-cursor__circle{
+display: none;
+}
 }
 </style>
