@@ -3,7 +3,7 @@
     <transition name="fade">
       <div class="pg" v-if="order_web_form === false">
         <div class="home-nav">
-          <div class="nav">
+          <div class="nav nav-mob-right">
             <p @click="goToArtworks" class="nav-left">
               {{ $t("home.nav[0].txt") }}
             </p>
@@ -15,7 +15,14 @@
             <div class="dec-line"></div>
             <div class="dec-line"></div>
           </div>
-          <div class="nav" v-if="order_web_form === false">
+          <div class="dec-div-mob">
+            <div class="dec-line-mob"></div>
+            <div class="dec-line-mob"></div>
+            <div class="dec-line-mob"></div>
+            <div class="dec-line-mob"></div>
+            <div class="dec-line-mob"></div>
+          </div>
+          <div class="nav nav-mob-left" v-if="order_web_form === false">
             <p @click="orderWeb" class="nav-left">
               {{ $t("home.nav[1].txt") }}
             </p>
@@ -118,7 +125,7 @@
             <p class="nav-scroll" v-if="scrollIndex !== 2" @click="scroll">
               {{ $t("home.nav[2].txt") }}
             </p>
-            <p class="nav-scroll" v-if="scrollIndex === 2" @click="scrollBack">
+            <p class="nav-scroll nav-scroll-back" v-if="scrollIndex === 2" @click="scrollBack">
               {{ $t("home.nav[3].txt") }}
             </p>
           </div>
@@ -399,6 +406,16 @@ export default {
     opacity: 1;
   }
 }
+@keyframes down_in_mob {
+  from {
+    top: -50vh;
+    opacity: 0.1;
+  }
+  to {
+    top: 55vh;
+    opacity: 1;
+  }
+}
 @keyframes down_in_order {
   from {
     top: -50vh;
@@ -472,10 +489,7 @@ select {
   left: 30vw;
 }
 .cat-title {
-  font-size: 3rem; /*
-  transform: rotate(270deg);
-  width: 5vw;
-  margin-top: 25vh;*/
+  font-size: 3rem; 
   font-family: "HortaRegular", cursive;
   animation: left_in 2s 1;
   position: relative;
@@ -487,6 +501,9 @@ select {
   justify-content: center;
 
   margin-left: 2rem;
+}
+.dec-div-mob{
+display: none;
 }
 .dec-line {
   height: 50vh;
@@ -728,20 +745,21 @@ border-radius: 2rem;*/
   }
 }
 @media only screen and (min-width: 768px) and (max-width: 1023px) {
-label{
-font-size: 1rem;
-}
+  label {
+    font-size: 1rem;
+  }
   p {
     font-size: 0.8rem;
   }
-  select{
-  font-size: .8rem;
+  select {
+    font-size: 0.8rem;
   }
-  .art-img,  .web-img {
+  .art-img,
+  .web-img {
     top: 20vh;
   }
-  .btn-send{
-  width: 15vw;
+  .btn-send {
+    width: 15vw;
   }
   .category {
     margin-top: 0;
@@ -791,12 +809,12 @@ font-size: 1rem;
   .occup {
     font-size: 1.5rem;
   }
-  .order-exit{
-  font-size: 2rem;
+  .order-exit {
+    font-size: 2rem;
   }
-  .order-title{
-  font-size: 2rem;
-  margin-top: 1.5rem;
+  .order-title {
+    font-size: 2rem;
+    margin-top: 1.5rem;
   }
   .start-img {
     top: 25vh;
@@ -807,11 +825,88 @@ font-size: 1rem;
   }
 }
 @media only screen and (max-width: 768px) {
+input{
+width: 25vw;
+height: 3vh;
+font-size: .9rem;
+}
+label{
+font-size: .9rem;
+}
+select{
+width: 25vw;
+height: 3vh;
+font-size: .9rem;
+}
+.btn-send{
+width: 30vw;
+}
   .pg {
     width: 100vw;
-    height: 100vh;
     display: flex;
     flex-direction: column;
+    margin-top: 0;
+  }
+  .category {
+    width: 50vw;
+    top: 25vh;
+  }
+  .cat-desc {
+    width: 50vw;
+    margin-top: 20vh;
+  }
+  .cat-title{
+  position: absolute;
+  top: 15vh;
+  }
+  .category-txt {
+    width: 50vw;
+    left: 25vw;
+    top: 55vh;
+  }
+  .dec-div {
+    position: fixed;
+    left: -5vw;
+    top: 27vh;
+  }
+  .dec-div-mob {
+    position: fixed;
+    left: 85vw;
+    top: 27vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .dec-line-mob {
+    height: 50vh;
+    width: 3vw;
+    border-left: 5px dotted #c3eae3;
+  }
+  .down-in{
+  animation: down_in_mob 2s 1;
+  }
+  .f-letter {
+    font-size: 3.5rem;
+  }
+  .home-nav {
+    position: static;
+  }
+  .image-home {
+    width: 50vw;
+  }
+  .img-prof {
+    width: 50vw;
+  }
+  .inpts{
+  width: 90vw;
+  gap: 5vw;
+  }
+  .inpt-lbl{
+  width: 40vw;
+  }
+  .instr{
+  width: 80vw;
   }
   .intro-photo {
     width: 100vw;
@@ -820,50 +915,80 @@ font-size: 1rem;
     object-fit: contain;
     z-index: -1;
   }
-  .name {
+  .intro-txt {
+    width: 50vw;
     font-size: 1rem;
-    width: 45vw;
+  }
+  .name {
+    font-size: 3.5rem;
     align-self: center;
-    /* position: absolute;
-  top: 53vh;
-  left: 4vw; */
-    /* transform: rotate(270deg); */
-    /* color: black; */
+  }
+  .nav {
+    width: 30vw;
+    border-width: 3px;
+  }
+  .nav-mob-left {
+    position: fixed;
+    left: 0;
+    top: 10vh;
+    justify-content: flex-end;
+  }
+  .nav-mob-right {
+    position: fixed;
+    left: 70vw;
+    top: 10vh;
+  }
+  .nav-scroll{
+  margin-left: -5vw;
+  }
+  .nav-scroll-back{
+  margin-left: -12vw;
   }
   .occup {
-    /* transform: rotate(270deg); */
     font-size: 1rem;
-    margin-left: 1vw;
-    width: 60vw;
-    /* position: absolute;
-  left: 30vw;
-  top: 52vh;
-  color: #214478; */
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
   }
-  .l-sqr {
-    border: none;
-    box-shadow: none;
-    width: 20vw;
-    position: absolute;
-    left: 0;
-    background-color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  .order-exit{
+  left: 80vw;
+  top: 1.5rem;
   }
+  .order-form{
+  width: 90vw;
+  left: 5vw;
+  margin-top: 7vh;
+  }
+  .order-title, .order-exit{
+  font-size: 2rem;
+  }
+
   .left-decor {
     display: none;
   }
   .right-decor {
     display: none;
   }
+  .start-img {
+    left: 25vw;
+    top: 27vh;
+  }
+  .tooltip {
+    width: 50vw;
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+
   .web-title {
     margin-left: 0;
-    transform: rotate(270deg);
     display: flex;
-    width: 120vw;
+    width: 90vw;
     height: fit-content;
     margin-bottom: 6vh;
+    top: 15vh;
+  }
+  .web-img, .art-img {
+    visibility: hidden;
   }
 }
 </style>

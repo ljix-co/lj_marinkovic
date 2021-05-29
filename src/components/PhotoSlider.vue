@@ -6,18 +6,20 @@
     }"
   >
     <div class="left-side" :class="{ 'left-side-artwork': artworks_page }">
-   
-      <div class="lines" @click="prevImg()" :class="{'fade': images.length == 1}">
-      <div class="trq-left-line"></div>
-      <div class="gry-left-line"></div>
+      <div
+        class="lines"
+        @click="prevImg()"
+        :class="{ fade: images.length == 1 }"
+      >
+        <div class="trq-left-line"></div>
+        <div class="gry-left-line"></div>
       </div>
     </div>
     <div class="center" :class="{ 'center-artwork': artworks_page }">
-    
       <div class="delete-img-div" v-if="admin_route">
         <i class="far fa-trash-alt delete" @click="deleteImg()"></i>
       </div>
-      <div class="exit-div" :class="{ 'show-exit': show_slider }">
+      <div v-if="artworks_page" class="exit-div" :class="{ 'show-exit': show_slider }">
         <i class="fas fa-times exit" @click="exitSlider"></i>
       </div>
       <img
@@ -28,12 +30,15 @@
         :src="image"
         alt=""
       />
-    
     </div>
     <div class="right-side" :class="{ 'right-side-artwork': artworks_page }">
-      <div class="lines" @click="nextImg()" :class="{'fade': images.length == 1}">
-      <div class="trq-right-line"></div>
-      <div class="gry-right-line"></div>
+      <div
+        class="lines"
+        @click="nextImg()"
+        :class="{ fade: images.length == 1 }"
+      >
+        <div class="trq-right-line"></div>
+        <div class="gry-right-line"></div>
       </div>
     </div>
   </div>
@@ -95,7 +100,6 @@ export default {
       }
 
       this.image = this.images[this.index].path;
-     
     },
     prevImg() {
       if (this.index != 0) {
@@ -163,15 +167,14 @@ export default {
   width: 50vw;
   height: 75vh;
   object-fit: contain;
-  background-color: #A6A6A6;
+  background-color: #a6a6a6;
   align-self: center;
   border-bottom: 5px solid #27f2cb;
- 
 }
 .center {
   width: 70vw;
   height: 85vh;
-  margin-top:5vh;
+  margin-top: 5vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -184,7 +187,6 @@ export default {
   font-size: 2rem;
   z-index: 1;
   color: #545454;
-
 }
 
 .delete-img-div {
@@ -198,22 +200,22 @@ export default {
 .exit-div {
   visibility: hidden;
 }
-.fade{
-opacity: .1;
+.fade {
+  opacity: 0.1;
 }
-.gry-left-line{
-width: 3vw;
-height: 5px;
-background-color: #545454;
+.gry-left-line {
+  width: 3vw;
+  height: 5px;
+  background-color: #545454;
 }
-.gry-right-line{
-width: 3vw;
-height: 5px;
-background-color: #545454;
-margin-left: 3vw;
+.gry-right-line {
+  width: 3vw;
+  height: 5px;
+  background-color: #545454;
+  margin-left: 3vw;
 }
-.hide{
-visibility: hidden;
+.hide {
+  visibility: hidden;
 }
 .img {
   width: 70vw;
@@ -243,7 +245,7 @@ visibility: hidden;
   display: flex;
   align-items: center;
   width: 70vw;
-margin-bottom: 10vh;
+  margin-bottom: 10vh;
   margin-left: 15vw;
 }
 .photo-slider-enlarged {
@@ -252,19 +254,19 @@ margin-bottom: 10vh;
   justify-content: center;
   width: 100vw;
 }
-.trq-left-line{
-width: 5vw;
-height: 5px;
-margin-left: 1vw;
-margin-bottom: .7rem;
-background-color: #27f2cb;
+.trq-left-line {
+  width: 5vw;
+  height: 5px;
+  margin-left: 1vw;
+  margin-bottom: 0.7rem;
+  background-color: #27f2cb;
 }
-.trq-right-line{
-width: 5vw;
-height: 5px;
+.trq-right-line {
+  width: 5vw;
+  height: 5px;
 
-margin-bottom: .7rem;
-background-color: #27f2cb;
+  margin-bottom: 0.7rem;
+  background-color: #27f2cb;
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1280px) {
@@ -300,8 +302,8 @@ background-color: #27f2cb;
     font-size: 1.5rem;
     margin-top: 0;
   }
-  .photo-slider{
-  margin-left: 14vw;
+  .photo-slider {
+    margin-left: 14vw;
   }
 }
 @media only screen and (max-width: 768px) {
@@ -313,27 +315,48 @@ background-color: #27f2cb;
     width: 90vw;
     height: 70vh;
     object-fit: contain;
-    background-color: #474646;
-    margin-top: 10vh;
+    background-color: #fff7f9;
+
     margin-bottom: 5vh;
+  }
+  .center {
+    width: 100vw;
   }
   .delete-img-div {
     width: 80vw;
   }
   .exit {
-    font-size: 2rem;
-    color: #27f2cb;
+    font-size: 3rem;
+    color: #545454;
   }
-
+  .exit-div {
+    visibility: visible;
+    position: fixed;
+    left: 90vw;
+    top: 10vh;
+  }
   .home_img {
     width: 90vw;
     height: 60vh;
     object-fit: contain;
   }
-  .left {
-    visibility: hidden;
+  .img {
+    width: 90vw;
+    background-color: #fff7f9;
   }
-
+  .left-side,
+  .right-side {
+    display: none;
+  }
+  .photo-slider {
+    width: 100vw;
+    height: 90vh;
+    margin-left: 0;
+    position: fixed;
+    z-index: 3;
+    background-color: #fff7f9;
+    top: 10vh;
+  }
   .right {
     visibility: hidden;
   }

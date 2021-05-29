@@ -46,7 +46,7 @@ import Gallery from "../components/Gallery.vue";
 import axios from "axios";
 import { mapState, mapActions } from "vuex";
 import { checkLanguage } from "../mixins/checkLanguage.js";
-import {scrollToElement} from "../mixins/scrollToElement.js";
+import { scrollToElement } from "../mixins/scrollToElement.js";
 export default {
   components: {
     Gallery,
@@ -78,7 +78,7 @@ export default {
     },
     goBack() {
       this.showGallery = false;
-      window.scrollTo(0,0)
+      window.scrollTo(0, 0);
       setTimeout(() => {
         this.scrollToElement("selected-proj");
       }, 200);
@@ -215,80 +215,101 @@ background-color: #F9FFF7;*/
   font-size: 4rem;
 }
 @media only screen and (min-width: 1024px) and (max-width: 1440px) {
-.line, .short-desc{
-height: 50vh;
-}
-.link{
-font-size: 1rem;
-}
-.proj-title{
-font-size: 1.5rem;
-
-}
-.year-string {
-font-size: 3rem;
-}
+  .line,
+  .short-desc {
+    height: 50vh;
+  }
+  .link {
+    font-size: 1rem;
+  }
+  .proj-title {
+    font-size: 1.5rem;
+  }
+  .year-string {
+    font-size: 3rem;
+  }
 }
 @media only screen and (min-width: 768px) and (max-width: 1023px) {
-.line{
-display: none;
-}
-.link{
-font-size: 1rem;
-margin-bottom: 5vh;
-}
-.img-title{
-width: 70vw;
-margin-bottom: 5vh;
-}
-.prev-div{
-flex-direction: column;
-width: 70vw;
-height: 90vh;
-margin-top: 15vh;
-}
-
-.prev-img{
-width: 65vw;
-}
-.proj-title{
-font-size: 1.5rem;
-}
-.short-desc{
-width: 65vw;
-margin-left: 1rem;
-border-width: 3px;
-}
-.year{
-position: absolute;
-margin-left: -10vw;
-}
-}
-@media only screen and (max-width: 768px) {
-  .pg-col {
-    margin-left: 2rem;
+  .line {
+    display: none;
   }
-  .preview {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    width: 100vw;
+  .link {
+    font-size: 1rem;
+    margin-bottom: 5vh;
+  }
+  .img-title {
+    width: 70vw;
+    margin-bottom: 5vh;
   }
   .prev-div {
-    width: 80vw;
-    margin-left: 1.5rem;
+    flex-direction: column;
+    width: 70vw;
+    height: 90vh;
+    margin-top: 15vh;
   }
+
   .prev-img {
-    width: 80vw;
-    /* height: 50vh; */
-    object-fit: cover;
+    width: 65vw;
   }
-  .up-sqr {
-    width: 80vw;
-    margin-left: -1.2rem;
-    border: 4px solid #adadb0;
-    border: none;
-    margin-bottom: 2vh;
+  .proj-title {
+    font-size: 1.5rem;
+  }
+  .short-desc {
+    width: 65vw;
+    margin-left: 1rem;
+    border-width: 3px;
+  }
+  .year {
+    position: absolute;
+    margin-left: -10vw;
+  }
+}
+@media only screen and (max-width: 768px) {
+  .line {
+    display: none;
+  }
+  .link {
+    font-size: 1rem;
+    margin-bottom: 5vh;
+  }
+  .img-title {
+    width: 70vw;
+    margin-bottom: 5vh;
+  }
+  .pg-col {
+    margin-left: 1rem;
+  }
+  .prev-div {
+    flex-direction: column;
+    width: 70vw;
+    height: 70vh;
+
+    margin-bottom: 5vh;
+  }
+
+  .prev-img {
+    width: 65vw;
+    height: auto;
+  }
+  .proj-title {
+    font-size: 1.5rem;
+  }
+  .short-desc {
+    width: 65vw;
+    height: 40vh;
+    margin-left: 1rem;
+    border-width: 3px;
+    font-size: 1rem;
+  }
+  .year {
+    position: absolute;
+    margin-left: -10vw;
+  }
+  .year-string {
+    font-size: 2rem;
+  }
+  .tooltip:hover .tooltiptxt {
+    visibility: hidden;
   }
 }
 </style>

@@ -35,7 +35,7 @@
                 ></a>
               </div>
             </div>
-            <div class="sqr ">
+            <div class="sqr">
               <p class="instr">{{ $t("contact.personal") }}</p>
               <div class="pers-info">
                 <p class="conct-mail" @click="sendEmail">
@@ -196,7 +196,7 @@ b {
 h1 {
   font-family: "HortaRegular", cursive;
   position: absolute;
- top: 10vh;
+  top: 10vh;
   font-size: 3rem;
   color: black;
 }
@@ -293,7 +293,7 @@ input {
   align-items: flex-start;
   justify-content: flex-start;
   gap: 1rem;
-  margin-left: 5vw; 
+  margin-left: 5vw;
   margin-top: 30vh;
 }
 .instr {
@@ -301,8 +301,8 @@ input {
   margin-left: 2.5vw;
   margin-top: 1.5rem;
 }
-.mymail{
-margin-left: 7vw;
+.mymail {
+  margin-left: 7vw;
 }
 .sqr {
   display: flex;
@@ -345,133 +345,173 @@ margin-left: 7vw;
   margin-top: 5vh;
 }
 @media only screen and (min-width: 1024px) and (max-width: 1440px) {
-p{
-font-size: 1rem;
-}
-.contact {
-height: 90vh;
-}
-.content{
-left: 23vw;
-}
-.conct-mail{
-font-size: 1rem;
-
-}
-.dec-line{
-height: 50vh;
-}
-.fab{
-font-size: 4rem;
-width: 8vw;
-}
-.mymail{
-font-size: 2.2rem;
-}
-.pers-info, .soc-icons{
-margin-top: 0;
-width: 20vw;
-}
+  p {
+    font-size: 1rem;
+  }
+  .contact {
+    height: 90vh;
+  }
+  .content {
+    left: 23vw;
+  }
+  .conct-mail {
+    font-size: 1rem;
+  }
+  .dec-line {
+    height: 50vh;
+  }
+  .fab {
+    font-size: 4rem;
+    width: 8vw;
+  }
+  .mymail {
+    font-size: 2.2rem;
+  }
+  .pers-info,
+  .soc-icons {
+    margin-top: 0;
+    width: 20vw;
+  }
 }
 @media only screen and (min-width: 768px) and (max-width: 1023px) {
-button{
-width: 12vw;
-}
-h1{
-font-size: 2rem;
+  button {
+    width: 12vw;
+  }
+  h1 {
+    font-size: 2rem;
+  }
+  input {
+    height: 3vh;
+  }
+  p {
+    font-size: 0.8rem;
+  }
+  .contact {
+    height: 90vh;
+  }
+  .conct-mail {
+    font-size: 0.8rem;
+  }
+  .content {
+    left: 20vw;
 
-}
-input{
-height: 3vh;
-}
-p{
-font-size: .8rem;
-}
-.contact {
-height: 90vh;
-}
-.conct-mail{
-font-size: .8rem;
+    gap: 1rem;
+  }
+  .dec-line {
+    height: 50vh;
+  }
+  .fab {
+    font-size: 3rem;
+    width: 8vw;
+  }
+  .fas {
+    font-size: 2rem;
+  }
+  .instr {
+    width: 25vw;
+  }
+  .mymail {
+    font-size: 1.5rem;
+  }
+  .pers-info {
+    width: 30vw;
+    margin-left: 5vw;
+  }
+  .soc-icons {
+    gap: 1rem;
+    width: 20vw;
+  }
 
-}
-.content{
-left: 20vw;
-
-
-gap: 1rem;
-}
-.dec-line{
-height: 50vh;
-}
-.fab{
-font-size: 3rem;
-width: 8vw;
-}
-.fas{
-font-size: 2rem;
-}
-.instr{
-width: 25vw;
-}
-.mymail{
-font-size: 1.5rem;
-}
-.pers-info{
-width: 30vw;
-margin-left: 5vw;
-}
-.soc-icons{
-gap: 1rem;
-width: 20vw;
-}
-
-.sqr{
-gap: 0;
-width: 30vw;
-height: 30vw;
-margin-top: 30vh;
-}
-
+  .sqr {
+    gap: 0;
+    width: 30vw;
+    height: 30vw;
+    margin-top: 30vh;
+  }
 }
 @media only screen and (max-width: 767px) {
   h1 {
-    font-size: 1.5rem;
+    font-size: 2.5rem;
+    top: 0;
+    width: 90vw;
   }
   h2 {
     font-size: 1rem;
   }
-
-  .contact {
-    height: fit-content;
+  input{
+  width: 40vw;
+  height: 3vh;
+  }
+  .btn-send{
+  width: 30vw;
+  height: 5vh;
+  left: 33vw;
+  }
+  .editor{
+  width: 60vw;
   }
   .content {
-    margin-left: 0.5rem;
-    margin-top: 1rem;
-  }
-  .fb {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-  }
-  .map {
-    width: 90vw;
-    margin-top: 8vh;
-    margin-left: 0.5rem;
-  }
-  .mobile-map {
-    width: 90vw;
-  }
-  .right-sqr {
-    width: 90vw;
-    height: fit-content;
-    border: none;
-    margin-left: 0;
-    animation: mobile-in 2s 1;
-    align-self: center;
-  }
-  .pg {
-    display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0;
+    left: 20vw;
+  }
+  .conct-mail {
+    font-size: 0.9rem;
+  }
+  .dec-div {
+    margin-left: 0;
+  }
+  .email-form {
+    width: 90vw;
+    left: 5vw;
+    top: 7vh;
+    flex-direction: column;
+  }
+  .editor-div {
+    width: 30vw;
+    margin-top: 0;
+    margin-left: 15vw;
+    align-items: flex-start;
+  }
+  .fab {
+    font-size: 3rem;
+  }
+  .fas {
+    font-size: 1rem;
+    margin-left: 0;
+  }
+  .fa-times {
+    left: 80vw;
+    top: 1vh;
+    font-size: 2rem;
+  }
+  .instr {
+    margin-left: 2.5vw;
+    width: 55vw;
+  }
+  .inpts {
+    margin-top: 15vh;
+    margin-left: 15vw;
+  }
+  .mymail {
+    margin-left: 0;
+    font-size: 1.7rem;
+    margin-top: 7vh;
+  }
+  .pers-info {
+    width: 50vw;
+    gap: 1.5rem;
+    margin-top: -2vh;
+  }
+  .soc-icons {
+    width: 40vw;
+    gap: 1.5rem;
+    margin-top: -2vh;
+  }
+  .sqr {
+    width: 60vw;
+    height: 60vw;
+    margin-top: 10vh;
   }
 }
 </style>

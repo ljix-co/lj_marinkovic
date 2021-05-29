@@ -309,10 +309,14 @@ width: 35vw;
 }
 }
 @media only screen and (max-width: 768px) {
+img{
+width: 90vw;
+}
   .content {
     display: flex;
     flex-direction: column;
     margin-left: 1rem;
+    left: 0;
   }
   .description {
     width: 80vw;
@@ -321,16 +325,17 @@ width: 35vw;
     width: 100vw;
   }
 
-  .go-back {
-    top: 4rem;
-    left: 1rem;
-    background-color: white;
-    width: 2rem;
-    height: 2rem;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  .exit {
+    top: 5vh;
+    left: 0;
+    height: 5vh;
+    width: 95vw;
+    background-color: #fff7f9;
+  text-align: end;
+  }
+  .images{
+  width: 90vw;
+  margin-top: 5vh;
   }
   .left-side-bar {
     position: absolute;
@@ -345,8 +350,12 @@ width: 35vw;
   .link-btn {
     font-size: 1.5rem;
   }
+  .title{
+  width: 80vw;
+  }
   .txt {
     width: 90vw;
+    margin-top: 5vh;
   }
 }
 </style>

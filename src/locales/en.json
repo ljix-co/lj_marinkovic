@@ -1,5 +1,11 @@
 {
   "artworks": {
+    "artform": "Artform",
+    "dmns": "Dimensions",
+    "technique": "Technique",
+    "material": "Materials",
+    "year": "Year",
+    "price": "Price",
     "nav": {
         "how_to_buy": "HOW TO BUY",
         "order": "YOUR ORDER",
@@ -40,6 +46,7 @@
       "country": "MONTENEGRO"
     }
   ],
+  "error": "Sorry, but the page you are looking for is not here...",
   "home": {
     "categories": [
       {

@@ -98,8 +98,15 @@ margin-left: 1rem;
 }
 }
 @media only screen and (max-width: 768px) {
+img{
+width: 15vw;
+height: 5vh;
+}
 .lang-title{
 display: none;
+}
+.locale-switcher{
+left: 80vw;
 }
 }
 </style>

@@ -140,15 +140,20 @@ img {
 @media only screen and (max-width: 768px) {
   img {
     width: 90vw;
+    height: auto;
     margin-top: 7vh;
   }
   .author-info {
     display: flex;
     flex-direction: column;
+    margin-left: 5vw;
   }
   .bio {
     width: 75vw;
     margin-bottom: 1rem;
+  }
+  .dec-div{
+display: none;
   }
   .prof-img {
     margin-top: 0;
@@ -156,8 +161,8 @@ img {
   .txt {
     position: initial;
     width: 90vw;
-    height: fit-content;
-    border: none;
+    height: 70vh;
+    margin-top: 0;
   }
 }
 </style>

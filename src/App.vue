@@ -10,7 +10,7 @@
       <i
         :class="{
           'fas fa-bars menu-bar': showMenu === false,
-          'far fa-times-circle menu-bar': showMenu,
+          'fas fa-times menu-bar': showMenu,
         }"
         @click="showMenuList()"
       ></i>
@@ -44,21 +44,47 @@
       </div>
     </div>
     <transition name="fade" mode="out-in">
-    <router-view :class="{ 'no-show': loader }" />
+      <router-view :class="{ 'no-show': loader }" />
     </transition>
     <Loader v-if="loader"></Loader>
     <footer>
       <Footer></Footer>
     </footer>
-     <custom-cursor
-      :targets="[ 'a', 'button', 'i', 'nav-left', 'nav-scroll', 'order-nav', 'dtls-nav', 'order-exit', 'exit-order', 'order-delete', 'exit-order', 'check-order-btn',
-      'buy-nav', 'exit', 'prev-img', 'lines', 'delete', 'ctrl', 'img-gallery', 'logo', 'image-home', 'flag', 'cart-icon', 'cart-amount',
-      'add-icon', 'img-prof', 'cover-img', 'conct-mail']"
+    <custom-cursor
+      :targets="[
+        'a',
+        'button',
+        'i',
+        'nav-left',
+        'nav-scroll',
+        'order-nav',
+        'dtls-nav',
+        'order-exit',
+        'exit-order',
+        'order-delete',
+        'exit-order',
+        'check-order-btn',
+        'buy-nav',
+        'exit',
+        'prev-img',
+        'lines',
+        'delete',
+        'ctrl',
+        'img-gallery',
+        'logo',
+        'image-home',
+        'flag',
+        'cart-icon',
+        'cart-amount',
+        'add-icon',
+        'img-prof',
+        'cover-img',
+        'conct-mail',
+      ]"
       :circleColor="'#27f2cb'"
       :circleColorHover="'#bebebe'"
       :hoverSize="4"
     ></custom-cursor>
-   
   </div>
 </template>
 <script>
@@ -66,9 +92,9 @@ import { mapState, mapActions } from "vuex";
 import Footer from "./components/Footer.vue";
 import Loader from "./components/Loader.vue";
 import LocalSwitcher from "./components/LocalSwitcher.vue";
-import CustomCursor from './components/CustomCursor'
+import CustomCursor from "./components/CustomCursor";
 export default {
-  components: { Footer, LocalSwitcher, CustomCursor, Loader},
+  components: { Footer, LocalSwitcher, CustomCursor, Loader },
   // ,
   data() {
     return {
@@ -120,8 +146,7 @@ export default {
   padding: 0;
   box-sizing: border-box;
   cursor: none;
-  
-}/*
+} /*
 h1{
   font-family: 'HortaRegular';
 }*/
@@ -174,14 +199,14 @@ select:focus {
   text-align: center;
   color: #545454;
   overflow-x: hidden;
-  background-color: #FFF7F9;
+  background-color: #fff7f9;
 }
 
 #nav {
   padding: 10px;
   height: 8vh;
   width: 100%;
-  background-color: #FFF7F9;
+  background-color: #fff7f9;
   position: fixed;
   z-index: 2;
   position: fixed;
@@ -194,7 +219,6 @@ select:focus {
   color: #545454;
   text-decoration: none;
   font-size: 1.5rem;
-
 }
 
 #nav a.router-link-exact-active {
@@ -202,16 +226,18 @@ select:focus {
   border-bottom: 1px solid #545454;
   font-weight: 800;
 }
-.fade-enter-active, .fade-leave-active{
+.fade-enter-active,
+.fade-leave-active {
   transition: opacity 1s ease;
 }
-.fade-enter, .fade-leave-to{
+.fade-enter,
+.fade-leave-to {
   opacity: 0;
 }
 .nav {
   width: 70%;
   margin-left: 15%;
-  background-color: #FFF7F9;
+  background-color: #fff7f9;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -231,7 +257,6 @@ select:focus {
   top: 1rem;
   left: 5vw;
   width: 7vw;
-  
 }
 .logged-icons {
   position: absolute;
@@ -239,61 +264,70 @@ select:focus {
   left: 90vw;
 }
 
-
 .prof-link {
   font-size: 1.5rem;
   margin-left: 1rem;
 }
 @media only screen and (min-width: 1024px) and (max-width: 1440px) {
-p, li{
-font-size: .8rem;
-}
-#nav a{
-font-size: 1.2rem;
-}
-.logo{
-top: 1.5rem;
-}
-.logged-icons{
-top: .5rem;
-}
+  p,
+  li {
+    font-size: 0.8rem;
+  }
+  #nav a {
+    font-size: 1.2rem;
+  }
+  .logo {
+    top: 1.5rem;
+  }
+  .logged-icons {
+    top: 0.5rem;
+  }
 }
 @media only screen and (min-width: 768px) and (max-width: 1023px) {
-input {
-font-size: .8rem;
-}
-label{
-font-size: .8rem;
-}
-p, li{
-font-size: .8rem;
-}
-option{
-font-size: .8rem;
-}
-#nav a{
-font-size: 1rem;
-}
-.logo{
-top: 1.5rem;
-width: 9vw;
-}
-.logged-icons{
-top: .5rem;
-}
+  input {
+    font-size: 0.8rem;
+  }
+  label {
+    font-size: 0.8rem;
+  }
+  p,
+  li {
+    font-size: 0.8rem;
+  }
+  option {
+    font-size: 0.8rem;
+  }
+  #nav a {
+    font-size: 1rem;
+  }
+  .logo {
+    top: 1.5rem;
+    width: 9vw;
+  }
+  .logged-icons {
+    top: 0.5rem;
+  }
 }
 @media only screen and (max-width: 768px) {
+  label {
+    font-size: 0.9rem;
+  }
+
   #nav {
     z-index: 3;
+    height: 5vh;
+  }
+  #nav a {
+    font-size: 2rem;
   }
   .hide {
     visibility: hidden;
   }
   .nav {
     width: 65vw;
-    margin-left: 15vw;
     margin-top: -2vh;
     border: none;
+    margin-left: 0;
   }
   .menu-bar {
     visibility: visible;
@@ -302,6 +336,7 @@ top: .5rem;
     left: 90vw;
     top: 1vh;
   }
+
   .logo {
     width: 100px;
     z-index: 2;
@@ -316,15 +351,15 @@ top: .5rem;
     display: flex;
     flex-direction: column;
     width: 100vw;
-    height: fit-content;
+    height: 93vh;
     position: absolute;
     left: 0;
-    top: 6vh;
-    background-color: white;
+    top: 7vh;
+    background-color: #fff7f9;
     /* align-items: center; */
     justify-content: center;
     text-align: center;
-    gap: 2rem;
+    gap: 3rem;
   }
 }
 </style>

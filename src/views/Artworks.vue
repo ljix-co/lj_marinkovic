@@ -1,12 +1,15 @@
 <template>
   <div class="artworks">
+  <transition name="fade">
     <photo-slider
       :class="{ fade: show_order_list }"
       class="photo-slider"
       :key="'p' + componentKey"
       v-if="images.length > 0"
       :images="images"
+      @exit-mob-slider="exitMobSlider"
     ></photo-slider>
+  </transition>
     <div class="buy-nav-div">
       <transition name="fade">
         <p class="buy-nav" @click="showInstr" v-if="how_to_buy === false">
@@ -166,37 +169,37 @@
             <div class="prev-desc">
               <p class="artw-title">{{ art.title.toUpperCase() }}</p>
               <div class="prev-desc-txt">
-                <p>Artform:</p>
+                <p>{{ $t("artworks.artform") }}:</p>
                 <p class="prev-txt">
                   <b>{{ art.artform }}</b>
                 </p>
               </div>
               <div class="prev-desc-txt">
-                <p>Tehcnique:</p>
+                <p>{{ $t("artworks.technique") }}:</p>
                 <p class="prev-txt">
                   <b>{{ art.technique }}</b>
                 </p>
               </div>
               <div class="prev-desc-txt">
-                <p>Materials:</p>
+                <p>{{ $t("artworks.material") }}:</p>
                 <p class="prev-txt">
                   <b>{{ art.material }}</b>
                 </p>
               </div>
               <div class="prev-desc-txt">
-                <p>Dimensions:</p>
+                <p>{{ $t("artworks.dmns") }}:</p>
                 <p class="prev-txt">
                   <b>{{ art.artwork_dmns }}</b>
                 </p>
               </div>
               <div class="prev-desc-txt">
-                <p>Year:</p>
+                <p>{{ $t("artworks.year") }}:</p>
                 <p class="prev-txt">
                   <b>{{ art.artwork_year }}</b>
                 </p>
               </div>
               <div class="prev-desc-txt">
-                <p>Price:</p>
+                <p>{{ $t("artworks.price") }}:</p>
                 <p class="prev-txt">
                   <b>{{ art.artwork_price }}</b> €
                 </p>
@@ -332,12 +335,12 @@ export default {
 
             let email_txt = "";
             for (let i = 0; i < this.order_list.length; i++) {
-              email_txt += `<li><p>${this.order_list[i].artwork_title}</p>
+              email_txt += `<li><p>${this.order_list[i].artwork_title} | ${this.order_list[i].artwork_title_rs}</p>
                         <img width="200px" src="${this.order_list[i].artwork_imgpath}"/>
                         <p>${this.order_list[i].artwork_price}€</p>
                         </li>`;
             }
-            email_txt += ` <h2>Total price: ${this.total_price}€</h2>`;
+            email_txt += ` <h2>Total price: | Ukupna cena: ${this.total_price}€</h2>`;
 
             let orderFormData = new FormData();
             orderFormData.append("cust_id", this.cust_id);
@@ -377,6 +380,10 @@ export default {
     },
     closeOrderList() {
       this.show_order_list = false;
+    },
+    exitMobSlider() {
+      this.images = [];
+      this.scrollToElement('chosen-artwk');
     },
     forceRerender() {
       this.componentKey += 1;
@@ -536,6 +543,16 @@ export default {
     opacity: 1;
   }
 }
+@keyframes slide_in_left_mob {
+  from {
+    left: 150vw;
+    opacity: 0.1;
+  }
+  to {
+    left: 60vw;
+    opacity: 1;
+  }
+}
 @keyframes slide_in_right {
   from {
     left: -20vw;
@@ -563,6 +580,16 @@ export default {
   }
   to {
     left: 120vw;
+    opacity: 0.1;
+  }
+}
+@keyframes slide_out_right_mob {
+  from {
+    left: 60vw;
+    opacity: 1;
+  }
+  to {
+    left: 150vw;
     opacity: 0.1;
   }
 }
@@ -777,9 +804,10 @@ select {
   width: 15vw;
 }
 
-.order-title, .order-price{
-width: 15vw;
-text-align: center;
+.order-title,
+.order-price {
+  width: 15vw;
+  text-align: center;
 }
 .order-top-line {
   width: 60vw;
@@ -924,72 +952,199 @@ text-align: center;
   visibility: visible;
 }
 @media only screen and (min-width: 1024px) and (max-width: 1440px) {
-
-.btn-confirm{
-width: 10vw;
-height: 6vh;
-}
-.order-total-price{
-left: 1rem;
-}
+  .btn-confirm {
+    width: 10vw;
+    height: 6vh;
+  }
+  .order-total-price {
+    left: 1rem;
+  }
 }
 @media only screen and (min-width: 768px) and (max-width: 1023px) {
-h2{
-font-size: 1rem;
-}
-p{
-width: 7vw;
-}
-.artw-title, .chosen-artwk, .prev-div, .prev-img{
-width: 30vw;
-}
-.artw-title{
-font-size: 1rem;
-align-self: end;
-}
-.buy-nav, .exit{
-width: 20vw;
-}
-.btn-buy{
-margin-top: 25vh;
-margin-left: 5rem;
-width: 10vw;
-height: 5vh;
-}
-.btn-confirm{
-width: 10vw;
-height: 5vh;
-font-size: .8rem;
-}
-.check-order-btn{
-font-size: 1.2rem;
-margin-left: 1rem;
-}
-.chosen-artwk{
-height: 70vh;
-}
-.chosen-artwk .prev-img{
-width: 28vw;
-}
-.dtls-nav{
-font-size: .6rem;
-}
-.prev-div{
-height: 65vh;
-}
-.prev-gallery{
-margin-left: -3rem;
-}
-.prev-txt{
-width: 20vw;
-}
-.tooltip:hover .tooltiptxt {
-visibility: hidden;
-}
+  h2 {
+    font-size: 1rem;
+  }
+  p {
+    width: 7vw;
+  }
+  .artw-title,
+  .chosen-artwk,
+  .prev-div,
+  .prev-img {
+    width: 30vw;
+  }
+  .artw-title {
+    font-size: 1rem;
+    align-self: end;
+  }
+  .buy-nav,
+  .exit {
+    width: 20vw;
+  }
+  .btn-buy {
+    margin-top: 25vh;
+    margin-left: 5rem;
+    width: 10vw;
+    height: 5vh;
+  }
+  .btn-confirm {
+    width: 10vw;
+    height: 5vh;
+    font-size: 0.8rem;
+  }
+  .check-order-btn {
+    font-size: 1.2rem;
+    margin-left: 1rem;
+  }
+  .chosen-artwk {
+    height: 70vh;
+  }
+  .chosen-artwk .prev-img {
+    width: 28vw;
+  }
+  .dtls-nav {
+    font-size: 0.6rem;
+  }
+  .prev-div {
+    height: 65vh;
+  }
+  .prev-gallery {
+    margin-left: -3rem;
+  }
+  .prev-txt {
+    width: 20vw;
+  }
+  .tooltip:hover .tooltiptxt {
+    visibility: hidden;
+  }
 }
 @media only screen and (max-width: 768px) {
+  input {
+    width: 30vw;
+    height: 3vh;
+    font-size: 0.9rem;
+  }
+  label {
+    font-size: 0.9rem;
+  }
+  select {
+    width: 30vw;
+    height: 3vh;
+    font-size: 0.9rem;
+  }
+  p{
+  width: 25vw;
+  font-size: 1.2rem;
+  }
+  .artw-title{
+  width: 70vw;
+  font-size: 1.5rem;
+  }
+  .btn-confirm,
+  .btn-buy {
+    height: 5vh;
+    width: 30vw;
+  }
+  .buy-nav,
+  .exit {
+    margin-top: 2vh;
+    width: 40vw;
+    background-color: #fff7f9;
+  }
+  .buy-nav-div {
+    position: fixed;
+    left: 0;
+    top: 5vh;
+    height: 5vh;
+    width: 100vw;
+    background-color: #fff7f9;
+  }
+  .cart-icon{
+  left: 30vw;
+font-size: 2.5rem;
+  }
+  .cart-amount{
+  left: 31vw;
+  font-size: 1.5rem;
+  }
+
+  .check-order-btn {
+    width: 30vw;
+    margin-left: 1rem;
+  }
+  .chosen-artwk{
+  width: 80vw;
+  border: none;
+  }
+  .chosen-artwk .prev-img{
+  width: 80vw;
+  }
+  .dtls-nav-div {
+    visibility: hidden;
+  }
+  .how-to-instr {
+    width: 70vw;
+    margin-left: 0;
+    font-size: 1.5rem;
+  }
+  .inpts {
+    margin-top: 15vh;
+  }
+  .order{
+  width: 80vw;
+  height: 40vh;
+  margin-left: 1rem;
+  }
+  .order-delete{
+  width: 75vw;
+  font-size: 2rem;
+  }
+  .order-exit{
+  left: 80vw;
+  }
+  .order-form {
+    width: 40vw;
+    height: 90vh;
+    left: 60vw;
+    top: 9vh;
+  }
+  .order-img{
+  width: 80vw;
+  height: 30vh;
+  object-fit: contain;
+  margin-bottom: 1rem;
+  }
+  .order-list{
+  width: 80vw;
+  }
+  .order-list-div{
+  width: 90vw;
+  left: 5vw;
+  }
+  .order-list-title{
+  margin-left: 15vw;
+  }
+  .order-title, .order-price{
+  width: 70vw;
+  }
+  .order-top-line{
+  width: 90vw;
+  }
+  .order-total-price{
+  left: 5vw;
+  top: 10vh;
+  }
+  .order-nav,
+  .exit-order {
+    width: 40vw;
+    background-color: #fff7f9;
+  }
+  .order-nav-div {
+    left: 60vw;
+    top: 6.5vh;
+  }
   .pg-col {
-    margin-left: 2rem;
+    margin-left: 1rem;
   }
   .preview {
     display: flex;
@@ -997,9 +1152,12 @@ visibility: hidden;
     gap: 1rem;
     width: 100vw;
   }
+  .prev-desc{
+  width: 80vw;
+  }
   .prev-div {
     width: 80vw;
-    margin-left: 1.5rem;
+    margin-left: 0;
   }
   .prev-img {
     width: 80vw;
@@ -1012,18 +1170,32 @@ visibility: hidden;
     column-gap: 1rem;
     height: fit-content;
   }
+  .prev-txt{
+  width: 60vw;
+  }
+  .slide-in-left {
+    animation: slide_in_left_mob 1s 1;
+  }
+  .slide-out-right{
+    animation: slide_out_right_mob 2s 1;
+  }
   .shop-instruction {
     width: 70vw;
   }
   .shop-instruction-div {
-    width: 80vw;
-    margin-left: 2rem;
+    width: 100vw;
+    height: 100vh;
+    margin-left: 0;
+    align-items: flex-start;
   }
   .up-sqr {
     width: 80vw;
     margin-left: 0;
     border: 4px solid #adadb0;
     border: none;
+  }
+  .tooltip:hover .tooltiptxt{
+  visibility: hidden;
   }
 }
 </style>

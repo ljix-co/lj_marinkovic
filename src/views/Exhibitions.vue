@@ -1,44 +1,44 @@
 <template>
   <div class="exhibitions">
-  <transition name="fade">
-    <div class="pg-col" v-if="showGallery === false">
-      <div class="preview">
-        <div
-          class="prev-div"
-          v-for="(exh, index) in exhibitions"
-          :key="'e' + index"
-          @click="showExh(exh)"
-          :class="{'selected-exh': exh.selected}"
-        >
-          <div class="date">
-            <p class="date-string">{{ exh.exh_date_start }}</p>
-            <p class="date-string">-</p>
-            <p class="date-string">{{ exh.exh_date_finish }}</p>
-          </div>
-          <div class="line"></div>
-          <div class="img-title">
-            <div class="tooltip">
-              <img class="prev-img" :src="exh.coverphoto_path" alt="" />
-              <span class="tooltiptxt">{{ $t("tooltips.nav") }}</span>
+    <transition name="fade">
+      <div class="pg-col" v-if="showGallery === false">
+        <div class="preview">
+          <div
+            class="prev-div"
+            v-for="(exh, index) in exhibitions"
+            :key="'e' + index"
+            @click="showExh(exh)"
+            :class="{ 'selected-exh': exh.selected }"
+          >
+            <div class="date">
+              <p class="date-string">{{ exh.exh_date_start }}</p>
+              <p class="date-string">-</p>
+              <p class="date-string">{{ exh.exh_date_finish }}</p>
             </div>
-            <div class="prev-dsc">
-              <p class="exh-title">{{ exh.title.toUpperCase() }}</p>
-              <p class="place">{{ exh.place }}</p>
+            <div class="line"></div>
+            <div class="img-title">
+              <div class="tooltip">
+                <img class="prev-img" :src="exh.coverphoto_path" alt="" />
+                <span class="tooltiptxt">{{ $t("tooltips.nav") }}</span>
+              </div>
+              <div class="prev-dsc">
+                <p class="exh-title">{{ exh.title.toUpperCase() }}</p>
+                <p class="place">{{ exh.place }}</p>
+              </div>
             </div>
+            <div class="short-desc" v-html="exh.short_desc"></div>
           </div>
-          <div class="short-desc" v-html="exh.short_desc"></div>
         </div>
       </div>
-    </div>
-  </transition>
-  <transition name="fade">
-    <Gallery
-      v-if="showGallery"
-      :key="'g' + componentKey"
-      :images="images"
-      :chosenExh="chosenExh"
-      @go-back="goBack()"
-    ></Gallery>
+    </transition>
+    <transition name="fade">
+      <Gallery
+        v-if="showGallery"
+        :key="'g' + componentKey"
+        :images="images"
+        :chosenExh="chosenExh"
+        @go-back="goBack()"
+      ></Gallery>
     </transition>
   </div>
 </template>
@@ -47,7 +47,7 @@ import axios from "axios";
 import { mapState, mapActions } from "vuex";
 import Gallery from "../components/Gallery.vue";
 import { checkLanguage } from "../mixins/checkLanguage.js";
-import {scrollToElement} from '../mixins/scrollToElement.js'
+import { scrollToElement } from "../mixins/scrollToElement.js";
 export default {
   components: {
     Gallery,
@@ -79,7 +79,7 @@ export default {
     },
     goBack() {
       this.showGallery = false;
-      window.scrollTo(0,0)
+      window.scrollTo(0, 0);
       setTimeout(() => {
         this.scrollToElement("selected-exh");
       }, 200);
@@ -88,7 +88,7 @@ export default {
     showExh(exh) {
       this.changeLoader(true);
       let exh_id = exh.exh_id;
-        for (let i = 0; i < this.exhibitions.length; i++) {
+      for (let i = 0; i < this.exhibitions.length; i++) {
         if (this.exhibitions[i].selected === true) {
           this.exhibitions[i].selected = false;
         }
@@ -104,8 +104,6 @@ export default {
           this.images = res.data.data;
           this.showGallery = true;
           this.chosenExh = exh;
-          
-          
         });
     },
   },
@@ -143,12 +141,12 @@ p {
   justify-content: flex-end;
   gap: 0.5rem;
   transform: rotate(270deg);
-  margin-top: .5rem;
+  margin-top: 0.5rem;
   width: 5vw;
 }
 .date-string {
   color: #545454;
-  
+
   font-size: 3rem;
 }
 .exh-title {
@@ -157,10 +155,10 @@ p {
   text-align: center;
   font-weight: 800;
 }
-.img-title{
+.img-title {
   width: 50vw;
 }
-.line{
+.line {
   height: 70vh;
   width: 1px;
   background-color: #27f2cb;
@@ -199,7 +197,7 @@ p {
 }
 .prev-img {
   width: 40vw;
-  filter: grayscale(.3);
+  filter: grayscale(0.3);
   height: 50vh;
   background-color: #7e7e7e;
   object-fit: contain;
@@ -215,7 +213,6 @@ p {
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
-  
 }
 .short-desc {
   font-size: 1.2rem;
@@ -237,93 +234,115 @@ p {
   visibility: visible;
 }
 @media only screen and (min-width: 1024px) and (max-width: 1440px) {
-.date-string {
-font-size: 2rem;
-}
-.exh-title{
-font-size: 1.5rem;
-width: 40vw;
-margin-left: 5vw;
-}
-.line, .short-desc{
-height: 55vh;
-}
-.place {
-font-size: 1rem;
-}
-.prev-div{
-height: 60vh;
-}
-.prev-img{
-height: 40vh;
-}
-}
-@media only screen and (min-width: 768px) and (max-width: 1023px) {
-.line{
-display: none;
-}
-.place{
-font-size: 1rem;
-}
-.img-title{
-width: 70vw;
-}
-.preview{
-margin-top: 0;
-}
-.prev-div{
-flex-direction: column;
-width: 70vw;
-height: 90vh;
-margin-top: 0;
-margin-bottom: 5vh;
-}
-
-.prev-img{
-width: 65vw;
-}
-.exh-title{
-font-size: 1.5rem;
-}
-.short-desc{
-width: 65vw;
-margin-left: 1rem;
-border-width: 3px;
-}
-.date{
-position: absolute;
-margin-left: -5vw;
-}
-.date-string{
-font-size: 2rem;
-}
-}
-@media only screen and (max-width: 768px) {
-  .pg-col {
-    margin-left: 2rem;
+  .date-string {
+    font-size: 2rem;
   }
-  .preview {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    width: 100vw;
-    margin-left: 0;
+  .exh-title {
+    font-size: 1.5rem;
+    width: 40vw;
+    margin-left: 5vw;
+  }
+  .line,
+  .short-desc {
+    height: 55vh;
+  }
+  .place {
+    font-size: 1rem;
   }
   .prev-div {
-    width: 80vw;
-    margin-left: 1.5rem;
+    height: 60vh;
   }
   .prev-img {
-    width: 80vw;
-    /* height: 50vh; */
-    object-fit: cover;
+    height: 40vh;
   }
-  .up-sqr {
-    width: 80vw;
-    margin-left: -1.2rem;
-    border: 4px solid #adadb0;
-    border: none;
-    margin-bottom: 2vh;
+}
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+  .line {
+    display: none;
+  }
+  .place {
+    font-size: 1rem;
+  }
+  .img-title {
+    width: 70vw;
+  }
+  .preview {
+    margin-top: 0;
+  }
+  .prev-div {
+    flex-direction: column;
+    width: 70vw;
+    height: 90vh;
+    margin-top: 0;
+    margin-bottom: 5vh;
+  }
+
+  .prev-img {
+    width: 65vw;
+  }
+  .exh-title {
+    font-size: 1.5rem;
+  }
+  .short-desc {
+    width: 65vw;
+    margin-left: 1rem;
+    border-width: 3px;
+  }
+  .date {
+    position: absolute;
+    margin-left: -5vw;
+  }
+  .date-string {
+    font-size: 2rem;
+  }
+}
+@media only screen and (max-width: 768px) {
+  .line {
+    display: none;
+  }
+  .place {
+    font-size: 1rem;
+  }
+  .img-title {
+    width: 70vw;
+  }
+  .pg-col {
+    margin-left: 1rem;
+  }
+  .preview {
+    margin-top: 0;
+  }
+  .prev-div {
+    flex-direction: column;
+    width: 70vw;
+    height: 70vh;
+    margin-top: 0;
+    margin-bottom: 5vh;
+  }
+
+  .prev-img {
+    width: 65vw;
+    height: auto;
+  }
+  .exh-title {
+    font-size: 1rem;
+  }
+  .short-desc {
+    width: 65vw;
+    height: 40vh;
+    margin-left: 1rem;
+    border-width: 3px;
+    font-size: 1rem;
+  }
+  .date {
+    position: absolute;
+    margin-left: -10vw;
+  }
+  .date-string {
+    font-size: 2rem;
+  }
+  .tooltip:hover .tooltiptxt {
+    visibility: hidden;
   }
 }
 </style>

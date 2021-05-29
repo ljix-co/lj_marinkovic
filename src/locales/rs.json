@@ -1,5 +1,11 @@
 {
   "artworks": {
+    "artform": "Umetnička forma",
+    "dmns": "Dimenzije",
+    "technique": "Tehnika",
+    "material": "Materijal",
+    "year": "Godina",
+    "price": "Cena",
     "nav": {
       "how_to_buy": "KAKO DO KUPOVINE",
       "order": "VAŠA PORUDŽBINA",
@@ -40,6 +46,7 @@
       "country": "CRNA GORA"
     }
   ],
+  "error": "Žao mi je, ali stranica koju tražite nije ovde...",
   "home": {
     "categories": [
       {
