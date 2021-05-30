@@ -255,6 +255,7 @@ p {
   .prev-img {
     height: 40vh;
   }
+
 }
 @media only screen and (min-width: 768px) and (max-width: 1023px) {
   .line {
@@ -295,6 +296,10 @@ p {
   .date-string {
     font-size: 2rem;
   }
+  .tooltip .tooltiptxt {
+    width: 65vw;
+    margin-left: -65vw;
+  }
 }
 @media only screen and (max-width: 768px) {
   .line {
@@ -329,7 +334,7 @@ p {
   }
   .short-desc {
     width: 65vw;
-    height: 40vh;
+    height: auto;
     margin-left: 1rem;
     border-width: 3px;
     font-size: 1rem;

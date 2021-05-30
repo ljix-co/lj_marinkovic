@@ -125,7 +125,11 @@
             <p class="nav-scroll" v-if="scrollIndex !== 2" @click="scroll">
               {{ $t("home.nav[2].txt") }}
             </p>
-            <p class="nav-scroll nav-scroll-back" v-if="scrollIndex === 2" @click="scrollBack">
+            <p
+              class="nav-scroll nav-scroll-back"
+              v-if="scrollIndex === 2"
+              @click="scrollBack"
+            >
               {{ $t("home.nav[3].txt") }}
             </p>
           </div>
@@ -260,7 +264,12 @@ export default {
         this.scrollIndex = 2;
         console.log(this.scrollIndex);
         this.scrollDirectionIn = "down-in";
-        window.scrollTo(0, 700);
+        if (window.innerWidth < 768) {
+          window.scrollTo(0, 500);
+          console.log(window.scrollY);
+        } else {
+          window.scrollTo(0, 700);
+        }
       }
     },
     scrollBack() {
@@ -276,7 +285,11 @@ export default {
         // console.log(this.lastScrollPosition);
         this.scrollDirectionIn = "up-in";
       }
-      if (window.scrollY > 200 && window.scrollY <= 590) {
+      if (
+        window.scrollY > 200 &&
+        window.scrollY <= 590 &&
+        window.innerWidth > 768
+      ) {
         this.scrollIndex = 1;
         // this.lastScrollPosition = window.scrollY;
         if (window.scrollY > this.lastScrollPosition) {
@@ -286,8 +299,26 @@ export default {
         }
         this.lastScrollPosition = window.scrollY;
       }
-
-      if (window.scrollY >= 600) {
+      if (
+        window.scrollY > 200 &&
+        window.scrollY <= 490 &&
+        window.innerWidth < 768
+      ) {
+        this.scrollIndex = 1;
+        // this.lastScrollPosition = window.scrollY;
+        if (window.scrollY > this.lastScrollPosition) {
+          this.scrollDirectionLeave = "up-leave";
+        } else {
+          this.scrollDirectionLeave = "down-leave";
+        }
+        this.lastScrollPosition = window.scrollY;
+      }
+      if (window.scrollY >= 600 && window.innerWidth > 768) {
+        this.scrollIndex = 2;
+        this.lastScrollPosition = window.scrollY;
+        this.scrollDirectionIn = "down-in";
+      }
+        if (window.scrollY >= 500 && window.innerWidth < 768) {
         this.scrollIndex = 2;
         this.lastScrollPosition = window.scrollY;
         this.scrollDirectionIn = "down-in";
@@ -489,7 +520,7 @@ select {
   left: 30vw;
 }
 .cat-title {
-  font-size: 3rem; 
+  font-size: 3rem;
   font-family: "HortaRegular", cursive;
   animation: left_in 2s 1;
   position: relative;
@@ -502,8 +533,8 @@ select {
 
   margin-left: 2rem;
 }
-.dec-div-mob{
-display: none;
+.dec-div-mob {
+  display: none;
 }
 .dec-line {
   height: 50vh;
@@ -824,26 +855,26 @@ border-radius: 2rem;*/
     top: 18vh;
   }
 }
-@media only screen and (max-width: 768px) {
-input{
-width: 30vw;
-height: 5vh;
-font-size: .9rem;
-}
-label{
-font-size: .9rem;
-}
-p{
-font-size: .8rem;
-}
-select{
-width: 30vw;
-height: 5vh;
-font-size: .9rem;
-}
-.btn-send{
-width: 30vw;
-}
+@media only screen and (min-width: 375px) and (max-width: 768px) {
+  input {
+    width: 30vw;
+    height: 5vh;
+    font-size: 0.9rem;
+  }
+  label {
+    font-size: 0.9rem;
+  }
+  p {
+    font-size: 0.8rem;
+  }
+  select {
+    width: 30vw;
+    height: 5vh;
+    font-size: 0.9rem;
+  }
+  .btn-send {
+    width: 30vw;
+  }
   .pg {
     width: 100vw;
     display: flex;
@@ -852,22 +883,24 @@ width: 30vw;
   }
   .category {
     width: 50vw;
+    height: 300px;
     top: 25vh;
   }
   .cat-desc {
     width: 50vw;
     margin-top: 25vh;
   }
-  .cat-title{
-  position: absolute;
-  top: 20vh;
-  font-size: 2rem;
+  .cat-title {
+    position: absolute;
+    top: 20vh;
+    font-size: 2rem;
   }
   .category-txt {
     width: 50vw;
     left: 25vw;
     top: 55vh;
   }
+
   .dec-div {
     position: fixed;
     left: -5vw;
@@ -887,11 +920,11 @@ width: 30vw;
     width: 3vw;
     border-left: 5px dotted #c3eae3;
   }
-  .down-in{
-  animation: down_in_mob 2s 1;
+  .down-in {
+    animation: down_in_mob 2s 1;
   }
   .f-letter {
-    font-size: 3.5rem;
+    font-size: 2.5rem;
   }
   .home-nav {
     position: static;
@@ -902,15 +935,15 @@ width: 30vw;
   .img-prof {
     width: 50vw;
   }
-  .inpts{
-  width: 90vw;
-  gap: 5vw;
+  .inpts {
+    width: 90vw;
+    gap: 5vw;
   }
-  .inpt-lbl{
-  width: 40vw;
+  .inpt-lbl {
+    width: 40vw;
   }
-  .instr{
-  width: 80vw;
+  .instr {
+    width: 80vw;
   }
   .intro-photo {
     width: 100vw;
@@ -921,11 +954,11 @@ width: 30vw;
   }
   .intro-txt {
     width: 50vw;
-    font-size: .8rem;
-    margin-top: 10vh;
+    font-size: 0.8rem;
+    margin-top: 7vh;
   }
   .name {
-    font-size: 3.5rem;
+    font-size: 2.5rem;
     align-self: center;
   }
   .nav {
@@ -943,28 +976,30 @@ width: 30vw;
     left: 70vw;
     top: 10vh;
   }
-  .nav-scroll{
-  margin-left: -5vw;
+  .nav-scroll {
+    margin-left: -5vw;
+    font-size: 1.2rem;
   }
-  .nav-scroll-back{
-  margin-left: -12vw;
+  .nav-scroll-back {
+    margin-left: -12vw;
   }
   .occup {
-    font-size: 1rem;
+    font-size: 0.9rem;
     margin-top: 0.5rem;
     margin-bottom: 0.5rem;
   }
-  .order-exit{
-  left: 80vw;
-  top: 1.5rem;
+  .order-exit {
+    left: 80vw;
+    top: 1.5rem;
   }
-  .order-form{
-  width: 90vw;
-  left: 5vw;
-  margin-top: 7vh;
+  .order-form {
+    width: 90vw;
+    left: 5vw;
+    margin-top: 7vh;
   }
-  .order-title, .order-exit{
-  font-size: 2rem;
+  .order-title,
+  .order-exit {
+    font-size: 2rem;
   }
 
   .left-decor {
@@ -992,7 +1027,186 @@ width: 30vw;
     margin-bottom: 6vh;
     top: 13vh;
   }
-  .web-img, .art-img {
+  .web-img,
+  .art-img {
+    visibility: hidden;
+  }
+}
+@media only screen and (max-width: 374px) {
+  input {
+    width: 30vw;
+    height: 5vh;
+    font-size: 0.9rem;
+  }
+  label {
+    font-size: 0.9rem;
+  }
+  p {
+    font-size: 0.7rem;
+  }
+  select {
+    width: 30vw;
+    height: 5vh;
+    font-size: 0.9rem;
+  }
+  .btn-send {
+    width: 30vw;
+  }
+  .pg {
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    margin-top: 0;
+  }
+  .category {
+    width: 50vw;
+    height: 300px;
+    top: 25vh;
+  }
+  .cat-desc {
+    width: 50vw;
+    margin-top: 25vh;
+  }
+  .cat-title {
+    position: absolute;
+    top: 20vh;
+    font-size: 2rem;
+  }
+  .category-txt {
+    width: 50vw;
+    left: 25vw;
+    top: 55vh;
+  }
+
+  .dec-div {
+    position: fixed;
+    left: -5vw;
+    top: 27vh;
+  }
+  .dec-div-mob {
+    position: fixed;
+    left: 85vw;
+    top: 27vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .dec-line-mob {
+    height: 50vh;
+    width: 3vw;
+    border-left: 5px dotted #c3eae3;
+  }
+  .down-in {
+    animation: down_in_mob 2s 1;
+  }
+  .f-letter {
+    font-size: 2.5rem;
+  }
+  .home-nav {
+    position: static;
+  }
+  .image-home {
+    width: 50vw;
+  }
+  .img-prof {
+    width: 40vw;
+    margin-left: 5vw;
+  }
+  .inpts {
+    width: 90vw;
+    gap: 5vw;
+  }
+  .inpt-lbl {
+    width: 40vw;
+  }
+  .instr {
+    width: 80vw;
+  }
+  .intro-photo {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    object-fit: contain;
+    z-index: -1;
+  }
+  .intro-txt {
+    width: 50vw;
+    font-size: 0.7rem;
+    margin-top: 2vh;
+  }
+  .name {
+    font-size: 2.5rem;
+    align-self: center;
+  }
+  .nav {
+    width: 30vw;
+    border-width: 1px;
+  }
+  .nav-mob-left {
+    position: fixed;
+    left: 0;
+    top: 10vh;
+    justify-content: flex-end;
+  }
+  .nav-mob-right {
+    position: fixed;
+    left: 70vw;
+    top: 10vh;
+  }
+  .nav-scroll {
+    margin-left: -5vw;
+    font-size: 1.2rem;
+  }
+  .nav-scroll-back {
+    margin-left: -12vw;
+  }
+  .occup {
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .order-exit {
+    left: 80vw;
+    top: 1.5rem;
+  }
+  .order-form {
+    width: 90vw;
+    left: 5vw;
+    margin-top: 7vh;
+  }
+  .order-title,
+  .order-exit {
+    font-size: 2rem;
+  }
+
+  .left-decor {
+    display: none;
+  }
+  .right-decor {
+    display: none;
+  }
+  .start-img {
+    left: 25vw;
+    top: 27vh;
+  }
+  .tooltip {
+    width: 50vw;
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+
+  .web-title {
+    margin-left: 0;
+    display: flex;
+    width: 90vw;
+    height: fit-content;
+    margin-bottom: 6vh;
+    top: 13vh;
+  }
+  .web-img,
+  .art-img {
     visibility: hidden;
   }
 }

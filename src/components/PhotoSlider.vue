@@ -29,7 +29,11 @@
         }"
         :src="image"
         alt=""
+        v-hammer:swipe.left.right="swipeFunction"
       />
+      <div class="dot-div">
+      <div class="dot" :class="{'selected' : index === index_img}" v-for="(dot, index) in images" :key="'d' + index"></div>
+      </div>
     </div>
     <div class="right-side" :class="{ 'right-side-artwork': artworks_page }">
       <div
@@ -44,7 +48,7 @@
   </div>
 </template>
 <script>
-// v-hammer:swipe.left.right="swipeFunction"
+// 
 export default {
   props: {
     images: Array,
@@ -55,7 +59,7 @@ export default {
   data() {
     return {
       image: null,
-      index: 0,
+      index_img: 0,
       admin_route: false,
       show_slider: false,
       artworks_page: false,
@@ -93,27 +97,27 @@ export default {
       this.elementKey++;
     },
     nextImg() {
-      if (this.index != this.images.length - 1) {
-        this.index++;
+      if (this.index_img != this.images.length - 1) {
+        this.index_img++;
       } else {
-        this.index = 0;
+        this.index_img = 0;
       }
 
-      this.image = this.images[this.index].path;
+      this.image = this.images[this.index_img].path;
     },
     prevImg() {
-      if (this.index != 0) {
-        this.index--;
+      if (this.index_img != 0) {
+        this.index_img--;
       } else {
-        this.index = this.images.length - 1;
+        this.index_img = this.images.length - 1;
       }
-      this.image = this.images[this.index].path;
+      this.image = this.images[this.index_img].path;
     },
     showChosenImg() {
       for (let i = 0; i < this.images.length; i++) {
         if (this.chosen_image.img_path === this.images[i].path) {
           this.image = this.images[i].path;
-          this.index = i;
+          this.index_img = i;
         }
       }
     },
@@ -168,14 +172,15 @@ export default {
   height: 75vh;
   object-fit: contain;
   background-color: #a6a6a6;
-  align-self: center;
-  border-bottom: 5px solid #27f2cb;
+  align-self: center;/*
+  border-bottom: 5px solid #27f2cb;*/
 }
 .center {
   width: 70vw;
   height: 85vh;
   margin-top: 5vh;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 }
@@ -196,6 +201,19 @@ export default {
   width: 30vw;
   text-align: end;
   margin-top: 2rem;
+}
+.dot{
+width: 10px;
+height: 5px;
+
+background-color: #545454;
+}
+.dot-div{
+display: flex;
+align-items: center;
+justify-content: center;
+gap: .5rem;
+margin-top: 5vh;
 }
 .exit-div {
   visibility: hidden;
@@ -222,8 +240,8 @@ export default {
   height: 85vh;
   object-fit: contain;
   background-color: #ebefef;
-  align-self: flex-start;
-  border-bottom: 5px solid #27f2cb;
+  align-self: center;/*
+  border-bottom: 5px solid #27f2cb;*/
 }
 
 .left-side,
@@ -253,6 +271,9 @@ export default {
   align-items: center;
   justify-content: center;
   width: 100vw;
+}
+.selected{
+background-color: #27f2cb;
 }
 .trq-left-line {
   width: 5vw;
@@ -317,13 +338,19 @@ export default {
     object-fit: contain;
     background-color: #fff7f9;
 
-    margin-bottom: 5vh;
   }
   .center {
     width: 100vw;
   }
+  .center-artwork{
+  height: 100vh;
+  margin-top: 0;
+  }
   .delete-img-div {
     width: 80vw;
+  }
+  .dot-div{
+  margin-top: 0;
   }
   .exit {
     font-size: 2rem;

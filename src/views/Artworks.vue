@@ -5,7 +5,7 @@
       :class="{ fade: show_order_list }"
       class="photo-slider"
       :key="'p' + componentKey"
-      v-if="images.length > 0"
+      v-if="photosldr"
       :images="images"
       @exit-mob-slider="exitMobSlider"
     ></photo-slider>
@@ -267,6 +267,7 @@ export default {
       email_trigger: 0,
       cust_id: null,
       order_id: null,
+      photosldr: false
       // pay_option: false,
     };
   },
@@ -383,6 +384,7 @@ export default {
     },
     exitMobSlider() {
       this.images = [];
+      this.photosldr = false;
       this.scrollToElement('chosen-artwk');
     },
     forceRerender() {
@@ -429,6 +431,7 @@ export default {
           }
           this.forceRerender();
           this.scrollToElement("photo-slider");
+          this.photosldr = true;
         });
     },
     hideInstr() {
@@ -1018,7 +1021,7 @@ select {
     visibility: hidden;
   }
 }
-@media only screen and (max-width: 768px) {
+@media only screen and (min-width: 375px) and (max-width: 768px) {
   input {
     width: 30vw;
     height: 5vh;
@@ -1074,6 +1077,7 @@ select {
   .check-order-btn {
     width: 30vw;
     margin-left: 1rem;
+    font-size: 1.2rem;
   }
   .chosen-artwk{
   width: 80vw;
@@ -1165,6 +1169,201 @@ select {
   }
   .prev-div {
     width: 80vw;
+    margin-left: 0;
+  }
+  .prev-img {
+    width: 80vw;
+    object-fit: contain;
+  }
+  .prev-gallery {
+    width: 90vw;
+    margin-left: 0.7rem;
+    column-count: 1;
+    column-gap: 1rem;
+    height: fit-content;
+  }
+  .prev-txt{
+  width: 60vw;
+  }
+  .slide-in-left {
+    animation: slide_in_left_mob 1s 1;
+  }
+  .slide-out-right{
+    animation: slide_out_right_mob 2s 1;
+  }
+  .shop-instruction {
+    width: 70vw;
+  }
+  .shop-instruction-div {
+    width: 100vw;
+    height: 100vh;
+    margin-left: 0;
+    align-items: flex-start;
+    top: 10vh;
+  }
+  .up-sqr {
+    width: 80vw;
+    margin-left: 0;
+    border: 4px solid #adadb0;
+    border: none;
+  }
+  .tooltip:hover .tooltiptxt{
+  visibility: hidden;
+  }
+}
+@media only screen and (max-width: 374px) {
+  input {
+    width: 30vw;
+    height: 4vh;
+    font-size: 0.8rem;
+  }
+  label {
+    font-size: .8rem;
+  }
+  select {
+    width: 30vw;
+    height: 4vh;
+    font-size: 0.8rem;
+  }
+  p{
+  width: 25vw;
+  font-size: .8rem;
+  }
+  .artw-title{
+  width: 70vw;
+  font-size: 1.5rem;
+  }
+  .btn-confirm {
+    height: 7vh;
+    width: 30vw;
+  }
+  .btn-buy {
+    height: 7vh;
+    width: 30vw;
+    margin-top: 35vh;
+  }
+  .buy-nav,
+  .exit {
+    margin-top: 3vh;
+    width: 30vw;
+    background-color: #fff7f9;
+    font-size: .8rem;
+    border-width: 2px;
+  }
+  .buy-nav-div {
+    position: fixed;
+    left: 0;
+    top: 5vh;
+    height: 5vh;
+    width: 100vw;
+    background-color: #fff7f9;
+  }
+  .cart-icon{
+  left: 28vw;
+  font-size: 1.1rem;
+  top: 0;
+  }
+  .cart-amount{
+  left: 33vw;
+  top: 1vh;
+  }
+
+  .check-order-btn {
+    width: 30vw;
+    margin-left: 1rem;
+    font-size: 1.2rem;
+  }
+  .chosen-artwk{
+  width: 80vw;
+  border: none;
+  }
+  .chosen-artwk .prev-img{
+  width: 80vw;
+  }
+  .dtls-nav-div {
+    visibility: hidden;
+  }
+  .how-to-instr {
+    width: 70vw;
+    margin-left: 0;
+    font-size: 1rem;
+  }
+  .inpts {
+    margin-top: 2vh;
+    gap: .5rem;
+  }
+  .order{
+  width: 80vw;
+  height: 45vh;
+  margin-left: 1rem;
+  }
+  .order-delete{
+  width: 75vw;
+  font-size: 2rem;
+  }
+  .order-exit{
+  left: 80vw;
+  }
+  .order-form {
+    width: 40vw;
+    height: 90vh;
+    left: 60vw;
+    top: 10vh;
+  }
+  .order-img{
+  width: 80vw;
+  height: 30vh;
+  object-fit: contain;
+  margin-bottom: 1rem;
+  }
+  .order-list{
+  width: 80vw;
+  }
+  .order-list-div{
+  width: 90vw;
+  left: 5vw;
+  }
+  .order-list-title{
+  margin-left: 15vw;
+  }
+  .order-title, .order-price{
+  width: 70vw;
+  }
+  .order-top-line{
+  width: 90vw;
+  }
+  .order-total-price{
+  left: 5vw;
+  top: 10vh;
+  }
+  .order-nav,
+  .exit-order {
+    width: 40vw;
+    background-color: #fff7f9;
+    height: auto;
+    font-size: .8rem;
+    margin-top: 1.4vh;
+    border-width: 2px;
+  }
+  .order-nav-div {
+    left: 60vw;
+    top: 5.5vh;
+  }
+  .pg-col {
+    margin-left: 1rem;
+  }
+  .preview {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100vw;
+  }
+  .prev-desc{
+  width: 80vw;
+  }
+  .prev-div {
+    width: 80vw;
+    height: 80vh;
     margin-left: 0;
   }
   .prev-img {

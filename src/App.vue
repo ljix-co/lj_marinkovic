@@ -309,7 +309,7 @@ select:focus {
     top: 0.5rem;
   }
 }
-@media only screen and (max-width: 768px) {
+@media only screen and (min-width: 375px) and (max-width: 768px) {
   label {
     font-size: 0.9rem;
   }
@@ -337,14 +337,74 @@ select:focus {
   }
   .menu-bar {
     visibility: visible;
-    font-size: 2rem;
+    font-size: 1.5rem;
     position: absolute;
     left: 90vw;
-    top: 0;
+    top: 1vh;
   }
 
   .logo {
-    width: 100px;
+    width: 80px;
+    z-index: 2;
+    top: 0;
+  }
+  .logged-icons {
+    position: unset;
+  }
+  .long-menu {
+    margin-left: 0;
+  }
+  .show {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    height: 93vh;
+    position: absolute;
+    left: 0;
+    top: 7vh;
+    background-color: #fff7f9;
+    /* align-items: center; */
+    justify-content: center;
+    text-align: center;
+    gap: 3rem;
+  }
+}
+@media only screen and (max-width: 374px){
+  label {
+    font-size: 0.9rem;
+  }
+  p{
+  font-size: .8rem;
+  }
+  #nav {
+    z-index: 3;
+    height: 5vh;
+  }
+  #nav a {
+    font-size: 1rem;
+  }
+  .custom-curs{
+  visibility: hidden;
+  }
+  .hide {
+    visibility: hidden;
+  }
+  .nav {
+    width: 65vw;
+    margin-top: -2vh;
+    border: none;
+    margin-left: 0;
+  }
+  .menu-bar {
+    visibility: visible;
+    font-size: 1.5rem;
+    position: absolute;
+    left: 90vw;
+    top: 1vh;
+  }
+
+  .logo {
+    width: 80px;
     z-index: 2;
     top: 0;
   }

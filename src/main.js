@@ -7,9 +7,11 @@ import VueI18n from 'vue-i18n';
 import LazyLoadDirective from './directives/LazyLoadDirective';
 import OnScroll from './directives/OnScroll';
 import i18n from './i18n'
+import {VueHammer} from 'vue2-hammer';
 
 Vue.use(Vue2Editor);
 Vue.use(VueI18n)
+Vue.use(VueHammer);
 Vue.config.productionTip = false
 
 Vue.directive("lazyload", LazyLoadDirective);

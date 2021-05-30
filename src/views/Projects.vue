@@ -160,6 +160,7 @@ export default {
   display: flex;
   justify-content: center;
   margin-bottom: 20vh;
+  margin-top: 10vh;
   flex-wrap: wrap;
   width: 100vw;
 }
@@ -263,6 +264,10 @@ background-color: #F9FFF7;*/
     position: absolute;
     margin-left: -10vw;
   }
+  .tooltip .tooltiptxt {
+    width: 65vw;
+    margin-left: -65vw;
+  }
 }
 @media only screen and (max-width: 768px) {
   .line {
@@ -296,7 +301,7 @@ background-color: #F9FFF7;*/
   }
   .short-desc {
     width: 65vw;
-    height: 40vh;
+    height: auto;
     margin-left: 1rem;
     border-width: 3px;
     font-size: 1rem;

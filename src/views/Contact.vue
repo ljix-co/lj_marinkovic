@@ -431,7 +431,7 @@ input {
 }
 @media only screen and (max-width: 767px) {
   h1 {
-    font-size: 2.5rem;
+    font-size: 2rem;
     top: 0;
     width: 90vw;
   }
@@ -457,7 +457,7 @@ input {
     left: 20vw;
   }
   .conct-mail {
-    font-size: 0.9rem;
+    font-size: 0.7rem;
   }
   .dec-div {
     margin-left: 0;
@@ -476,10 +476,10 @@ input {
     align-items: flex-start;
   }
   .fab {
-    font-size: 3rem;
+    font-size: 2.5rem;
   }
   .fas {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     margin-left: 0;
   }
   .fa-times {
@@ -501,13 +501,14 @@ input {
     margin-top: 7vh;
   }
   .pers-info {
-    width: 50vw;
-    gap: 1.5rem;
-    margin-top: 2vh;
+    width: 55vw;
+    gap: .5rem;
+    margin-top: 0;
+  
   }
   .soc-icons {
     width: 40vw;
-    gap: 1.5rem;
+    gap: 1.3rem;
     margin-top: -2vh;
   }
   .sqr {

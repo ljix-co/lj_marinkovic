@@ -332,6 +332,7 @@ width: 90vw;
     width: 95vw;
     background-color: #fff7f9;
   text-align: end;
+  font-size: 2rem;
   }
   .images{
   width: 90vw;

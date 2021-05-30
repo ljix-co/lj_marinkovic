@@ -87,7 +87,7 @@ p {
 }
 @media only screen and (min-width: 768px) and (max-width: 1023px) {
 }
-@media only screen and (max-width: 768px) {
+@media only screen and (min-width: 375px) and (max-width: 768px) {
   p {
     font-size: 0.5rem;
   }
@@ -98,6 +98,25 @@ p {
   }
   .footer-txt {
     align-items: flex-end;
+  }
+}
+@media only screen and (max-width: 374px) {
+  img {
+    width: 60px;
+  }
+  p {
+    font-size: 0.5rem;
+  }
+  .footer-content {
+    width: 90vw;
+    margin-left: 5vw;
+    gap: .5rem;
+  }
+  .footer-txt {
+    align-items: flex-end;
+  }
+  .lj_logo{
+  width: 40px;
   }
 }
 </style>
