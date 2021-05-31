@@ -61,5 +61,30 @@ height: 90vh;
 display: flex;
 align-items: center;
 justify-content: center;
+z-index: 3;
+}
+@media only screen and (min-width: 1024px) and (max-width: 1440px) {
+h1{
+width: 60vw;
+}
+.alert{
+width: 70vw;
+}
+}
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+h1{
+width: 60vw;
+}
+.alert{
+width: 70vw;
+}
+}
+@media only screen and (max-width: 768px) {
+h1{
+width: 80vw;
+}
+.alert{
+width: 90vw;
+}
 }
 </style>
